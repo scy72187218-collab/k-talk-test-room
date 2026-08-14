@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>K-Talk 시험 방송방</title>
+<style>
+body{margin:0;background:#090711;color:white;font-family:Arial,sans-serif}
+.wrap{max-width:430px;margin:auto;min-height:100vh;background:linear-gradient(#171021,#08070d);padding:14px;box-sizing:border-box}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:800;color:#ffd76a;font-size:22px}
+.on{background:#ff2e6d;padding:7px 10px;border-radius:10px;font-weight:800}
+.video{margin-top:12px;position:relative;background:#15151c;border:1px solid #443050;border-radius:16px;overflow:hidden;aspect-ratio:16/10}
+.video video{width:100%;height:100%;object-fit:cover}
+.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.p{background:#211829;border:1px solid #4a3457;border-radius:11px;height:74px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.p.host{border-color:#ffd76a;color:#ffd76a}
+.controls{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;border:0;border-radius:12px;padding:12px;font-weight:800}
+.start{background:#8d46ff;color:white}
+.stop{background:#333;color:white}
+.note{margin-top:12px;background:#16121c;border-radius:12px;padding:12px;font-size:13px;line-height:1.5;color:#ddd}
+.gift{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.gift span{background:#241832;border:1px solid #563d69;padding:7px 9px;border-radius:9px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="brand">👑 K‑Talk</div>
+      <div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
+    </div>
+    <div class="on">ON AIR</div>
+  </div>
+
+  <div class="video">
+    <div id="ph" class="placeholder">아래 ‘방송 시작’을 누르세요</div>
+    <video id="v" autoplay playsinline muted></video>
+  </div>
+
+  <div class="controls">
+    <button class="btn start" onclick="startCam()">📹 방송 시작</button>
+    <button class="btn stop" onclick="stopCam()">방송 종료</button>
+  </div>
+
+  <div class="grid">
+    <div class="p host">진행자</div>
+    <div class="p">참가자 2</div><div class="p">참가자 3</div><div class="p">참가자 4</div>
+    <div class="p">참가자 5</div><div class="p">참가자 6</div><div class="p">참가자 7</div><div class="p">참가자 8</div>
+    <div class="p">참가자 9</div><div class="p">참가자 10</div><div class="p">참가자 11</div><div class="p">참가자 12</div>
+    <div class="p">참가자 13</div>
+  </div>
+
+  <div class="gift">
+    <span>🌹 1</span><span>🌹 10</span><span>🌹 20</span><span>🌹 30</span><span>🌹 50</span>
+    <span>🌹 100</span><span>❤️ 출석체크</span>
+  </div>
+
+  <div class="note">
+    K-Talk 현재 화면 기준 원본입니다. 카메라 화질과 기존 화면을 유지한 채
+    다음 단계에서 실시간 참가자 연결 기능을 추가합니다.
+  </div>
+</div>
+
+<script>
+let stream;
+async function startCam(){
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{width:{ideal:1920},height:{ideal:1080},facingMode:"user"},
+      audio:true
+    });
+    const v=document.getElementById('v');
+    v.srcObject=stream;
+    document.getElementById('ph').style.display='none';
+  }catch(e){
+    alert('카메라/마이크 권한을 허용해 주세요.');
+  }
+}
+function stopCam(){
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  document.getElementById('v').srcObject=null;
+  document.getElementById('ph').style.display='flex';
+}
+</script>
+</body>
+</html>
