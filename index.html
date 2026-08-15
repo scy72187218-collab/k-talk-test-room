@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>K-Talk 3인 화상채팅</title>
+<title>K-Talk 5인 테스트</title>
 
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
 body{margin:0;background:#090711;color:#fff;font-family:Arial}
 .w{max-width:430px;margin:auto;padding:14px}
-.top{display:flex;justify-content:space-between}
+.test{display:inline-block;background:#ffcc00;color:#111;font-weight:900;padding:5px 10px;border-radius:9px;margin-bottom:7px}
+.top{display:flex;justify-content:space-between;align-items:center}
 .brand{color:#ffd76a;font-size:22px;font-weight:800}
 .on{background:#ff2e6d;padding:7px 10px;border-radius:10px;font-weight:800}
-.v{margin-top:12px;position:relative;background:#15151c;border:1px solid #443050;border-radius:16px;overflow:hidden;aspect-ratio:16/10}
+.v{margin-top:12px;position:relative;background:#15151c;border-radius:16px;overflow:hidden;aspect-ratio:16/10}
 .v video,.p video{width:100%;height:100%;object-fit:cover}
 .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
 .c{display:flex;gap:8px;margin-top:12px}
@@ -30,40 +31,43 @@ body{margin:0;background:#090711;color:#fff;font-family:Arial}
 <body>
 <div class="w">
 
+<div class="test">TEST · 5명 화상채팅 테스트</div>
+
 <div class="top">
-<div>
-<div class="brand">👑 K-Talk</div>
-<div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
-</div>
-<div class="on">ON AIR</div>
+  <div>
+    <div class="brand">👑 K-Talk</div>
+    <div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
+  </div>
+  <div class="on">ON AIR</div>
 </div>
 
 <div class="v">
-<div id="ph" class="ph">아래 ‘방송 시작’을 누르세요</div>
-<video id="lv" autoplay playsinline muted></video>
+  <div id="ph" class="ph">아래 ‘방송 시작’을 누르세요</div>
+  <video id="lv" autoplay playsinline muted></video>
 </div>
 
 <div class="c">
-<button class="b s" onclick="startRoom()">📹 방송 시작</button>
-<button class="b e" onclick="stopRoom()">방송 종료</button>
+  <button class="b s" onclick="startRoom()">📹 방송 시작</button>
+  <button class="b e" onclick="stopRoom()">방송 종료</button>
 </div>
 
 <div id="st" class="st">대기 중</div>
 
 <div class="g">
-<div class="p" id="s1">진행자</div>
-<div class="p" id="s2">참가자 2</div>
-<div class="p" id="s3">참가자 3</div>
-<div class="p">참가자 4</div>
-<div class="p">참가자 5</div>
-<div class="p">참가자 6</div>
-<div class="p">참가자 7</div>
-<div class="p">참가자 8</div>
-<div class="p">참가자 9</div>
-<div class="p">참가자 10</div>
-<div class="p">참가자 11</div>
-<div class="p">참가자 12</div>
-<div class="p">참가자 13</div>
+  <div class="p" id="s1">진행자</div>
+  <div class="p" id="s2">참가자 2</div>
+  <div class="p" id="s3">참가자 3</div>
+  <div class="p" id="s4">참가자 4</div>
+  <div class="p" id="s5">참가자 5</div>
+
+  <div class="p">참가자 6</div>
+  <div class="p">참가자 7</div>
+  <div class="p">참가자 8</div>
+  <div class="p">참가자 9</div>
+  <div class="p">참가자 10</div>
+  <div class="p">참가자 11</div>
+  <div class="p">참가자 12</div>
+  <div class="p">참가자 13</div>
 </div>
 
 </div>
@@ -74,10 +78,10 @@ let peer=null;
 let mySlot=0;
 let calls={};
 
-const BASE='ktalk3-20260815-slot-';
+const BASE='ktalk5-20260815-slot-';
 
-function setStatus(t){
-  document.getElementById('st').textContent=t;
+function setStatus(text){
+  document.getElementById('st').textContent=text;
 }
 
 function getSlot(id){
@@ -91,17 +95,17 @@ function showRemote(slot, remoteStream){
 
   box.innerHTML='';
 
-  const v=document.createElement('video');
-  v.autoplay=true;
-  v.playsInline=true;
-  v.srcObject=remoteStream;
+  const video=document.createElement('video');
+  video.autoplay=true;
+  video.playsInline=true;
+  video.srcObject=remoteStream;
 
-  const l=document.createElement('div');
-  l.className='lab';
-  l.textContent=slot===1 ? '진행자' : '참가자 '+slot;
+  const label=document.createElement('div');
+  label.className='lab';
+  label.textContent=slot===1 ? '진행자' : '참가자 '+slot;
 
-  box.appendChild(v);
-  box.appendChild(l);
+  box.appendChild(video);
+  box.appendChild(label);
 
   setStatus('✅ 상대방 연결됨');
 }
@@ -137,7 +141,7 @@ function claimSlot(slot){
         try{p.destroy()}catch(e){}
         resolve(null);
       }
-    },1800);
+    },1600);
   });
 }
 
@@ -154,7 +158,8 @@ async function startRoom(){
       },
       audio:{
         echoCancellation:true,
-        noiseSuppression:true
+        noiseSuppression:true,
+        autoGainControl:true
       }
     });
 
@@ -168,7 +173,7 @@ async function startRoom(){
 
   setStatus('방 연결 중...');
 
-  for(let i=1;i<=3;i++){
+  for(let i=1;i<=5;i++){
     const p=await claimSlot(i);
     if(p){
       peer=p;
@@ -178,7 +183,7 @@ async function startRoom(){
   }
 
   if(!peer){
-    setStatus('3명 방이 가득 찼습니다.');
+    setStatus('5명 방이 가득 찼습니다.');
     return;
   }
 
@@ -242,9 +247,9 @@ function stopRoom(){
   document.getElementById('lv').srcObject=null;
   document.getElementById('ph').style.display='flex';
 
-  resetSlot(1);
-  resetSlot(2);
-  resetSlot(3);
+  for(let i=1;i<=5;i++){
+    resetSlot(i);
+  }
 
   setStatus('대기 중');
 }
