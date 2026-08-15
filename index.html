@@ -3,189 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>K-Talk 시험 방송방</title>
+<title>K-Talk 3인 화상채팅</title>
 
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
-body{
-  margin:0;
-  background:#090711;
-  color:white;
-  font-family:Arial,sans-serif;
-}
-.wrap{
-  max-width:430px;
-  margin:auto;
-  padding:14px;
-}
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.brand{
-  color:#ffd76a;
-  font-size:22px;
-  font-weight:bold;
-}
-.onair{
-  background:#ff2e6d;
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:bold;
-}
-.mainvideo{
-  margin-top:12px;
-  height:260px;
-  background:#15151c;
-  border-radius:16px;
-  overflow:hidden;
-  position:relative;
-}
-.mainvideo video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.message{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#aaa;
-}
-.buttons{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-button{
-  flex:1;
-  padding:13px;
-  border:0;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  color:white;
-}
-.start{background:#9148ff;}
-.stop{background:#333;}
-.status{
-  margin-top:10px;
-  background:#1c1524;
-  color:#ffd76a;
-  padding:10px;
-  border-radius:10px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-  margin-top:10px;
-}
-.person{
-  height:78px;
-  background:#211829;
-  border:1px solid #4a3457;
-  border-radius:11px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  position:relative;
-  font-size:12px;
-}
-.person video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.label{
-  position:absolute;
-  bottom:3px;
-  left:3px;
-  background:#0009;
-  padding:2px 5px;
-  border-radius:5px;
-  font-size:10px;
-}
+body{margin:0;background:#090711;color:#fff;font-family:Arial}
+.w{max-width:430px;margin:auto;padding:14px}
+.top{display:flex;justify-content:space-between}
+.brand{color:#ffd76a;font-size:22px;font-weight:800}
+.on{background:#ff2e6d;padding:7px 10px;border-radius:10px;font-weight:800}
+.v{margin-top:12px;position:relative;background:#15151c;border:1px solid #443050;border-radius:16px;overflow:hidden;aspect-ratio:16/10}
+.v video,.p video{width:100%;height:100%;object-fit:cover}
+.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
+.c{display:flex;gap:8px;margin-top:12px}
+.b{flex:1;border:0;border-radius:12px;padding:12px;font-weight:800;color:#fff}
+.s{background:#8d46ff}
+.e{background:#333}
+.st{margin-top:10px;padding:10px;background:#1c1524;border-radius:10px;color:#ffd76a}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.p{height:74px;background:#211829;border:1px solid #4a3457;border-radius:11px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;font-size:12px}
+.lab{position:absolute;left:4px;bottom:4px;background:#0008;padding:2px 5px;border-radius:6px;font-size:10px}
 </style>
 </head>
 
 <body>
-<div class="wrap">
+<div class="w">
 
 <div class="top">
-  <div>
-    <div class="brand">👑 K-Talk</div>
-    <div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
-  </div>
-  <div class="onair">ON AIR</div>
+<div>
+<div class="brand">👑 K-Talk</div>
+<div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
+</div>
+<div class="on">ON AIR</div>
 </div>
 
-<div class="mainvideo">
-  <div id="msg" class="message">방송 시작을 누르세요</div>
-  <video id="myVideo" autoplay playsinline muted></video>
+<div class="v">
+<div id="ph" class="ph">아래 ‘방송 시작’을 누르세요</div>
+<video id="lv" autoplay playsinline muted></video>
 </div>
 
-<div class="buttons">
-  <button class="start" onclick="startRoom()">📹 방송 시작</button>
-  <button class="stop" onclick="stopRoom()">방송 종료</button>
+<div class="c">
+<button class="b s" onclick="startRoom()">📹 방송 시작</button>
+<button class="b e" onclick="stopRoom()">방송 종료</button>
 </div>
 
-<div id="status" class="status">대기 중</div>
+<div id="st" class="st">대기 중</div>
 
-<div class="grid">
-  <div class="person">진행자</div>
-  <div class="person" id="guest">참가자 2</div>
-  <div class="person">참가자 3</div>
-  <div class="person">참가자 4</div>
-
-  <div class="person">참가자 5</div>
-  <div class="person">참가자 6</div>
-  <div class="person">참가자 7</div>
-  <div class="person">참가자 8</div>
-
-  <div class="person">참가자 9</div>
-  <div class="person">참가자 10</div>
-  <div class="person">참가자 11</div>
-  <div class="person">참가자 12</div>
-
-  <div class="person">참가자 13</div>
+<div class="g">
+<div class="p" id="s1">진행자</div>
+<div class="p" id="s2">참가자 2</div>
+<div class="p" id="s3">참가자 3</div>
+<div class="p">참가자 4</div>
+<div class="p">참가자 5</div>
+<div class="p">참가자 6</div>
+<div class="p">참가자 7</div>
+<div class="p">참가자 8</div>
+<div class="p">참가자 9</div>
+<div class="p">참가자 10</div>
+<div class="p">참가자 11</div>
+<div class="p">참가자 12</div>
+<div class="p">참가자 13</div>
 </div>
 
 </div>
 
 <script>
-let stream;
-let peer;
-let call;
+let stream=null;
+let peer=null;
+let mySlot=0;
+let calls={};
 
-const ROOM_ID = "ktalk-test-room-main-20260815";
+const BASE='ktalk3-20260815-slot-';
 
-function statusText(text){
-  document.getElementById("status").innerText = text;
+function setStatus(t){
+  document.getElementById('st').textContent=t;
 }
 
-function showGuest(remoteStream){
-  const box = document.getElementById("guest");
-  box.innerHTML = "";
+function getSlot(id){
+  const m=String(id||'').match(/slot-(\d+)$/);
+  return m ? Number(m[1]) : 0;
+}
 
-  const video = document.createElement("video");
-  video.autoplay = true;
-  video.playsInline = true;
-  video.srcObject = remoteStream;
+function showRemote(slot, remoteStream){
+  const box=document.getElementById('s'+slot);
+  if(!box) return;
 
-  const label = document.createElement("div");
-  label.className = "label";
-  label.innerText = "참가자 2";
+  box.innerHTML='';
 
-  box.appendChild(video);
-  box.appendChild(label);
+  const v=document.createElement('video');
+  v.autoplay=true;
+  v.playsInline=true;
+  v.srcObject=remoteStream;
 
-  statusText("✅ 상대방 연결됨");
+  const l=document.createElement('div');
+  l.className='lab';
+  l.textContent=slot===1 ? '진행자' : '참가자 '+slot;
+
+  box.appendChild(v);
+  box.appendChild(l);
+
+  setStatus('✅ 상대방 연결됨');
+}
+
+function resetSlot(slot){
+  const box=document.getElementById('s'+slot);
+  if(box){
+    box.innerHTML=slot===1 ? '진행자' : '참가자 '+slot;
+  }
+}
+
+function claimSlot(slot){
+  return new Promise(resolve=>{
+    const p=new Peer(BASE+slot);
+    let done=false;
+
+    p.on('open',()=>{
+      if(done) return;
+      done=true;
+      resolve(p);
+    });
+
+    p.on('error',()=>{
+      if(done) return;
+      done=true;
+      try{p.destroy()}catch(e){}
+      resolve(null);
+    });
+
+    setTimeout(()=>{
+      if(!done){
+        done=true;
+        try{p.destroy()}catch(e){}
+        resolve(null);
+      }
+    },1800);
+  });
 }
 
 async function startRoom(){
@@ -193,9 +146,9 @@ async function startRoom(){
   if(stream) return;
 
   try{
-    stream = await navigator.mediaDevices.getUserMedia({
+    stream=await navigator.mediaDevices.getUserMedia({
       video:{
-        facingMode:"user",
+        facingMode:'user',
         width:{ideal:1280},
         height:{ideal:720}
       },
@@ -205,104 +158,95 @@ async function startRoom(){
       }
     });
 
-    document.getElementById("myVideo").srcObject = stream;
-    document.getElementById("msg").style.display = "none";
+    document.getElementById('lv').srcObject=stream;
+    document.getElementById('ph').style.display='none';
 
   }catch(e){
-    alert("카메라와 마이크 권한을 허용해 주세요.");
+    alert('카메라와 마이크 권한을 허용해 주세요.');
     return;
   }
 
-  statusText("방 연결 중...");
-  startHost();
-}
+  setStatus('방 연결 중...');
 
-function startHost(){
+  for(let i=1;i<=3;i++){
+    const p=await claimSlot(i);
+    if(p){
+      peer=p;
+      mySlot=i;
+      break;
+    }
+  }
 
-  peer = new Peer(ROOM_ID);
+  if(!peer){
+    setStatus('3명 방이 가득 찼습니다.');
+    return;
+  }
 
-  let hostOpened = false;
+  peer.on('call',call=>{
+    const slot=getSlot(call.peer);
+    calls[slot]=call;
 
-  peer.on("open", function(){
-    hostOpened = true;
-    statusText("진행자 대기 중 · 상대방도 방송 시작을 눌러주세요");
-  });
-
-  peer.on("call", function(incomingCall){
-
-    call = incomingCall;
     call.answer(stream);
 
-    call.on("stream", function(remoteStream){
-      showGuest(remoteStream);
+    call.on('stream',remoteStream=>{
+      showRemote(slot,remoteStream);
+    });
+
+    call.on('close',()=>{
+      delete calls[slot];
+      resetSlot(slot);
     });
   });
 
-  peer.on("error", function(err){
+  for(let i=1;i<mySlot;i++){
+    const call=peer.call(BASE+i,stream);
+    calls[i]=call;
 
-    if(!hostOpened && err.type === "unavailable-id"){
-      try{ peer.destroy(); }catch(e){}
-      startGuest();
-    }else{
-      statusText("연결 오류 · 다시 시도해 주세요");
-    }
-  });
-
-  setTimeout(function(){
-    if(!hostOpened && peer && !peer.destroyed){
-      try{ peer.destroy(); }catch(e){}
-      startGuest();
-    }
-  },2500);
-}
-
-function startGuest(){
-
-  statusText("참가자로 연결 중...");
-
-  peer = new Peer();
-
-  peer.on("open", function(){
-
-    call = peer.call(ROOM_ID, stream);
-
-    call.on("stream", function(remoteStream){
-      showGuest(remoteStream);
+    call.on('stream',remoteStream=>{
+      showRemote(i,remoteStream);
     });
 
-    call.on("close", function(){
-      statusText("상대방 연결 종료");
+    call.on('close',()=>{
+      delete calls[i];
+      resetSlot(i);
     });
-  });
+  }
 
-  peer.on("error", function(){
-    statusText("연결 오류 · 다시 시도해 주세요");
-  });
+  setStatus(
+    mySlot===1
+      ? '진행자 입장 완료'
+      : '참가자 '+mySlot+' 입장 완료'
+  );
 }
 
 function stopRoom(){
 
-  try{
-    if(call) call.close();
-  }catch(e){}
+  Object.values(calls).forEach(call=>{
+    try{call.close()}catch(e){}
+  });
+
+  calls={};
 
   try{
     if(peer) peer.destroy();
   }catch(e){}
 
   if(stream){
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach(track=>track.stop());
   }
 
-  stream = null;
-  peer = null;
-  call = null;
+  stream=null;
+  peer=null;
+  mySlot=0;
 
-  document.getElementById("myVideo").srcObject = null;
-  document.getElementById("msg").style.display = "flex";
-  document.getElementById("guest").innerHTML = "참가자 2";
+  document.getElementById('lv').srcObject=null;
+  document.getElementById('ph').style.display='flex';
 
-  statusText("대기 중");
+  resetSlot(1);
+  resetSlot(2);
+  resetSlot(3);
+
+  setStatus('대기 중');
 }
 </script>
 
