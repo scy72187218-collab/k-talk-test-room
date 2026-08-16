@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -9,176 +10,393 @@
 
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#05030a;color:#fff;
- font-family:Arial,"Noto Sans KR",sans-serif
+html,body{margin:0;background:#05030a;color:#fff;font-family:Arial,"Noto Sans KR",sans-serif}
+body{min-height:100vh}
+button,input{font-family:inherit}
+button{cursor:pointer}
+
+.app{
+ width:100%;
+ max-width:1100px;
+ margin:auto;
+ padding:7px;
 }
-.app{max-width:1100px;margin:auto;padding:10px}
 
 header{
- display:flex;align-items:center;justify-content:space-between;
- padding:4px 5px 8px
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ padding:4px 4px 7px;
 }
-.logo{font-size:30px;font-weight:900;color:#ffd44f}
+
+.logo{
+ font-size:27px;
+ font-weight:900;
+ color:#ffd44f;
+ line-height:1;
+}
+
+.sub{
+ margin-top:5px;
+ font-size:13px;
+ color:#eee;
+}
+
 .onair{
- background:#ef174f;padding:10px 14px;
- border-radius:10px;font-weight:900
+ background:#ef174f;
+ padding:9px 12px;
+ border-radius:10px;
+ font-weight:900;
+ white-space:nowrap;
 }
 
 .notice{
  border:1px solid #54265e;
- border-radius:9px;padding:9px;
- text-align:center;font-weight:800;color:#ffd548;
- margin-bottom:9px
+ border-radius:9px;
+ padding:8px 5px;
+ text-align:center;
+ font-weight:900;
+ color:#ffd548;
+ margin-bottom:7px;
+ font-size:14px;
 }
 
 .modebar{
- display:flex;gap:7px;margin-bottom:9px
+ display:flex;
+ gap:6px;
+ margin-bottom:7px;
 }
+
 .modebar button{
- flex:1;padding:10px;border:1px solid #66306f;
- border-radius:10px;background:#17101e;color:#fff;font-weight:900
-}
-.modebar .active{background:#8b2be2}
-
-.layout{
- display:grid;
- grid-template-columns:1.05fr 1.35fr;
- gap:9px
-}
-
-/* 호스트 화면 */
-.host{
- position:relative;height:360px;
- border:1px solid #63306d;border-radius:12px;
- overflow:hidden;background:#09080d
-}
-.host video{
- width:100%;height:100%;
- object-fit:cover
-}
-.hostEmpty{
- position:absolute;inset:0;
- display:flex;align-items:center;justify-content:center;
- color:#aaa;font-size:18px
-}
-.hostTag{
- position:absolute;left:10px;top:10px;
- color:#ff365c;font-weight:900
+ flex:1;
+ min-width:0;
+ padding:10px 3px;
+ border:1px solid #66306f;
+ border-radius:10px;
+ background:#17101e;
+ color:#fff;
+ font-weight:900;
+ font-size:14px;
 }
 
-/* 참가자 */
-.rightTitle{
- padding:7px 10px;background:#17101d;
- border:1px solid #57305f;
- border-radius:9px;margin-bottom:7px;
- color:#ffd64c;font-weight:900
-}
-.people{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:6px
-}
-.person{
- height:113px;
- background:#17131b;
- border:1px solid #55305d;
- border-radius:9px;
- overflow:hidden;position:relative;
- display:flex;align-items:center;justify-content:center;
- color:#aaa
-}
-.person video{
- width:100%;height:100%;object-fit:cover
-}
-.personLabel{
- position:absolute;left:4px;bottom:4px;
- background:#000b;padding:3px 6px;
- border-radius:5px;font-size:11px
-}
-
-.controls{
- display:flex;gap:7px;margin:9px 0
-}
-.controls button{
- flex:1;border:0;border-radius:10px;
- padding:12px;color:#fff;font-weight:900
-}
-.start{background:#8f35ed}
-.stop{background:#d71d47}
-
-.status{
- background:#191020;border:1px solid #4d2855;
- padding:9px;border-radius:9px;
- color:#ffd750;margin-bottom:9px
-}
-
-.lower{
- display:grid;grid-template-columns:1fr 1fr;
- gap:9px
-}
-.panel{
- border:1px solid #54285d;
- background:#0b080f;border-radius:11px;
- padding:9px
-}
-.panel h3{margin:0 0 7px;color:#f0c9ff}
-
-.chat{
- height:150px;overflow:auto;
- background:#060509;padding:7px;
- border-radius:7px;line-height:1.55;
- font-size:13px
-}
-.chatInput{
- display:flex;gap:5px;margin-top:6px
-}
-.chatInput input{
- flex:1;background:#1c1920;border:0;
- color:#fff;padding:10px;border-radius:8px
-}
-.chatInput button{
- background:#9138e6;color:#fff;border:0;
- border-radius:8px;padding:0 15px;font-weight:900
-}
-
-.gifts{
- display:grid;grid-template-columns:repeat(5,1fr);
- gap:5px
-}
-.gift{
- text-align:center;border:1px solid #4f2858;
- border-radius:8px;padding:8px 2px;
- cursor:pointer
-}
-.gift b{display:block;font-size:27px}
-.gift small{font-size:11px}
-
-.events{
- display:flex;gap:6px;margin-top:8px
-}
-.events button{
- flex:1;background:#281334;color:#fff;
- border:1px solid #733185;border-radius:8px;
- padding:10px;font-weight:800
+.modebar .active{
+ background:#8b2be2;
+ box-shadow:0 0 10px #8b2be277;
 }
 
 .passwordBox{
  display:none;
- background:#1a1020;border:1px solid #793188;
- padding:10px;border-radius:10px;margin-bottom:9px
-}
-.passwordBox input{
- width:100%;padding:11px;border:0;border-radius:7px;
- font-size:16px
+ background:#1a1020;
+ border:1px solid #793188;
+ padding:8px;
+ border-radius:10px;
+ margin-bottom:7px;
 }
 
+.passwordBox input{
+ width:100%;
+ margin-top:6px;
+ padding:10px;
+ border:0;
+ border-radius:7px;
+ font-size:16px;
+}
+
+/* 핵심 방송 화면: 휴대폰에서도 좌우 유지 */
+.layout{
+ display:grid;
+ grid-template-columns:46% 54%;
+ gap:5px;
+ align-items:start;
+}
+
+/* 호스트 */
+.host{
+ position:relative;
+ height:330px;
+ border:1px solid #63306d;
+ border-radius:11px;
+ overflow:hidden;
+ background:#09080d;
+}
+
+.host video{
+ display:block;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ object-position:center;
+}
+
+.hostEmpty{
+ position:absolute;
+ inset:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:8px;
+ color:#aaa;
+ font-size:15px;
+}
+
+.hostTag{
+ position:absolute;
+ left:7px;
+ top:7px;
+ color:#ff365c;
+ font-size:12px;
+ font-weight:900;
+ z-index:3;
+}
+
+/* 참가자 */
+.rightTitle{
+ height:31px;
+ display:flex;
+ align-items:center;
+ padding:4px 6px;
+ background:#17101d;
+ border:1px solid #57305f;
+ border-radius:8px;
+ margin-bottom:4px;
+ color:#ffd64c;
+ font-weight:900;
+ font-size:11px;
+ overflow:hidden;
+ white-space:nowrap;
+}
+
+.people{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:3px;
+}
+
+.person{
+ height:71px;
+ min-width:0;
+ background:#17131b;
+ border:1px solid #55305d;
+ border-radius:7px;
+ overflow:hidden;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:#aaa;
+ font-size:10px;
+}
+
+.person video{
+ display:block;
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.personLabel{
+ position:absolute;
+ left:2px;
+ bottom:2px;
+ max-width:95%;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ background:#000c;
+ padding:2px 3px;
+ border-radius:4px;
+ font-size:8px;
+}
+
+/* 방송 버튼 */
+.controls{
+ display:flex;
+ gap:6px;
+ margin:7px 0;
+}
+
+.controls button{
+ flex:1;
+ border:0;
+ border-radius:9px;
+ padding:11px 5px;
+ color:#fff;
+ font-weight:900;
+}
+
+.start{background:#8f35ed}
+.stop{background:#d71d47}
+
+.status{
+ background:#191020;
+ border:1px solid #4d2855;
+ padding:8px;
+ border-radius:9px;
+ color:#ffd750;
+ margin-bottom:7px;
+ font-size:12px;
+}
+
+/* 아래 채팅/선물 */
+.lower{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:7px;
+}
+
+.panel{
+ min-width:0;
+ border:1px solid #54285d;
+ background:#0b080f;
+ border-radius:10px;
+ padding:7px;
+}
+
+.panel h3{
+ margin:0 0 6px;
+ color:#f0c9ff;
+ font-size:15px;
+}
+
+.chat{
+ height:135px;
+ overflow:auto;
+ background:#060509;
+ padding:6px;
+ border-radius:7px;
+ line-height:1.5;
+ font-size:12px;
+}
+
+.chatInput{
+ display:flex;
+ gap:4px;
+ margin-top:5px;
+}
+
+.chatInput input{
+ min-width:0;
+ flex:1;
+ background:#1c1920;
+ border:0;
+ color:#fff;
+ padding:9px;
+ border-radius:7px;
+}
+
+.chatInput button{
+ background:#9138e6;
+ color:#fff;
+ border:0;
+ border-radius:7px;
+ padding:0 12px;
+ font-weight:900;
+}
+
+.gifts{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:3px;
+}
+
+.gift{
+ min-width:0;
+ text-align:center;
+ border:1px solid #4f2858;
+ border-radius:7px;
+ padding:6px 1px;
+}
+
+.gift b{
+ display:block;
+ font-size:23px;
+}
+
+.gift small{
+ font-size:9px;
+}
+
+.events{
+ display:flex;
+ gap:4px;
+ margin-top:6px;
+}
+
+.events button{
+ flex:1;
+ min-width:0;
+ background:#281334;
+ color:#fff;
+ border:1px solid #733185;
+ border-radius:7px;
+ padding:8px 2px;
+ font-size:10px;
+ font-weight:800;
+}
+
+/* 휴대폰 */
 @media(max-width:700px){
- .layout{grid-template-columns:1fr}
+ .app{padding:5px}
+
+ .logo{font-size:24px}
+ .sub{font-size:12px}
+ .onair{font-size:13px;padding:8px 10px}
+
+ .notice{
+   font-size:12px;
+   padding:7px 3px;
+ }
+
+ .modebar button{
+   font-size:12px;
+   padding:9px 2px;
+ }
+
+ /* 절대로 1열로 바꾸지 않음 */
+ .layout{
+   grid-template-columns:46% 54%;
+   gap:4px;
+ }
+
+ .host{
+   height:305px;
+ }
+
+ .rightTitle{
+   height:27px;
+   font-size:9px;
+   padding:3px;
+ }
+
+ .people{
+   grid-template-columns:repeat(3,minmax(0,1fr));
+   gap:2px;
+ }
+
+ .person{
+   height:66px;
+   font-size:8px;
+ }
+
+ .personLabel{
+   font-size:7px;
+ }
+
+ .lower{
+   grid-template-columns:1fr;
+ }
+
+ .chat{height:125px}
+}
+
+/* 아주 작은 휴대폰 */
+@media(max-width:390px){
  .host{height:285px}
- .person{height:95px}
- .lower{grid-template-columns:1fr}
- .logo{font-size:25px}
+ .person{height:61px}
+ .logo{font-size:22px}
 }
 </style>
 </head>
@@ -188,52 +406,39 @@ header{
 
 <header>
  <div>
-   <div class="logo">👑 K-Talk</div>
-   <small id="roomDescription">화상 방송방 · 최대 13명</small>
+  <div class="logo">👑 K-Talk</div>
+  <div id="roomDescription" class="sub">화상 방송방 · 최대 13명</div>
  </div>
  <div class="onair">● ON AIR</div>
 </header>
 
 <div class="notice">
- ★ 출석체크 눌러주세요 ★　 광고 문의 환영합니다
+ ★ 출석체크 눌러주세요 ★　신청곡 5,000원　★ 광고 문의 환영합니다 ★
 </div>
 
 <div class="modebar">
- <button id="publicBtn" class="active" onclick="selectPublic()">
-   🌐 일반방 13명
- </button>
-
- <button id="secretBtn" onclick="selectSecret()">
-   🔒 비밀방 6명
- </button>
+ <button id="publicBtn" class="active" onclick="selectPublic()">🌐 일반방 13명</button>
+ <button id="secretBtn" onclick="selectSecret()">🔒 비밀방 6명</button>
 </div>
 
 <div id="passwordBox" class="passwordBox">
  <b>🔒 비밀방 비밀번호</b>
- <input id="roomPassword"
-        type="password"
-        maxlength="12"
-        placeholder="비밀번호를 입력하세요">
+ <input id="roomPassword" type="password" maxlength="12" placeholder="비밀번호를 입력하세요">
 </div>
 
 <div class="layout">
 
  <div>
-   <div class="host">
-     <video id="hostVideo" autoplay playsinline muted></video>
-     <div id="hostEmpty" class="hostEmpty">
-       방송 시작을 눌러주세요
-     </div>
-     <div class="hostTag">● ON AIR</div>
-   </div>
+  <div class="host">
+   <video id="hostVideo" autoplay playsinline muted></video>
+   <div id="hostEmpty" class="hostEmpty">방송 시작을 눌러주세요</div>
+   <div class="hostTag">● ON AIR</div>
+  </div>
  </div>
 
  <div>
-   <div id="roomTitle" class="rightTitle">
-     👥 일반 방송방 · 최대 13명
-   </div>
-
-   <div id="people" class="people"></div>
+  <div id="roomTitle" class="rightTitle">👥 일반 방송방 · 최대 13명</div>
+  <div id="people" class="people"></div>
  </div>
 
 </div>
@@ -248,71 +453,42 @@ header{
 <div class="lower">
 
  <div class="panel">
-   <h3>💬 채팅</h3>
+  <h3>💬 채팅</h3>
 
-   <div id="chat" class="chat">
-     <div>관리자 : K-Talk 방송방입니다.</div>
-   </div>
+  <div id="chat" class="chat">
+   <div>관리자 : K-Talk 방송방입니다.</div>
+  </div>
 
-   <div class="chatInput">
-     <input id="chatText"
-            placeholder="메시지를 입력하세요"
-            onkeydown="if(event.key==='Enter')sendChat()">
-
-     <button onclick="sendChat()">전송</button>
-   </div>
+  <div class="chatInput">
+   <input id="chatText"
+    placeholder="메시지를 입력하세요"
+    onkeydown="if(event.key==='Enter')sendChat()">
+   <button onclick="sendChat()">전송</button>
+  </div>
  </div>
 
  <div class="panel">
-   <h3>🎁 선물 / 후원</h3>
+  <h3>🎁 선물 / 후원 · 테스트</h3>
 
-   <div class="gifts">
+  <div class="gifts">
+   <div class="gift" onclick="sendGift('장미')"><b>🌹</b><small>장미<br>50원</small></div>
+   <div class="gift" onclick="sendGift('하트')"><b>❤️</b><small>하트</small></div>
+   <div class="gift" onclick="sendGift('별')"><b>⭐</b><small>별</small></div>
+   <div class="gift" onclick="sendGift('풍선')"><b>🎈</b><small>풍선</small></div>
+   <div class="gift" onclick="sendGift('선물상자')"><b>🎁</b><small>선물상자</small></div>
+  </div>
 
-     <div class="gift" onclick="sendGift('장미')">
-       <b>🌹</b>
-       <small>장미<br>50원</small>
-     </div>
-
-     <div class="gift" onclick="sendGift('하트')">
-       <b>❤️</b>
-       <small>하트</small>
-     </div>
-
-     <div class="gift" onclick="sendGift('별')">
-       <b>⭐</b>
-       <small>별</small>
-     </div>
-
-     <div class="gift" onclick="sendGift('풍선')">
-       <b>🎈</b>
-       <small>풍선</small>
-     </div>
-
-     <div class="gift" onclick="sendGift('선물상자')">
-       <b>🎁</b>
-       <small>선물상자</small>
-     </div>
-
-   </div>
-
-   <div class="events">
-     <button onclick="attendance()">💗 출석체크</button>
-     <button onclick="lottery()">🎰 제비뽑기</button>
-     <button onclick="importantNotice()">📢 공지</button>
-   </div>
-
+  <div class="events">
+   <button onclick="attendance()">💗 출석체크</button>
+   <button onclick="lottery()">🎰 제비뽑기</button>
+   <button onclick="importantNotice()">📢 공지</button>
+  </div>
  </div>
-</div>
 
+</div>
 </div>
 
 <script>
-/* ========================================
-   K-TALK 실제 화상 방송
-   일반방 13명 / 비밀방 6명
-   코인 실제 계산 OFF
-======================================== */
-
 let roomMode="public";
 let MAX_USERS=13;
 
@@ -327,38 +503,27 @@ const retryAfter=new Map();
 
 const $=id=>document.getElementById(id);
 
-function currentRoomKey(){
-
- if(roomMode==="public"){
-   return "ktalk-public-live-final-20260817-";
- }
-
- const pw=$("roomPassword").value.trim();
-
- return "ktalk-secret-"+simpleHash(pw)+"-";
-}
-
 function simpleHash(text){
-
  let h=0;
-
  for(let i=0;i<text.length;i++){
-   h=((h<<5)-h)+text.charCodeAt(i);
-   h|=0;
+  h=((h<<5)-h)+text.charCodeAt(i);
+  h|=0;
  }
-
  return Math.abs(h);
 }
 
-/* ===============================
-   일반방 / 비밀방 선택
-================================ */
+function currentRoomKey(){
+ if(roomMode==="public"){
+  return "ktalk-public-live-final-20260817-";
+ }
+ const pw=$("roomPassword").value.trim();
+ return "ktalk-secret-"+simpleHash(pw)+"-";
+}
 
 function selectPublic(){
-
  if(localStream){
-   alert("방송을 먼저 종료해 주세요.");
-   return;
+  alert("방송을 먼저 종료해 주세요.");
+  return;
  }
 
  roomMode="public";
@@ -366,23 +531,17 @@ function selectPublic(){
 
  $("publicBtn").classList.add("active");
  $("secretBtn").classList.remove("active");
-
  $("passwordBox").style.display="none";
-
- $("roomDescription").textContent=
-   "화상 방송방 · 최대 13명";
-
- $("roomTitle").textContent=
-   "👥 일반 방송방 · 최대 13명";
+ $("roomDescription").textContent="화상 방송방 · 최대 13명";
+ $("roomTitle").textContent="👥 일반 방송방 · 최대 13명";
 
  buildPeople();
 }
 
 function selectSecret(){
-
  if(localStream){
-   alert("방송을 먼저 종료해 주세요.");
-   return;
+  alert("방송을 먼저 종료해 주세요.");
+  return;
  }
 
  roomMode="secret";
@@ -390,233 +549,172 @@ function selectSecret(){
 
  $("secretBtn").classList.add("active");
  $("publicBtn").classList.remove("active");
-
  $("passwordBox").style.display="block";
-
- $("roomDescription").textContent=
-   "🔒 비밀 화상방 · 최대 6명";
-
- $("roomTitle").textContent=
-   "🔒 비밀 방 · 최대 6명";
+ $("roomDescription").textContent="🔒 비밀 화상방 · 최대 6명";
+ $("roomTitle").textContent="🔒 비밀방 · 최대 6명";
 
  buildPeople();
 }
 
-/* ===============================
-   참가자 화면
-================================ */
-
 function buildPeople(){
-
  const box=$("people");
-
  box.innerHTML="";
 
  for(let i=1;i<=MAX_USERS;i++){
-
-   const d=document.createElement("div");
-
-   d.className="person";
-   d.id="person-"+i;
-
-   d.textContent=
-     i===1 ? "진행자" : "참가자 "+i;
-
-   box.appendChild(d);
+  const d=document.createElement("div");
+  d.className="person";
+  d.id="person-"+i;
+  d.textContent=i===1 ? "진행자" : "참가자 "+i;
+  box.appendChild(d);
  }
 }
 
 buildPeople();
 
 function resetPerson(slot){
-
  const box=$("person-"+slot);
-
  if(!box)return;
 
- box.innerHTML=
-   slot===1 ? "진행자" : "참가자 "+slot;
+ box.innerHTML="";
+ box.textContent=slot===1 ? "진행자" : "참가자 "+slot;
 }
 
 function showRemote(slot,stream){
-
  const box=$("person-"+slot);
-
  if(!box)return;
 
  box.innerHTML="";
 
  const video=document.createElement("video");
-
  video.autoplay=true;
  video.playsInline=true;
  video.srcObject=stream;
 
  const label=document.createElement("div");
-
  label.className="personLabel";
-
- label.textContent=
-   slot===1 ? "진행자" : "참가자 "+slot;
+ label.textContent=slot===1 ? "진행자" : "참가자 "+slot;
 
  box.appendChild(video);
  box.appendChild(label);
+
+ video.play().catch(()=>{});
 }
 
 function getSlot(peerId){
-
  const m=String(peerId||"").match(/-(\d+)$/);
-
  return m ? Number(m[1]) : 0;
 }
 
-/* ===============================
-   빈 자리 찾기
-================================ */
-
 function claimSlot(slot){
-
  return new Promise(resolve=>{
+  const id=currentRoomKey()+slot;
 
-   const id=currentRoomKey()+slot;
-
-   const p=new Peer(id,{
-     debug:0,
-     config:{
-       iceServers:[
-         {urls:"stun:stun.l.google.com:19302"},
-         {urls:"stun:stun1.l.google.com:19302"}
-       ]
-     }
-   });
-
-   let finished=false;
-
-   function finish(value){
-
-     if(finished)return;
-
-     finished=true;
-
-     resolve(value);
+  const p=new Peer(id,{
+   debug:0,
+   config:{
+    iceServers:[
+     {urls:"stun:stun.l.google.com:19302"},
+     {urls:"stun:stun1.l.google.com:19302"}
+    ]
    }
+  });
 
-   p.on("open",()=>finish(p));
+  let finished=false;
 
-   p.on("error",()=>{
+  function finish(value){
+   if(finished)return;
+   finished=true;
+   resolve(value);
+  }
 
-     try{p.destroy()}catch(e){}
+  p.on("open",()=>finish(p));
 
-     finish(null);
-   });
+  p.on("error",()=>{
+   try{p.destroy()}catch(e){}
+   finish(null);
+  });
 
-   setTimeout(()=>{
-
-     if(finished)return;
-
-     try{p.destroy()}catch(e){}
-
-     finish(null);
-
-   },2200);
+  setTimeout(()=>{
+   if(finished)return;
+   try{p.destroy()}catch(e){}
+   finish(null);
+  },2200);
  });
 }
 
-/* ===============================
-   방송 시작
-================================ */
-
 async function startBroadcast(){
-
  if(localStream)return;
 
  if(roomMode==="secret"){
+  const pw=$("roomPassword").value.trim();
 
-   const pw=$("roomPassword").value.trim();
+  if(pw.length<4){
+   alert("비밀방 비밀번호를 4자리 이상 입력하세요.");
+   return;
+  }
+ }
 
-   if(pw.length<4){
-
-     alert("비밀방 비밀번호를 4자리 이상 입력하세요.");
-
-     return;
-   }
+ if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+  alert("이 브라우저에서는 카메라 방송을 사용할 수 없습니다.");
+  return;
  }
 
  try{
-
-   localStream=
-     await navigator.mediaDevices.getUserMedia({
-
-       video:{
-         facingMode:"user",
-         width:{ideal:640},
-         height:{ideal:480},
-         frameRate:{ideal:20,max:25}
-       },
-
-       audio:{
-         echoCancellation:true,
-         noiseSuppression:true,
-         autoGainControl:true
-       }
-     });
-
+  localStream=await navigator.mediaDevices.getUserMedia({
+   video:{
+    facingMode:"user",
+    width:{ideal:640},
+    height:{ideal:480},
+    frameRate:{ideal:20,max:25}
+   },
+   audio:{
+    echoCancellation:true,
+    noiseSuppression:true,
+    autoGainControl:true
+   }
+  });
  }catch(e){
-
-   alert("카메라와 마이크 사용을 허용해 주세요.");
-
-   return;
+  localStream=null;
+  alert("카메라와 마이크 사용을 허용해 주세요.");
+  return;
  }
 
  $("hostVideo").srcObject=localStream;
-
+ $("hostVideo").play().catch(()=>{});
  $("hostEmpty").style.display="none";
-
  $("status").textContent="방송 연결 중...";
 
  for(let slot=1;slot<=MAX_USERS;slot++){
+  const candidate=await claimSlot(slot);
 
-   const candidate=await claimSlot(slot);
-
-   if(candidate){
-
-     peer=candidate;
-     mySlot=slot;
-
-     break;
-   }
+  if(candidate){
+   peer=candidate;
+   mySlot=slot;
+   break;
+  }
  }
 
  if(!peer){
-
-   alert("현재 방송방이 가득 찼습니다.");
-
-   stopBroadcast();
-
-   return;
+  alert("현재 방송방이 가득 찼습니다.");
+  stopBroadcast();
+  return;
  }
 
  peer.on("call",call=>{
+  const slot=getSlot(call.peer);
 
-   const slot=getSlot(call.peer);
+  if(!slot || slot===mySlot){
+   try{call.close()}catch(e){}
+   return;
+  }
 
-   if(!slot || slot===mySlot){
-
-     try{call.close()}catch(e){}
-
-     return;
-   }
-
-   call.answer(localStream);
-
-   attachCall(slot,call);
+  call.answer(localStream);
+  attachCall(slot,call);
  });
 
  peer.on("disconnected",()=>{
-
-   $("status").textContent="연결 복구 중...";
-
-   try{peer.reconnect()}catch(e){}
+  $("status").textContent="연결 복구 중...";
+  try{peer.reconnect()}catch(e){}
  });
 
  peer.on("error",()=>{});
@@ -628,85 +726,57 @@ async function startBroadcast(){
  syncTimer=setInterval(syncUsers,2000);
 
  $("status").textContent=
-   "✅ "+
-   (mySlot===1 ? "진행자" : "참가자 "+mySlot)+
-   " 입장 완료 · 최대 "+MAX_USERS+"명";
+  "✅ "+(mySlot===1 ? "진행자" : "참가자 "+mySlot)+
+  " 입장 완료 · 최대 "+MAX_USERS+"명";
 
  speakImportant(
-   mySlot===1
-   ? "K Talk 방송을 시작합니다."
-   : "K Talk 방송방에 입장했습니다."
+  mySlot===1
+   ? "케이톡 방송을 시작합니다."
+   : "케이톡 방송방에 입장했습니다."
  );
 }
 
-/* ===============================
-   통화 연결
-================================ */
-
 function attachCall(slot,call){
-
  if(!slot || slot===mySlot)return;
 
  const old=calls.get(slot);
 
  if(old && old!==call){
-
-   try{old.close()}catch(e){}
+  try{old.close()}catch(e){}
  }
 
  calls.set(slot,call);
  pending.delete(slot);
 
  call.on("stream",stream=>{
-
-   calls.set(slot,call);
-
-   showRemote(slot,stream);
+  calls.set(slot,call);
+  showRemote(slot,stream);
  });
 
  call.on("close",()=>{
-
-   if(calls.get(slot)===call){
-
-     calls.delete(slot);
-     pending.delete(slot);
-
-     resetPerson(slot);
-
-     retryAfter.set(
-       slot,
-       Date.now()+1200
-     );
-   }
+  if(calls.get(slot)===call){
+   calls.delete(slot);
+   pending.delete(slot);
+   resetPerson(slot);
+   retryAfter.set(slot,Date.now()+1200);
+  }
  });
 
  call.on("error",()=>{
-
-   if(calls.get(slot)===call){
-
-     calls.delete(slot);
-     pending.delete(slot);
-
-     resetPerson(slot);
-
-     retryAfter.set(
-       slot,
-       Date.now()+1200
-     );
-   }
+  if(calls.get(slot)===call){
+   calls.delete(slot);
+   pending.delete(slot);
+   resetPerson(slot);
+   retryAfter.set(slot,Date.now()+1200);
+  }
  });
 }
 
 function dial(slot){
-
  if(!peer || !localStream)return;
-
  if(slot===mySlot)return;
-
  if(calls.has(slot))return;
-
  if(pending.has(slot))return;
-
  if((retryAfter.get(slot)||0)>Date.now())return;
 
  pending.set(slot,Date.now());
@@ -714,99 +784,68 @@ function dial(slot){
  let call;
 
  try{
-
-   call=peer.call(
-     currentRoomKey()+slot,
-     localStream,
-     {metadata:{slot:mySlot}}
-   );
-
+  call=peer.call(
+   currentRoomKey()+slot,
+   localStream,
+   {metadata:{slot:mySlot}}
+  );
  }catch(e){
-
-   pending.delete(slot);
-
-   return;
+  pending.delete(slot);
+  return;
  }
 
  if(!call){
-
-   pending.delete(slot);
-
-   return;
+  pending.delete(slot);
+  return;
  }
 
  let connected=false;
 
  call.on("stream",stream=>{
-
-   connected=true;
-
-   attachCall(slot,call);
-
-   showRemote(slot,stream);
+  connected=true;
+  attachCall(slot,call);
+  showRemote(slot,stream);
  });
 
  call.on("close",()=>{
+  pending.delete(slot);
 
-   pending.delete(slot);
-
-   if(calls.get(slot)===call){
-
-     calls.delete(slot);
-     resetPerson(slot);
-   }
+  if(calls.get(slot)===call){
+   calls.delete(slot);
+   resetPerson(slot);
+  }
  });
 
  call.on("error",()=>{
-
-   pending.delete(slot);
+  pending.delete(slot);
  });
 
  setTimeout(()=>{
-
-   if(!connected){
-
-     pending.delete(slot);
-
-     try{call.close()}catch(e){}
-
-     retryAfter.set(
-       slot,
-       Date.now()+1500
-     );
-   }
-
+  if(!connected){
+   pending.delete(slot);
+   try{call.close()}catch(e){}
+   retryAfter.set(slot,Date.now()+1500);
+  }
  },6500);
 }
 
 function syncUsers(){
-
  if(!peer || !localStream)return;
 
  for(let slot=1;slot<=MAX_USERS;slot++){
-
-   if(slot===mySlot)continue;
-
-   dial(slot);
+  if(slot===mySlot)continue;
+  dial(slot);
  }
 }
 
-/* ===============================
-   방송 종료
-================================ */
-
 function stopBroadcast(){
-
  if(syncTimer){
-
-   clearInterval(syncTimer);
-
-   syncTimer=null;
+  clearInterval(syncTimer);
+  syncTimer=null;
  }
 
  calls.forEach(call=>{
-
-   try{call.close()}catch(e){}
+  try{call.close()}catch(e){}
  });
 
  calls.clear();
@@ -814,15 +853,11 @@ function stopBroadcast(){
  retryAfter.clear();
 
  if(peer){
-
-   try{peer.destroy()}catch(e){}
+  try{peer.destroy()}catch(e){}
  }
 
  if(localStream){
-
-   localStream
-     .getTracks()
-     .forEach(track=>track.stop());
+  localStream.getTracks().forEach(track=>track.stop());
  }
 
  peer=null;
@@ -830,170 +865,111 @@ function stopBroadcast(){
  mySlot=0;
 
  $("hostVideo").srcObject=null;
-
  $("hostEmpty").style.display="flex";
-
  $("status").textContent="방송 대기 중";
 
  buildPeople();
 
  if("speechSynthesis" in window){
-
-   speechSynthesis.cancel();
+  speechSynthesis.cancel();
  }
 }
 
-/* ========================================
-   채팅 자동 음성 읽기
-======================================== */
-
+/* 채팅 AI 음성 읽기 */
 let voiceEnabled=true;
 
 function speak(text,important=false){
-
- if(!voiceEnabled)return;
-
- if(!text)return;
-
+ if(!voiceEnabled || !text)return;
  if(!("speechSynthesis" in window))return;
 
  if(important){
-
-   speechSynthesis.cancel();
+  speechSynthesis.cancel();
  }
 
- const utter=
-   new SpeechSynthesisUtterance(text);
+ const msg=new SpeechSynthesisUtterance(text);
+ msg.lang="ko-KR";
+ msg.rate=1;
+ msg.pitch=1;
+ msg.volume=1;
 
- utter.lang="ko-KR";
- utter.rate=1;
- utter.pitch=1;
- utter.volume=1;
-
- speechSynthesis.speak(utter);
+ speechSynthesis.speak(msg);
 }
 
 function speakImportant(text){
-
  speak(text,true);
 }
 
 function addChat(name,text,important=false){
-
  const row=document.createElement("div");
-
  row.textContent=name+" : "+text;
 
  $("chat").appendChild(row);
-
- $("chat").scrollTop=
-   $("chat").scrollHeight;
+ $("chat").scrollTop=$("chat").scrollHeight;
 
  if(important){
-
-   speakImportant(
-     name+" 안내입니다. "+text
-   );
-
+  speakImportant(name+" 안내입니다. "+text);
  }else{
-
-   speak(
-     name+"님, "+text
-   );
+  speak(name+"님, "+text);
  }
 }
 
 function sendChat(){
-
  const input=$("chatText");
-
  const text=input.value.trim();
 
  if(!text)return;
 
  addChat("나",text);
-
  input.value="";
 }
 
-/* ===============================
-   중요한 공지
-================================ */
-
 function importantNotice(){
-
  addChat(
-   "관리자",
-   "중요 공지사항을 확인해 주세요.",
-   true
+  "관리자",
+  "중요 공지사항을 확인해 주세요.",
+  true
  );
 }
 
-/* ===============================
-   선물
-   테스트 중 실제 돈/코인 계산 없음
-================================ */
-
+/* 테스트 선물 - 실제 돈/코인 차감 없음 */
 function sendGift(name){
-
  addChat(
-   "선물",
-   name+
-   " 선물이 전송되었습니다.",
-   true
+  "선물",
+  name+" 선물이 전송되었습니다. 테스트 선물입니다.",
+  true
  );
-
- /* 실제 코인 차감 없음 */
 }
-
-/* ===============================
-   출석 체크
-================================ */
 
 function attendance(){
-
  addChat(
-   "출석체크",
-   "출석체크가 완료되었습니다."
+  "출석체크",
+  "출석체크가 완료되었습니다."
  );
 }
 
-/* ===============================
-   제비뽑기
-================================ */
-
 function lottery(){
-
  const results=[
-   "꽝",
-   "꽝",
-   "장미 1송이",
-   "장미 2송이",
-   "장미 3송이",
-   "장미 4송이",
-   "장미 5송이"
+  "꽝",
+  "꽝",
+  "장미 1송이",
+  "장미 2송이",
+  "장미 3송이",
+  "장미 4송이",
+  "장미 5송이"
  ];
 
  const result=
-   results[
-     Math.floor(
-       Math.random()*results.length
-     )
-   ];
+  results[Math.floor(Math.random()*results.length)];
 
  addChat(
-   "제비뽑기",
-   result+"입니다."
+  "제비뽑기",
+  result+"입니다."
  );
 }
 
-window.addEventListener(
- "beforeunload",
- ()=>{
-
-   try{stopBroadcast()}catch(e){}
- }
-);
+window.addEventListener("beforeunload",()=>{
+ try{stopBroadcast()}catch(e){}
+});
 </script>
 
 </body>
