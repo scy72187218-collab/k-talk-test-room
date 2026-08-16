@@ -3,40 +3,134 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>K-Talk 5인 테스트</title>
+<title>K-Talk 13인 화상채팅</title>
 
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
-body{margin:0;background:#090711;color:#fff;font-family:Arial}
-.w{max-width:430px;margin:auto;padding:14px}
-.test{display:inline-block;background:#ffcc00;color:#111;font-weight:900;padding:5px 10px;border-radius:9px;margin-bottom:7px}
-.top{display:flex;justify-content:space-between;align-items:center}
-.brand{color:#ffd76a;font-size:22px;font-weight:800}
-.on{background:#ff2e6d;padding:7px 10px;border-radius:10px;font-weight:800}
-.v{margin-top:12px;position:relative;background:#15151c;border-radius:16px;overflow:hidden;aspect-ratio:16/10}
-.v video,.p video{width:100%;height:100%;object-fit:cover}
-.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
-.c{display:flex;gap:8px;margin-top:12px}
-.b{flex:1;border:0;border-radius:12px;padding:12px;font-weight:800;color:#fff}
+body{
+  margin:0;
+  background:#090711;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+.w{
+  max-width:480px;
+  margin:auto;
+  padding:14px;
+}
+.final{
+  display:inline-block;
+  background:#ffd700;
+  color:#111;
+  font-weight:900;
+  padding:5px 10px;
+  border-radius:9px;
+  margin-bottom:7px;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  color:#ffd76a;
+  font-size:22px;
+  font-weight:800;
+}
+.on{
+  background:#ff2e6d;
+  padding:7px 10px;
+  border-radius:10px;
+  font-weight:800;
+}
+.v{
+  margin-top:12px;
+  position:relative;
+  background:#15151c;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:16/10;
+}
+.v video,.p video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.ph{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#aaa;
+}
+.c{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+.b{
+  flex:1;
+  border:0;
+  border-radius:12px;
+  padding:12px;
+  font-weight:800;
+  color:#fff;
+}
 .s{background:#8d46ff}
 .e{background:#333}
-.st{margin-top:10px;padding:10px;background:#1c1524;border-radius:10px;color:#ffd76a}
-.g{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
-.p{height:74px;background:#211829;border:1px solid #4a3457;border-radius:11px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;font-size:12px}
-.lab{position:absolute;left:4px;bottom:4px;background:#0008;padding:2px 5px;border-radius:6px;font-size:10px}
+.st{
+  margin-top:10px;
+  padding:10px;
+  background:#1c1524;
+  border-radius:10px;
+  color:#ffd76a;
+}
+.g{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-top:10px;
+}
+.p{
+  height:76px;
+  background:#211829;
+  border:1px solid #4a3457;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  font-size:11px;
+}
+.lab{
+  position:absolute;
+  left:4px;
+  bottom:4px;
+  background:#0009;
+  padding:2px 5px;
+  border-radius:6px;
+  font-size:10px;
+}
+.me{
+  border:2px solid #ffd700;
+}
 </style>
 </head>
 
 <body>
 <div class="w">
 
-<div class="test">TEST · 5명 화상채팅 테스트</div>
+<div class="final">K-Talk · 최대 13명</div>
 
 <div class="top">
   <div>
     <div class="brand">👑 K-Talk</div>
-    <div style="font-size:12px;color:#aaa">시험 방송방 · 최대 13명</div>
+    <div style="font-size:12px;color:#aaa">
+      화상 방송방 · 최대 13명
+    </div>
   </div>
   <div class="on">ON AIR</div>
 </div>
@@ -53,206 +147,534 @@ body{margin:0;background:#090711;color:#fff;font-family:Arial}
 
 <div id="st" class="st">대기 중</div>
 
-<div class="g">
-  <div class="p" id="s1">진행자</div>
-  <div class="p" id="s2">참가자 2</div>
-  <div class="p" id="s3">참가자 3</div>
-  <div class="p" id="s4">참가자 4</div>
-  <div class="p" id="s5">참가자 5</div>
-
-  <div class="p">참가자 6</div>
-  <div class="p">참가자 7</div>
-  <div class="p">참가자 8</div>
-  <div class="p">참가자 9</div>
-  <div class="p">참가자 10</div>
-  <div class="p">참가자 11</div>
-  <div class="p">참가자 12</div>
-  <div class="p">참가자 13</div>
-</div>
+<div class="g" id="grid"></div>
 
 </div>
 
 <script>
-let stream=null;
-let peer=null;
-let mySlot=0;
-let calls={};
+const MAX_USERS = 13;
 
-const BASE='ktalk5-20260815-slot-';
+/*
+  이전 5명 테스트방과 충돌하지 않도록
+  새로운 13명용 방 ID를 사용합니다.
+*/
+const BASE = 'ktalk13-final-20260816-slot-';
 
-function setStatus(text){
-  document.getElementById('st').textContent=text;
+let stream = null;
+let peer = null;
+let mySlot = 0;
+
+const calls = {};
+const pending = {};
+let syncTimer = null;
+
+
+/* 참가자 13칸 만들기 */
+function makeGrid(){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  for(let i=1;i<=MAX_USERS;i++){
+    const box = document.createElement('div');
+    box.className = 'p';
+    box.id = 's'+i;
+    box.textContent = i===1 ? '진행자' : '참가자 '+i;
+    grid.appendChild(box);
+  }
 }
 
+makeGrid();
+
+
+function setStatus(text){
+  document.getElementById('st').textContent = text;
+}
+
+
 function getSlot(id){
-  const m=String(id||'').match(/slot-(\d+)$/);
+  const m = String(id || '').match(/slot-(\d+)$/);
   return m ? Number(m[1]) : 0;
 }
 
-function showRemote(slot, remoteStream){
-  const box=document.getElementById('s'+slot);
+
+function resetSlot(slot){
+  const box = document.getElementById('s'+slot);
   if(!box) return;
 
-  box.innerHTML='';
+  box.classList.remove('me');
+  box.innerHTML = slot===1 ? '진행자' : '참가자 '+slot;
 
-  const video=document.createElement('video');
-  video.autoplay=true;
-  video.playsInline=true;
-  video.srcObject=remoteStream;
+  if(slot === mySlot){
+    box.classList.add('me');
+    box.innerHTML = slot===1
+      ? '진행자 · 나'
+      : '참가자 '+slot+' · 나';
+  }
+}
 
-  const label=document.createElement('div');
-  label.className='lab';
-  label.textContent=slot===1 ? '진행자' : '참가자 '+slot;
+
+function markMe(){
+  for(let i=1;i<=MAX_USERS;i++){
+    resetSlot(i);
+  }
+
+  const box = document.getElementById('s'+mySlot);
+
+  if(box){
+    box.classList.add('me');
+    box.innerHTML =
+      mySlot===1 ? '진행자 · 나' : '참가자 '+mySlot+' · 나';
+  }
+}
+
+
+function showRemote(slot, remoteStream){
+  if(!slot || slot === mySlot) return;
+
+  const box = document.getElementById('s'+slot);
+  if(!box) return;
+
+  box.innerHTML = '';
+
+  const video = document.createElement('video');
+  video.autoplay = true;
+  video.playsInline = true;
+  video.srcObject = remoteStream;
+
+  const label = document.createElement('div');
+  label.className = 'lab';
+  label.textContent =
+    slot===1 ? '진행자' : '참가자 '+slot;
 
   box.appendChild(video);
   box.appendChild(label);
 
-  setStatus('✅ 상대방 연결됨');
+  setStatus('✅ 참가자 연결 중 · 내 번호 '+mySlot);
 }
 
-function resetSlot(slot){
-  const box=document.getElementById('s'+slot);
-  if(box){
-    box.innerHTML=slot===1 ? '진행자' : '참가자 '+slot;
+
+function clearCall(slot){
+  if(calls[slot]){
+    try{
+      calls[slot].close();
+    }catch(e){}
+    delete calls[slot];
+  }
+
+  delete pending[slot];
+
+  if(slot !== mySlot){
+    resetSlot(slot);
   }
 }
 
+
+/*
+  빈 번호를 찾아서 내 번호를 정합니다.
+  1번부터 13번까지 사용합니다.
+*/
 function claimSlot(slot){
   return new Promise(resolve=>{
-    const p=new Peer(BASE+slot);
-    let done=false;
+
+    const p = new Peer(BASE + slot,{
+      debug:0,
+      config:{
+        iceServers:[
+          {urls:'stun:stun.l.google.com:19302'},
+          {urls:'stun:stun1.l.google.com:19302'}
+        ]
+      }
+    });
+
+    let finished = false;
 
     p.on('open',()=>{
-      if(done) return;
-      done=true;
+      if(finished) return;
+      finished = true;
       resolve(p);
     });
 
     p.on('error',()=>{
-      if(done) return;
-      done=true;
-      try{p.destroy()}catch(e){}
+      if(finished) return;
+      finished = true;
+
+      try{
+        p.destroy();
+      }catch(e){}
+
       resolve(null);
     });
 
     setTimeout(()=>{
-      if(!done){
-        done=true;
-        try{p.destroy()}catch(e){}
-        resolve(null);
-      }
-    },1600);
+      if(finished) return;
+
+      finished = true;
+
+      try{
+        p.destroy();
+      }catch(e){}
+
+      resolve(null);
+
+    },2200);
   });
 }
 
-async function startRoom(){
 
-  if(stream) return;
+/*
+  높은 번호 참가자가 낮은 번호 참가자에게 전화합니다.
+
+  예:
+  3번은 1번,2번에게 연결
+  7번은 1~6번에게 연결
+
+  그리고 2초마다 다시 확인하므로
+  나중에 들어오거나 재입장해도 자동으로 다시 붙습니다.
+*/
+function connectTo(slot){
+
+  if(!peer || !stream) return;
+  if(slot <= 0) return;
+  if(slot >= mySlot) return;
+  if(calls[slot]) return;
+  if(pending[slot]) return;
+
+  pending[slot] = true;
+
+  let call;
 
   try{
-    stream=await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:'user',
-        width:{ideal:1280},
-        height:{ideal:720}
-      },
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true,
-        autoGainControl:true
-      }
+    call = peer.call(BASE+slot,stream,{
+      metadata:{slot:mySlot}
     });
-
-    document.getElementById('lv').srcObject=stream;
-    document.getElementById('ph').style.display='none';
-
   }catch(e){
-    alert('카메라와 마이크 권한을 허용해 주세요.');
+    delete pending[slot];
     return;
   }
 
-  setStatus('방 연결 중...');
+  if(!call){
+    delete pending[slot];
+    return;
+  }
 
-  for(let i=1;i<=5;i++){
-    const p=await claimSlot(i);
+  let gotStream = false;
+
+  call.on('stream',remoteStream=>{
+
+    gotStream = true;
+    delete pending[slot];
+
+    calls[slot] = call;
+
+    showRemote(slot,remoteStream);
+  });
+
+  call.on('close',()=>{
+    if(calls[slot] === call){
+      delete calls[slot];
+    }
+
+    delete pending[slot];
+    resetSlot(slot);
+  });
+
+  call.on('error',()=>{
+    if(calls[slot] === call){
+      delete calls[slot];
+    }
+
+    delete pending[slot];
+    resetSlot(slot);
+  });
+
+
+  /*
+    상대방이 아직 준비되지 않았으면
+    잠시 후 다시 연결할 수 있게 해제합니다.
+  */
+  setTimeout(()=>{
+
+    if(!gotStream){
+
+      try{
+        call.close();
+      }catch(e){}
+
+      delete pending[slot];
+
+      if(calls[slot] === call){
+        delete calls[slot];
+      }
+    }
+
+  },7000);
+}
+
+
+/*
+  계속 참가자를 확인합니다.
+  이것이 접속 순서 문제를 없애는 핵심입니다.
+*/
+function syncPeers(){
+
+  if(!peer || !stream || !mySlot) return;
+
+  for(let i=1;i<mySlot;i++){
+
+    if(!calls[i] && !pending[i]){
+      connectTo(i);
+    }
+  }
+}
+
+
+async function startRoom(){
+
+  if(stream || peer){
+    return;
+  }
+
+  try{
+
+    /*
+      13명 휴대폰 사용을 고려해서
+      영상 부하를 너무 높이지 않습니다.
+    */
+    stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          facingMode:'user',
+          width:{ideal:640},
+          height:{ideal:360},
+          frameRate:{ideal:15,max:20}
+        },
+
+        audio:{
+          echoCancellation:true,
+          noiseSuppression:true,
+          autoGainControl:true
+        }
+      });
+
+    document.getElementById('lv').srcObject = stream;
+    document.getElementById('ph').style.display = 'none';
+
+  }catch(e){
+
+    stream = null;
+
+    alert('카메라와 마이크를 허용해 주세요.');
+    return;
+  }
+
+
+  setStatus('13명 방 연결 중...');
+
+
+  /*
+    1번부터 13번까지 빈 번호 찾기
+  */
+  for(let i=1;i<=MAX_USERS;i++){
+
+    const p = await claimSlot(i);
+
     if(p){
-      peer=p;
-      mySlot=i;
+      peer = p;
+      mySlot = i;
       break;
     }
   }
 
+
+  /*
+    13명 모두 사용 중
+  */
   if(!peer){
-    setStatus('5명 방이 가득 찼습니다.');
+
+    if(stream){
+      stream.getTracks().forEach(t=>t.stop());
+    }
+
+    stream = null;
+
+    document.getElementById('lv').srcObject = null;
+    document.getElementById('ph').style.display = 'flex';
+
+    setStatus('⛔ 이 방은 최대 13명입니다.');
+    alert('현재 13명이 접속 중입니다.');
+
     return;
   }
 
+
+  markMe();
+
+
+  /*
+    다른 참가자가 나에게 연결 요청했을 때
+  */
   peer.on('call',call=>{
-    const slot=getSlot(call.peer);
-    calls[slot]=call;
+
+    const slot = getSlot(call.peer);
+
+    if(!slot || slot === mySlot){
+      try{call.close()}catch(e){}
+      return;
+    }
+
+    /*
+      같은 사람과 기존 연결이 있으면
+      오래된 연결 정리
+    */
+    if(calls[slot]){
+      try{
+        calls[slot].close();
+      }catch(e){}
+    }
+
+    delete pending[slot];
+
+    calls[slot] = call;
 
     call.answer(stream);
 
     call.on('stream',remoteStream=>{
+      calls[slot] = call;
       showRemote(slot,remoteStream);
     });
 
     call.on('close',()=>{
-      delete calls[slot];
-      resetSlot(slot);
+      if(calls[slot] === call){
+        delete calls[slot];
+        resetSlot(slot);
+      }
     });
+
+    call.on('error',()=>{
+      if(calls[slot] === call){
+        delete calls[slot];
+        resetSlot(slot);
+      }
+    });
+
   });
 
-  for(let i=1;i<mySlot;i++){
-    const call=peer.call(BASE+i,stream);
-    calls[i]=call;
 
-    call.on('stream',remoteStream=>{
-      showRemote(i,remoteStream);
-    });
+  peer.on('disconnected',()=>{
 
-    call.on('close',()=>{
-      delete calls[i];
-      resetSlot(i);
-    });
-  }
+    setStatus('연결 복구 중...');
+
+    try{
+      peer.reconnect();
+    }catch(e){}
+  });
+
+
+  peer.on('error',err=>{
+
+    /*
+      아직 입장하지 않은 번호를 찾을 때 생기는 오류는
+      다음 동기화 때 다시 확인합니다.
+    */
+    if(
+      err &&
+      (
+        err.type === 'peer-unavailable' ||
+        err.type === 'network'
+      )
+    ){
+      return;
+    }
+
+    console.log('Peer error:',err);
+  });
+
+
+  /*
+    접속 직후 즉시 한번 확인
+  */
+  syncPeers();
+
+
+  /*
+    순서와 관계없이 계속 참가자 확인
+  */
+  syncTimer = setInterval(syncPeers,2000);
+
 
   setStatus(
     mySlot===1
-      ? '진행자 입장 완료'
-      : '참가자 '+mySlot+' 입장 완료'
+      ? '✅ 진행자 입장 완료 · 최대 13명'
+      : '✅ 참가자 '+mySlot+' 입장 완료 · 최대 13명'
   );
 }
 
+
 function stopRoom(){
 
-  Object.values(calls).forEach(call=>{
-    try{call.close()}catch(e){}
+  if(syncTimer){
+    clearInterval(syncTimer);
+    syncTimer = null;
+  }
+
+  Object.keys(calls).forEach(slot=>{
+    try{
+      calls[slot].close();
+    }catch(e){}
   });
 
-  calls={};
+  Object.keys(calls).forEach(k=>delete calls[k]);
+  Object.keys(pending).forEach(k=>delete pending[k]);
+
 
   try{
-    if(peer) peer.destroy();
+    if(peer){
+      peer.destroy();
+    }
   }catch(e){}
+
 
   if(stream){
     stream.getTracks().forEach(track=>track.stop());
   }
 
-  stream=null;
-  peer=null;
-  mySlot=0;
 
-  document.getElementById('lv').srcObject=null;
-  document.getElementById('ph').style.display='flex';
+  stream = null;
+  peer = null;
+  mySlot = 0;
 
-  for(let i=1;i<=5;i++){
+
+  document.getElementById('lv').srcObject = null;
+  document.getElementById('ph').style.display = 'flex';
+
+
+  for(let i=1;i<=MAX_USERS;i++){
     resetSlot(i);
   }
 
+
   setStatus('대기 중');
 }
+
+
+window.addEventListener('beforeunload',()=>{
+
+  if(syncTimer){
+    clearInterval(syncTimer);
+  }
+
+  try{
+    if(peer){
+      peer.destroy();
+    }
+  }catch(e){}
+
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+  }
+
+});
 </script>
 
 </body>
