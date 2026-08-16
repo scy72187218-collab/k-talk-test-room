@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -5,795 +6,566 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>K-Talk LIVE</title>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:#05040b;
-  color:#fff;
-  font-family:Arial,"Noto Sans KR",sans-serif;
-}
-.app{
-  max-width:1100px;
-  margin:auto;
-  padding:12px;
-}
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
-.brand{
-  text-align:center;
-  flex:1;
-}
-.brand b{
-  color:#ffd34d;
-  font-size:29px;
-}
-.brand div{
-  font-size:15px;
-  color:#ddd;
-}
-.onair{
-  background:#d91542;
-  border-radius:9px;
-  padding:9px 13px;
-  font-weight:900;
-}
-.notice{
-  border:1px solid #462150;
-  border-radius:8px;
-  padding:8px;
-  text-align:center;
-  margin-bottom:10px;
-  font-size:15px;
-}
-.notice .yellow{color:#ffd22e;font-weight:900}
-.notice .pink{color:#ff38b6;font-weight:900}
+body{margin:0;background:#07050b;color:#fff;font-family:Arial,sans-serif}
+.wrap{max-width:1000px;margin:auto;padding:8px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:27px;font-weight:900;color:#ffd64a}
+.on{background:#e61d50;padding:7px 12px;border-radius:8px;font-weight:900}
+.notice{text-align:center;border:1px solid #55245e;border-radius:8px;padding:7px;margin:7px 0;color:#ffd43c;font-weight:800}
 
-.broadcast{
-  display:grid;
-  grid-template-columns:47% 53%;
-  gap:10px;
-}
-.host{
-  position:relative;
-  min-height:530px;
-  background:#090812;
-  border:1px solid #4d2257;
-  border-radius:10px;
-  overflow:hidden;
-}
-.host video{
-  width:100%;
-  height:100%;
-  min-height:530px;
-  object-fit:cover;
-}
-.placeholder{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#aaa;
-  font-size:20px;
-}
-.attendance{
-  position:absolute;
-  z-index:5;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  border:2px solid #ff2f9c;
-  border-radius:28px;
-  padding:8px 20px;
-  background:#2a0824dd;
-  box-shadow:0 0 18px #ff29a0;
-  color:#ffd737;
-  font-weight:900;
-  font-size:16px;
-}
-.wave{
-  position:absolute;
-  bottom:18px;
-  left:7%;
-  right:7%;
-  text-align:center;
-  font-size:24px;
-  letter-spacing:2px;
-  color:#b64cff;
-  text-shadow:0 0 10px #8d30ff;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-}
-.slot{
-  min-height:124px;
-  position:relative;
-  background:#111019;
-  border:1px solid #3e2547;
-  border-radius:8px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#aaa;
-}
-.slot video{
-  width:100%;
-  height:100%;
-  min-height:124px;
-  object-fit:cover;
-}
-.slot.me{border:2px solid #ffd527}
-.label{
-  position:absolute;
-  left:5px;
-  bottom:5px;
-  background:#000a;
-  padding:3px 6px;
-  border-radius:5px;
-  font-size:11px;
-}
-.num{
-  position:absolute;
-  top:4px;
-  left:4px;
-  background:#777b;
-  padding:2px 5px;
-  border-radius:5px;
-  font-size:11px;
-}
-.lower{
-  display:grid;
-  grid-template-columns:47% 53%;
-  gap:10px;
-  margin-top:10px;
-}
-.panel{
-  background:#08070d;
-  border:1px solid #492053;
-  border-radius:10px;
-  padding:10px;
-}
-.tabs{
-  display:flex;
-  gap:30px;
-  border-bottom:1px solid #2d1935;
-  padding-bottom:8px;
-  margin-bottom:8px;
-}
-.tabs b:first-child{color:#ff79ff}
-.chat{
-  height:300px;
-  overflow:auto;
-  font-size:14px;
-  line-height:1.65;
-}
-.chat .a{color:#44dfff}
-.chat .b{color:#66ef58}
-.chat .c{color:#ff65cc}
-.chatbox{
-  display:flex;
-  gap:7px;
-  margin-top:8px;
-}
-.chatbox input{
-  flex:1;
-  background:#17151d;
-  border:1px solid #33263a;
-  color:white;
-  border-radius:8px;
-  padding:10px;
-}
-.chatbox button{
-  border:0;
-  border-radius:8px;
-  color:white;
-  font-weight:800;
-  background:#7935bf;
-  padding:0 16px;
-}
-.giftTop{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px;
-}
-.giftTop div{
-  text-align:center;
-  padding:7px 2px;
-}
-.ico{font-size:30px}
-.price{font-size:12px;color:#ffd34c}
+.stage{display:grid;grid-template-columns:46% 54%;gap:6px}
+.main{position:relative;background:#111018;border:1px solid #502a5a;border-radius:10px;overflow:hidden;min-height:430px}
+.main video,.slot video{width:100%;height:100%;object-fit:cover}
+.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
+.check{position:absolute;z-index:5;top:10px;left:50%;transform:translateX(-50%);background:#32102fdd;border:2px solid #ff3fa5;color:#ffe348;border-radius:25px;padding:7px 14px;font-weight:900}
 
-.roseRow{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px;
-  margin-top:8px;
-  border:1px solid #d69b00;
-  border-radius:10px;
-  padding:6px;
-}
-.roseBtn{
-  text-align:center;
-  background:#170e1e;
-  border-radius:8px;
-  padding:8px 2px;
-  cursor:pointer;
-}
-.roseBtn .r{font-size:26px}
-.roseBtn b{font-size:12px}
-.giftBox{
-  margin-top:8px;
-  width:100%;
-  background:linear-gradient(90deg,#42104d,#7b1b8c);
-  border:1px solid #c457ff;
-  border-radius:10px;
-  color:#fff;
-  font-weight:900;
-  padding:11px;
-  font-size:16px;
-}
-.lottery{
-  margin-top:10px;
-  border:1px solid #e23ad8;
-  border-radius:10px;
-  padding:10px;
-  background:linear-gradient(90deg,#170b21,#310a32);
-}
-.lottery h3{
-  text-align:center;
-  color:#ff9ef3;
-  margin:0 0 8px;
-}
-.draws{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-}
-.draw{
-  text-align:center;
-  background:#160d1e;
-  border:1px solid #47234f;
-  border-radius:8px;
-  padding:8px 3px;
-}
-.draw button{
-  margin-top:5px;
-  background:#70229b;
-  border:0;
-  color:white;
-  border-radius:7px;
-  padding:6px 12px;
-}
-.controls{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-.controls button{
-  flex:1;
-  border:0;
-  border-radius:10px;
-  padding:12px;
-  font-weight:900;
-  color:white;
-}
-.start{background:#8e3cff}
-.stop{background:#393939}
-.status{
-  margin-top:7px;
-  color:#ffd45e;
-  text-align:center;
-  font-size:13px;
-}
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#000c;
-  z-index:50;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-.modalIn{
-  width:100%;
-  max-width:450px;
-  background:#130c18;
-  border:2px solid #9d3cff;
-  border-radius:15px;
-  padding:14px;
-}
-.modalIn h2{color:#ff9cf7}
-.bigGifts{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-}
-.bigGifts button{
-  background:#25102e;
-  border:1px solid #713881;
-  border-radius:10px;
-  color:white;
-  padding:16px;
-  font-size:17px;
-}
-.close{
-  width:100%;
-  margin-top:10px;
-  padding:10px;
-  border:0;
-  border-radius:8px;
-}
-@media(max-width:700px){
-  .app{padding:7px}
-  .broadcast{grid-template-columns:47% 53%;gap:5px}
-  .host{min-height:390px}
-  .host video{min-height:390px}
-  .slot{min-height:90px}
-  .slot video{min-height:90px}
-  .lower{grid-template-columns:47% 53%;gap:5px}
-  .chat{height:245px;font-size:11px}
-  .giftTop{font-size:10px}
-  .ico{font-size:22px}
-  .roseBtn .r{font-size:19px}
-  .roseBtn b{font-size:10px}
-  .attendance{font-size:12px;padding:6px 13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.slot{min-height:100px;background:#15121a;border:1px solid #45284e;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;font-size:11px;color:#aaa}
+.slot.me{border:2px solid #ffd700}
+.label{position:absolute;left:4px;bottom:4px;background:#000b;padding:2px 5px;border-radius:5px;font-size:10px}
+
+.controls{display:flex;gap:6px;margin-top:7px}
+button{border:0;border-radius:9px;padding:10px;color:#fff;font-weight:900}
+.start{background:#8d3bea;flex:1}.stop{background:#333;flex:1}
+.status{text-align:center;color:#ffd76a;padding:6px;font-size:12px}
+
+.bottom{display:grid;grid-template-columns:46% 54%;gap:6px}
+.panel{border:1px solid #4c2456;background:#0d0911;border-radius:9px;padding:8px}
+.chat{height:230px;overflow:auto;font-size:12px;line-height:1.7}
+.chatInput{display:flex;gap:5px}
+.chatInput input{flex:1;background:#17131c;border:1px solid #3c2943;color:#fff;border-radius:7px;padding:9px}
+.chatInput button{background:#7130a9}
+
+.gifts{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.gift{text-align:center;background:#160d1c;border:1px solid #45234e;border-radius:8px;padding:6px 2px}
+.gift .icon{font-size:25px}
+.coin{color:#ffd43d;font-size:11px}
+
+.roses{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:7px;border:1px solid #b88612;border-radius:9px;padding:5px}
+.rose{text-align:center;padding:6px 1px;background:#170e1c;border-radius:7px;cursor:pointer}
+.rose span{font-size:23px}
+.rose b{display:block;font-size:11px}
+
+.box{width:100%;margin-top:7px;background:linear-gradient(90deg,#53115f,#8c239d);border:1px solid #ce5cff}
+
+.lottery{margin-top:7px;border:1px solid #d43cc9;border-radius:9px;padding:7px}
+.lottery h3{text-align:center;margin:0 0 6px;color:#ff8aee}
+.draws{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.draw{text-align:center;background:#190e20;border-radius:7px;padding:6px;font-size:11px}
+
+.modal{display:none;position:fixed;inset:0;background:#000d;z-index:20;align-items:center;justify-content:center;padding:20px}
+.modalIn{max-width:420px;width:100%;background:#160d1d;border:2px solid #a33dff;border-radius:14px;padding:12px}
+.big{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.big button{background:#291333;border:1px solid #6c347a;font-size:17px}
+.close{width:100%;margin-top:8px;background:#444}
+
+@media(max-width:600px){
+ .main{min-height:360px}
+ .slot{min-height:83px}
+ .chat{height:205px}
+ .brand{font-size:22px}
+ .gift .icon{font-size:20px}
+ .rose span{font-size:19px}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="wrap">
 
-<div class="header">
-  <div class="onair">● ON AIR</div>
-  <div class="brand">
-    <b>♛ K-Talk</b>
-    <div>화상 방송방 · 최대 13명</div>
-  </div>
-  <div>👥 128　🔔</div>
+<div class="top">
+ <div class="brand">♛ K-Talk</div>
+ <div>화상 방송방 · 최대 13명</div>
+ <div class="on">● ON AIR</div>
 </div>
 
-<div class="notice">
-  <span class="yellow">★ 출석체크 눌러주세요 ★</span>
-  &nbsp; 신청곡 5,000원 &nbsp;
-  <span class="pink">★ 광고 문의 환영합니다 ★</span>
-</div>
+<div class="notice">★ 출석체크 눌러주세요 ★　　광고 문의 환영합니다</div>
 
-<div class="broadcast">
-
-  <div class="host">
-    <button class="attendance" onclick="attendance()">♡ 출석체크 ♡</button>
-    <div id="ph" class="placeholder">방송 시작을 눌러주세요</div>
-    <video id="localVideo" autoplay playsinline muted></video>
-    <div class="wave">▂▃▅▇▆▃▂▅▇▆▃▅▇▆▃▂▅▇</div>
-  </div>
-
-  <div id="grid" class="grid"></div>
-
+<div class="stage">
+ <div class="main">
+  <button class="check" onclick="attendance()">♡ 출석체크 ♡</button>
+  <div id="ph" class="placeholder">방송 시작을 눌러주세요</div>
+  <video id="localVideo" autoplay playsinline muted></video>
+ </div>
+ <div id="grid" class="grid"></div>
 </div>
 
 <div class="controls">
-  <button class="start" onclick="startRoom()">📹 방송 시작</button>
-  <button class="stop" onclick="stopRoom()">방송 종료</button>
+ <button class="start" onclick="startRoom()">📹 방송 시작</button>
+ <button class="stop" onclick="stopRoom()">방송 종료</button>
 </div>
 <div id="status" class="status">대기 중</div>
 
-<div class="lower">
+<div class="bottom">
 
-<div class="panel">
-  <div class="tabs">
-    <b>채팅</b>
-    <b>참가자 (13)</b>
-  </div>
-
+ <div class="panel">
+  <b>채팅　 참가자</b>
   <div id="chat" class="chat">
-    <div><span class="a">현재시</span> 좋은 방송 감사합니다! 💜</div>
-    <div><span class="b">민수는 1위~</span> 즐겁게 듣고 있어요! ❤️</div>
-    <div><span class="a">이태훈</span> 신청곡 너무 좋아요 👍</div>
-    <div><span class="c">시청★</span> 신청곡 이벤트도 최고!</div>
-    <div><span class="a">해피걸</span> 우와~ 노래 최고예요! 👏</div>
+   <div>💬 K-Talk 방송에 오신 것을 환영합니다.</div>
+  </div>
+  <div class="chatInput">
+   <input id="msg" placeholder="메시지를 입력하세요">
+   <button onclick="sendChat()">전송</button>
+  </div>
+ </div>
+
+ <div>
+  <div class="panel">
+   <b>선물 / 후원</b>
+
+   <div class="gifts">
+    <div class="gift"><div class="icon">🌹</div>장미<div class="coin">🪙50</div></div>
+    <div class="gift"><div class="icon">❤️</div>하트</div>
+    <div class="gift"><div class="icon">⭐</div>별</div>
+    <div class="gift"><div class="icon">🎈</div>풍선</div>
+    <div class="gift"><div class="icon">💖</div>슈퍼하트</div>
+   </div>
+
+   <div class="roses">
+    <div class="rose" onclick="roseGift(1)"><span>🌹</span><b>1개</b><div class="coin">🪙50</div></div>
+    <div class="rose" onclick="roseGift(5)"><span>🌹</span><b>5개</b><div class="coin">🪙250</div></div>
+    <div class="rose" onclick="roseGift(10)"><span>💐</span><b>10개</b><div class="coin">🪙500</div></div>
+    <div class="rose" onclick="roseGift(50)"><span>💐</span><b>50개</b><div class="coin">🪙2,500</div></div>
+    <div class="rose" onclick="roseGift(100)"><span>💐</span><b>100개</b><div class="coin">🪙5,000</div></div>
+   </div>
+
+   <button class="box" onclick="openBox()">🎁 선물 상자 · 큰 선물 보기</button>
   </div>
 
-  <div class="chatbox">
-    <input id="msg" placeholder="메시지를 입력하세요...">
-    <button onclick="sendChat()">전송</button>
+  <div class="lottery">
+   <h3>🎲 제비뽑기 이벤트</h3>
+   <div class="draws">
+    <div class="draw">☀️ 아침<br>뽑기</div>
+    <div class="draw">☀️ 점심<br>뽑기</div>
+    <div class="draw">🌙 저녁<br>뽑기</div>
+   </div>
   </div>
-</div>
+ </div>
 
-<div>
-
-<div class="panel">
-  <b>선물 / 후원</b>
-
-  <div class="giftTop">
-    <div><div class="ico">🌹</div>장미<div class="price">🪙10</div></div>
-    <div><div class="ico">❤️</div>하트<div class="price">🪙300</div></div>
-    <div><div class="ico">⭐</div>별<div class="price">🪙500</div></div>
-    <div><div class="ico">🎈</div>풍선<div class="price">🪙1,000</div></div>
-    <div><div class="ico">💖</div>슈퍼 하트<div class="price">🪙10,000</div></div>
-  </div>
-
-  <div class="roseRow">
-    <div class="roseBtn" onclick="roseGift(1)">
-      <div class="r">🌹</div><b>1개</b><div class="price">🪙10</div>
-    </div>
-    <div class="roseBtn" onclick="roseGift(5)">
-      <div class="r">🌹</div><b>5개</b><div class="price">🪙50</div>
-    </div>
-    <div class="roseBtn" onclick="roseGift(10)">
-      <div class="r">💐</div><b>10개</b><div class="price">🪙100</div>
-    </div>
-    <div class="roseBtn" onclick="roseGift(50)">
-      <div class="r">💐</div><b>50개</b><div class="price">🪙500</div>
-    </div>
-    <div class="roseBtn" onclick="roseGift(100)">
-      <div class="r">💐</div><b>100개</b><div class="price">🪙1,000</div>
-    </div>
-  </div>
-
-  <button class="giftBox" onclick="openBox()">🎁 선물 상자 · 큰 선물 보기</button>
-</div>
-
-<div class="lottery">
-  <h3>제비뽑기 이벤트</h3>
-  <div class="draws">
-    <div class="draw">☀️ 아침<br>09:00<br><button>뽑기 1/3</button></div>
-    <div class="draw">☀️ 점심<br>13:00<br><button>뽑기 1/3</button></div>
-    <div class="draw">🌙 저녁<br>20:00<br><button>뽑기 1/3</button></div>
-  </div>
-</div>
-
-</div>
 </div>
 </div>
 
 <div id="giftModal" class="modal">
-<div class="modalIn">
+ <div class="modalIn">
   <h2>🎁 큰 선물</h2>
-  <div class="bigGifts">
-    <button onclick="bigGift('🐋 고래')">🐋 고래</button>
-    <button onclick="bigGift('🚗 자동차')">🚗 자동차</button>
-    <button onclick="bigGift('🚀 우주선')">🚀 우주선</button>
-    <button onclick="bigGift('👑 왕관')">👑 왕관</button>
-    <button onclick="bigGift('💎 다이아몬드')">💎 다이아몬드</button>
-    <button onclick="bigGift('🎆 축하폭죽')">🎆 축하폭죽</button>
+  <div class="big">
+   <button onclick="bigGift('🐋 고래')">🐋 고래</button>
+   <button onclick="bigGift('🚗 자동차')">🚗 자동차</button>
+   <button onclick="bigGift('🚀 우주선')">🚀 우주선</button>
+   <button onclick="bigGift('👑 왕관')">👑 왕관</button>
+   <button onclick="bigGift('💎 다이아몬드')">💎 다이아몬드</button>
+   <button onclick="bigGift('🎆 축하폭죽')">🎆 축하폭죽</button>
   </div>
   <button class="close" onclick="closeBox()">닫기</button>
-</div>
+ </div>
 </div>
 
 <script>
-const MAX_USERS=13;
-const BASE='ktalk-final13-v20260817-style-slot-';
+const MAX_USERS = 13;
+const BASE = 'ktalk-final13-v20260816-slot-';
 
-let localStream=null;
-let peer=null;
-let mySlot=0;
-let syncTimer=null;
+let localStream = null;
+let peer = null;
+let mySlot = 0;
+let syncTimer = null;
 
-const calls=new Map();
-const pending=new Map();
-const lastSeen=new Map();
-const retryAfter=new Map();
+const calls = new Map();
+const pending = new Map();
+const lastSeen = new Map();
+const retryAfter = new Map();
 
 function $(id){return document.getElementById(id)}
 function setStatus(t){$('status').textContent=t}
-function slotName(n){return n===1?'진행자':'참가자 '+n}
+function slotName(slot){return slot===1?'진행자':'참가자 '+slot}
 
 function buildGrid(){
-  const g=$('grid');
-  g.innerHTML='';
-  for(let i=1;i<=MAX_USERS;i++){
-    const d=document.createElement('div');
-    d.className='slot';
-    d.id='slot-'+i;
-    d.innerHTML='<span class="num">'+i+'</span>'+slotName(i);
-    g.appendChild(d);
-  }
+ const grid=$('grid');
+ grid.innerHTML='';
+ for(let i=1;i<=MAX_USERS;i++){
+  const d=document.createElement('div');
+  d.className='slot';
+  d.id='slot-'+i;
+  d.textContent=slotName(i);
+  grid.appendChild(d);
+ }
 }
 buildGrid();
 
-function resetSlot(n){
-  const b=$('slot-'+n);
-  if(!b)return;
-  b.className='slot'+(n===mySlot?' me':'');
-  b.innerHTML='<span class="num">'+n+'</span>'+
-    (n===mySlot?slotName(n)+' · 나':slotName(n));
-}
-
 function getSlotFromPeerId(id){
-  const m=String(id||'').match(/slot-(\d+)$/);
-  return m?Number(m[1]):0;
+ const m=String(id||'').match(/slot-(\d+)$/);
+ return m?Number(m[1]):0;
 }
 
-function renderRemote(n,stream){
-  if(!n||n===mySlot)return;
-  const b=$('slot-'+n);
-  if(!b)return;
-
-  b.innerHTML='<span class="num">'+n+'</span>';
-
-  const v=document.createElement('video');
-  v.autoplay=true;
-  v.playsInline=true;
-  v.srcObject=stream;
-
-  const l=document.createElement('div');
-  l.className='label';
-  l.textContent=slotName(n);
-
-  b.appendChild(v);
-  b.appendChild(l);
-  lastSeen.set(n,Date.now());
+function resetSlot(slot){
+ const box=$('slot-'+slot);
+ if(!box)return;
+ box.className='slot'+(slot===mySlot?' me':'');
+ box.innerHTML=slot===mySlot?slotName(slot)+'<br>· 나 ·':slotName(slot);
 }
 
-function closeSlot(n,reset=true){
-  const c=calls.get(n);
-  if(c){try{c.close()}catch(e){}}
-  calls.delete(n);
-  pending.delete(n);
-  lastSeen.delete(n);
-  if(reset)resetSlot(n);
+function renderRemote(slot,stream){
+ if(!slot||slot===mySlot)return;
+ const box=$('slot-'+slot);
+ if(!box)return;
+ box.innerHTML='';
+
+ const v=document.createElement('video');
+ v.autoplay=true;
+ v.playsInline=true;
+ v.srcObject=stream;
+
+ const lab=document.createElement('div');
+ lab.className='label';
+ lab.textContent=slotName(slot);
+
+ box.appendChild(v);
+ box.appendChild(lab);
+ lastSeen.set(slot,Date.now());
 }
 
-function attachCall(n,c){
-  if(!n||n===mySlot||!c)return;
+function closeSlot(slot,reset=true){
+ const call=calls.get(slot);
+ if(call){try{call.close()}catch(e){}}
+ calls.delete(slot);
+ pending.delete(slot);
+ lastSeen.delete(slot);
+ if(reset)resetSlot(slot);
+}
 
-  const old=calls.get(n);
-  if(old&&old!==c){
-    try{old.close()}catch(e){}
+function attachCall(slot,call){
+ if(!slot||slot===mySlot||!call)return;
+
+ const old=calls.get(slot);
+ if(old&&old!==call){
+  try{old.close()}catch(e){}
+ }
+
+ calls.set(slot,call);
+ pending.delete(slot);
+ lastSeen.set(slot,Date.now());
+
+ call.on('stream',remoteStream=>{
+  calls.set(slot,call);
+  pending.delete(slot);
+  lastSeen.set(slot,Date.now());
+  renderRemote(slot,remoteStream);
+  setStatus('✅ 연결됨 · 내 번호 '+mySlot+' · 최대 13명');
+ });
+
+ call.on('close',()=>{
+  if(calls.get(slot)===call){
+   calls.delete(slot);
+   pending.delete(slot);
+   lastSeen.delete(slot);
+   resetSlot(slot);
+   retryAfter.set(slot,Date.now()+1200);
   }
+ });
 
-  calls.set(n,c);
-  pending.delete(n);
-  lastSeen.set(n,Date.now());
-
-  c.on('stream',s=>{
-    renderRemote(n,s);
-  });
-
-  c.on('close',()=>{
-    if(calls.get(n)===c){
-      calls.delete(n);
-      pending.delete(n);
-      resetSlot(n);
-      retryAfter.set(n,Date.now()+1200);
-    }
-  });
-
-  c.on('error',()=>{
-    if(calls.get(n)===c){
-      calls.delete(n);
-      pending.delete(n);
-      resetSlot(n);
-      retryAfter.set(n,Date.now()+1200);
-    }
-  });
-}
-
-function claimSlot(n){
-  return new Promise(resolve=>{
-    const p=new Peer(BASE+n,{
-      debug:0,
-      config:{
-        iceServers:[
-          {urls:'stun:stun.l.google.com:19302'},
-          {urls:'stun:stun1.l.google.com:19302'}
-        ]
-      }
-    });
-
-    let done=false;
-
-    p.on('open',()=>{
-      if(done)return;
-      done=true;
-      resolve(p);
-    });
-
-    p.on('error',()=>{
-      try{p.destroy()}catch(e){}
-      if(done)return;
-      done=true;
-      resolve(null);
-    });
-
-    setTimeout(()=>{
-      if(!done){
-        done=true;
-        try{p.destroy()}catch(e){}
-        resolve(null);
-      }
-    },2200);
-  });
-}
-
-function shouldDial(n){
-  if(!peer||!localStream||!mySlot)return false;
-  if(n<=0||n>=mySlot)return false;
-  if(calls.has(n)||pending.has(n))return false;
-  if((retryAfter.get(n)||0)>Date.now())return false;
-  return true;
-}
-
-function dial(n){
-  if(!shouldDial(n))return;
-
-  pending.set(n,Date.now());
-
-  let c;
-  try{
-    c=peer.call(BASE+n,localStream);
-  }catch(e){
-    pending.delete(n);
-    return;
+ call.on('error',()=>{
+  if(calls.get(slot)===call){
+   calls.delete(slot);
+   pending.delete(slot);
+   lastSeen.delete(slot);
+   resetSlot(slot);
+   retryAfter.set(slot,Date.now()+1200);
   }
+ });
+}
 
-  if(!c){
-    pending.delete(n);
-    return;
+function claimSlot(slot){
+ return new Promise(resolve=>{
+  const p=new Peer(BASE+slot,{
+   debug:0,
+   config:{
+    iceServers:[
+     {urls:'stun:stun.l.google.com:19302'},
+     {urls:'stun:stun1.l.google.com:19302'}
+    ]
+   }
+  });
+
+  let finished=false;
+
+  const done=value=>{
+   if(finished)return;
+   finished=true;
+   resolve(value);
+  };
+
+  p.on('open',()=>done(p));
+
+  p.on('error',()=>{
+   try{p.destroy()}catch(e){}
+   done(null);
+  });
+
+  setTimeout(()=>{
+   if(!finished){
+    try{p.destroy()}catch(e){}
+    done(null);
+   }
+  },2200);
+ });
+}
+
+function shouldDial(slot){
+ if(!peer||!localStream||!mySlot)return false;
+ if(slot<=0||slot>=mySlot)return false;
+ if(calls.has(slot)||pending.has(slot))return false;
+ if((retryAfter.get(slot)||0)>Date.now())return false;
+ return true;
+}
+
+function dial(slot){
+ if(!shouldDial(slot))return;
+
+ pending.set(slot,Date.now());
+
+ let call=null;
+
+ try{
+  call=peer.call(BASE+slot,localStream,{metadata:{slot:mySlot}});
+ }catch(e){
+  pending.delete(slot);
+  retryAfter.set(slot,Date.now()+1500);
+  return;
+ }
+
+ if(!call){
+  pending.delete(slot);
+  retryAfter.set(slot,Date.now()+1500);
+  return;
+ }
+
+ let gotStream=false;
+
+ call.on('stream',remoteStream=>{
+  gotStream=true;
+  attachCall(slot,call);
+  renderRemote(slot,remoteStream);
+ });
+
+ call.on('close',()=>{
+  if(calls.get(slot)===call)calls.delete(slot);
+  pending.delete(slot);
+  lastSeen.delete(slot);
+  resetSlot(slot);
+  retryAfter.set(slot,Date.now()+1200);
+ });
+
+ call.on('error',()=>{
+  if(calls.get(slot)===call)calls.delete(slot);
+  pending.delete(slot);
+  lastSeen.delete(slot);
+  resetSlot(slot);
+  retryAfter.set(slot,Date.now()+1200);
+ });
+
+ setTimeout(()=>{
+  if(!gotStream){
+   try{call.close()}catch(e){}
+   if(calls.get(slot)===call)calls.delete(slot);
+   pending.delete(slot);
+   retryAfter.set(slot,Date.now()+1500);
+   resetSlot(slot);
   }
-
-  attachCall(n,c);
+ },7000);
 }
 
 function syncPeers(){
-  if(!peer||!localStream||!mySlot)return;
+ if(!peer||!localStream||!mySlot)return;
 
-  for(let n=1;n<mySlot;n++){
-    if(shouldDial(n))dial(n);
+ for(let slot=1;slot<mySlot;slot++){
+  if(shouldDial(slot))dial(slot);
+ }
+
+ for(const [slot,call] of calls.entries()){
+  const pc=call&&call.peerConnection;
+  const state=pc?pc.connectionState:'';
+
+  if(state==='connected'){
+   lastSeen.set(slot,Date.now());
+   continue;
   }
 
-  for(const [n,c] of calls.entries()){
-    const pc=c&&c.peerConnection;
-    const state=pc?pc.connectionState:'';
-
-    if(state==='failed'||state==='closed'){
-      closeSlot(n);
-      retryAfter.set(n,Date.now()+1200);
-    }
+  if(state==='failed'||state==='closed'){
+   closeSlot(slot);
+   retryAfter.set(slot,Date.now()+1200);
+   continue;
   }
+
+  if(state==='disconnected'){
+   const since=lastSeen.get(slot)||Date.now();
+   if(Date.now()-since>4500){
+    closeSlot(slot);
+    retryAfter.set(slot,Date.now()+1200);
+   }
+  }
+ }
+
+ for(const [slot,started] of pending.entries()){
+  if(Date.now()-started>9000){
+   pending.delete(slot);
+   retryAfter.set(slot,Date.now()+1200);
+  }
+ }
 }
 
 async function startRoom(){
-  if(localStream||peer)return;
+ if(localStream||peer)return;
 
-  try{
-    localStream=await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:'user',
-        width:{ideal:640},
-        height:{ideal:480}
-      },
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true,
-        autoGainControl:true
-      }
-    });
-
-    $('localVideo').srcObject=localStream;
-    $('ph').style.display='none';
-
-  }catch(e){
-    alert('카메라와 마이크를 허용해 주세요.');
-    return;
-  }
-
-  setStatus('13명 방 연결 중...');
-
-  for(let i=1;i<=MAX_USERS;i++){
-    const p=await claimSlot(i);
-    if(p){
-      peer=p;
-      mySlot=i;
-      break;
-    }
-  }
-
-  if(!peer){
-    alert('현재 13명이 접속 중입니다.');
-    return;
-  }
-
-  for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
-
-  peer.on('call',c=>{
-    const n=getSlotFromPeerId(c.peer);
-    if(!n||n===mySlot)return;
-
-    try{c.answer(localStream)}catch(e){}
-    attachCall(n,c);
+ try{
+  localStream=await navigator.mediaDevices.getUserMedia({
+   video:{
+    facingMode:'user',
+    width:{ideal:640},
+    height:{ideal:360},
+    frameRate:{ideal:15,max:20}
+   },
+   audio:{
+    echoCancellation:true,
+    noiseSuppression:true,
+    autoGainControl:true
+   }
   });
 
-  peer.on('disconnected',()=>{
-    try{peer.reconnect()}catch(e){}
-  });
+  $('localVideo').srcObject=localStream;
+  $('ph').style.display='none';
 
-  syncPeers();
-  syncTimer=setInterval(syncPeers,2000);
+ }catch(e){
+  localStream=null;
+  alert('카메라와 마이크를 허용해 주세요.');
+  return;
+ }
 
-  setStatus(
-    mySlot===1
-      ?'✅ 진행자 입장 완료 · 최대 13명'
-      :'✅ 참가자 '+mySlot+' 입장 완료 · 최대 13명'
-  );
+ setStatus('13명 방 연결 중...');
+
+ for(let i=1;i<=MAX_USERS;i++){
+  const p=await claimSlot(i);
+  if(p){
+   peer=p;
+   mySlot=i;
+   break;
+  }
+ }
+
+ if(!peer){
+  localStream.getTracks().forEach(t=>t.stop());
+  localStream=null;
+  $('localVideo').srcObject=null;
+  $('ph').style.display='flex';
+  setStatus('⛔ 이 방은 최대 13명입니다.');
+  alert('현재 13명이 접속 중입니다.');
+  return;
+ }
+
+ for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
+
+ peer.on('call',call=>{
+  const slot=getSlotFromPeerId(call.peer);
+
+  if(!slot||slot===mySlot){
+   try{call.close()}catch(e){}
+   return;
+  }
+
+  try{call.answer(localStream)}catch(e){}
+  attachCall(slot,call);
+ });
+
+ peer.on('disconnected',()=>{
+  setStatus('연결 복구 중...');
+  try{peer.reconnect()}catch(e){}
+ });
+
+ peer.on('error',err=>{
+  if(err&&(err.type==='peer-unavailable'||err.type==='network'))return;
+  console.log(err);
+ });
+
+ syncPeers();
+ syncTimer=setInterval(syncPeers,2000);
+
+ setStatus(
+  mySlot===1
+   ?'✅ 진행자 입장 완료 · 최대 13명'
+   :'✅ 참가자 '+mySlot+' 입장 완료 · 최대 13명'
+ );
 }
 
 function stopRoom(){
-  if(syncTimer){
-    clearInterval(syncTimer);
-    syncTimer=null;
-  }
+ if(syncTimer){
+  clearInterval(syncTimer);
+  syncTimer=null;
+ }
 
-  for(const n of Array.from(calls.keys())){
-    closeSlot(n,false);
-  }
+ for(const slot of Array.from(calls.keys())){
+  closeSlot(slot,false);
+ }
 
-  try{
-    if(peer)peer.destroy();
-  }catch(e){}
+ calls.clear();
+ pending.clear();
+ lastSeen.clear();
+ retryAfter.clear();
 
-  if(localStream){
-    localStream.getTracks().forEach(t=>t.stop());
-  }
+ try{
+  if(peer)peer.destroy();
+ }catch(e){}
 
-  localStream=null;
-  peer=null;
-  mySlot=0;
+ if(localStream){
+  localStream.getTracks().forEach(t=>t.stop());
+ }
 
-  $('localVideo').srcObject=null;
-  $('ph').style.display='flex';
+ localStream=null;
+ peer=null;
+ mySlot=0;
 
-  for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
+ $('localVideo').srcObject=null;
+ $('ph').style.display='flex';
 
-  setStatus('대기 중');
+ for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
+
+ setStatus('대기 중');
 }
 
 function roseGift(n){
-  alert('🌹 장미 '+n+'개 선물');
+ alert('🌹 장미 '+n+'개 · 테스트 선물');
 }
 
 function attendance(){
-  alert('출석체크 완료 · 🪙20');
+ alert('⭐ 출석체크 · 테스트');
 }
 
 function openBox(){
-  $('giftModal').style.display='flex';
+ $('giftModal').style.display='flex';
 }
 
 function closeBox(){
-  $('giftModal').style.display='none';
+ $('giftModal').style.display='none';
 }
 
 function bigGift(name){
-  alert(name+' 선물 선택');
-  closeBox();
+ alert(name+' · 테스트 선물');
+ closeBox();
 }
 
 function sendChat(){
-  const input=$('msg');
-  const text=input.value.trim();
-  if(!text)return;
+ const input=$('msg');
+ const text=input.value.trim();
+ if(!text)return;
 
-  const div=document.createElement('div');
-  div.textContent='나 : '+text;
-  $('chat').appendChild(div);
-  input.value='';
-  $('chat').scrollTop=$('chat').scrollHeight;
+ const d=document.createElement('div');
+ d.textContent='나 : '+text;
+ $('chat').appendChild(d);
+
+ input.value='';
+ $('chat').scrollTop=$('chat').scrollHeight;
 }
 
 window.addEventListener('beforeunload',stopRoom);
 </script>
 </body>
- </html>
+</html>
