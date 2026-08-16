@@ -1,375 +1,293 @@
-
 <!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>K-Talk LIVE</title>
+<title>K-Talk 실시간 방송</title>
 
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
-html,body{
+body{
   margin:0;
-  background:#05030a;
+  background:#05070b;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
-body{min-height:100vh}
-button,input{font-family:inherit}
-button{cursor:pointer}
-
-.app{
-  width:100%;
-  max-width:1100px;
-  margin:auto;
-  padding:6px;
+button,input{
+  font:inherit;
 }
-
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:5px 4px 8px;
-}
-
-.logo{
-  font-size:27px;
-  font-weight:900;
-  color:#ffd44f;
-}
-
-.sub{
-  margin-top:4px;
-  font-size:12px;
-  color:#eee;
-}
-
-.onair{
-  background:#ef174f;
+.top{
+  height:58px;
   padding:9px 12px;
-  border-radius:10px;
-  font-weight:900;
-  white-space:nowrap;
-}
-
-.notice{
-  border:1px solid #54265e;
-  border-radius:9px;
-  padding:8px 4px;
-  text-align:center;
-  font-weight:900;
-  color:#ffd548;
-  margin-bottom:7px;
-  font-size:13px;
-}
-
-.modebar{
-  display:flex;
-  gap:6px;
-  margin-bottom:7px;
-}
-
-.modebar button{
-  flex:1;
-  padding:10px 3px;
-  border:1px solid #66306f;
-  border-radius:10px;
-  background:#17101e;
-  color:#fff;
-  font-weight:900;
-}
-
-.modebar .active{
-  background:#8b2be2;
-  box-shadow:0 0 10px #8b2be277;
-}
-
-.passwordBox{
-  display:none;
-  background:#1a1020;
-  border:1px solid #793188;
-  padding:8px;
-  border-radius:10px;
-  margin-bottom:7px;
-}
-
-.passwordBox input{
-  width:100%;
-  margin-top:6px;
-  padding:10px;
-  border:0;
-  border-radius:7px;
-  font-size:16px;
-}
-
-/* 방송 화면 */
-.layout{
-  display:grid;
-  grid-template-columns:46% 54%;
-  gap:5px;
-  align-items:start;
-}
-
-/* 호스트 */
-.host{
-  position:relative;
-  height:305px;
-  border:1px solid #63306d;
-  border-radius:11px;
-  overflow:hidden;
-  background:#09080d;
-}
-
-.host video{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-}
-
-.hostEmpty{
-  position:absolute;
-  inset:0;
   display:flex;
   align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#aaa;
-  padding:10px;
+  gap:8px;
+  border-bottom:1px solid #252a33;
+  background:#0d1017;
 }
-
-.hostTag{
-  position:absolute;
-  left:7px;
-  top:7px;
-  color:#ff365c;
-  font-size:12px;
-  font-weight:900;
-  z-index:3;
-}
-
-/* 참가자 */
-.rightTitle{
-  height:29px;
-  display:flex;
-  align-items:center;
-  padding:4px 6px;
-  background:#17101d;
-  border:1px solid #57305f;
-  border-radius:8px;
-  margin-bottom:4px;
-  color:#ffd64c;
-  font-weight:900;
-  font-size:10px;
-  overflow:hidden;
-  white-space:nowrap;
-}
-
-.people{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:3px;
-}
-
-.person{
-  height:65px;
-  min-width:0;
-  background:#17131b;
-  border:1px solid #55305d;
-  border-radius:7px;
-  overflow:hidden;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#aaa;
-  font-size:9px;
-}
-
-.person.me{
-  border:2px solid #ffd44f;
-}
-
-.person video{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.personLabel{
-  position:absolute;
-  left:2px;
-  bottom:2px;
-  max-width:95%;
-  background:#000c;
-  padding:2px 3px;
-  border-radius:4px;
-  font-size:7px;
-}
-
-/* 방송 시작/종료 */
-.controls{
-  display:flex;
-  gap:6px;
-  margin:7px 0;
-}
-
-.controls button{
-  flex:1;
-  border:0;
-  border-radius:9px;
-  padding:11px 5px;
-  color:#fff;
-  font-weight:900;
-}
-
-.start{background:#8f35ed}
-.stop{background:#d71d47}
-
-.status{
-  background:#191020;
-  border:1px solid #4d2855;
-  padding:8px;
-  border-radius:9px;
-  color:#ffd750;
-  margin-bottom:7px;
-  font-size:12px;
-}
-
-/* 채팅/선물 */
-.lower{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-}
-
-.panel{
-  min-width:0;
-  border:1px solid #54285d;
-  background:#0b080f;
-  border-radius:10px;
-  padding:7px;
-}
-
-.panel h3{
-  margin:0 0 6px;
-  color:#f0c9ff;
-  font-size:15px;
-}
-
-.chat{
-  height:130px;
-  overflow:auto;
-  background:#060509;
-  padding:6px;
-  border-radius:7px;
-  line-height:1.5;
-  font-size:12px;
-}
-
-.chatInput{
-  display:flex;
-  gap:4px;
-  margin-top:5px;
-}
-
-.chatInput input{
-  min-width:0;
-  flex:1;
-  background:#1c1920;
-  border:0;
-  color:#fff;
-  padding:9px;
-  border-radius:7px;
-}
-
-.chatInput button{
-  background:#9138e6;
-  color:#fff;
-  border:0;
-  border-radius:7px;
-  padding:0 12px;
-  font-weight:900;
-}
-
-.gifts{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:3px;
-}
-
-.gift{
-  min-width:0;
-  text-align:center;
-  border:1px solid #4f2858;
-  border-radius:7px;
-  padding:6px 1px;
-}
-
-.gift b{
-  display:block;
-  font-size:23px;
-}
-
-.gift small{
-  font-size:9px;
-}
-
-.events{
-  display:flex;
-  gap:4px;
-  margin-top:6px;
-}
-
-.events button{
-  flex:1;
-  min-width:0;
-  background:#281334;
-  color:#fff;
-  border:1px solid #733185;
-  border-radius:7px;
-  padding:8px 2px;
-  font-size:10px;
+.logo{
+  font-size:20px;
   font-weight:800;
 }
+.live{
+  background:#e52239;
+  border-radius:15px;
+  padding:4px 9px;
+  font-size:12px;
+}
+.status{
+  margin-left:auto;
+  font-size:12px;
+  color:#9ca7b8;
+}
+.startBtn{
+  border:0;
+  border-radius:9px;
+  padding:9px 12px;
+  color:white;
+  background:#e52239;
+  font-weight:700;
+}
 
-@media(max-width:700px){
-  .app{padding:5px}
-  .logo{font-size:24px}
-  .onair{font-size:13px;padding:8px 10px}
+.main{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr);
+  gap:8px;
+  padding:8px;
+}
 
-  /* 휴대폰에서도 좌우 배치 */
-  .layout{
-    grid-template-columns:46% 54%;
-    gap:4px;
+.stage{
+  position:relative;
+  background:#11151d;
+  border:1px solid #242b38;
+  border-radius:12px;
+  overflow:hidden;
+  min-height:420px;
+}
+.stage video{
+  width:100%;
+  height:100%;
+  min-height:420px;
+  object-fit:cover;
+  background:#10131a;
+}
+.stageInfo{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  background:rgba(0,0,0,.62);
+  border-radius:8px;
+  padding:8px 11px;
+}
+.stageTitle{
+  font-weight:800;
+  font-size:15px;
+}
+.stageSub{
+  font-size:12px;
+  color:#ddd;
+  margin-top:3px;
+}
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+}
+.slot{
+  position:relative;
+  background:#151a23;
+  border:1px solid #293140;
+  border-radius:8px;
+  min-height:105px;
+  overflow:hidden;
+}
+.slot video{
+  width:100%;
+  height:105px;
+  object-fit:cover;
+  display:block;
+  background:#11151c;
+}
+.slotEmpty{
+  height:105px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#687385;
+  font-size:13px;
+}
+.slotName{
+  position:absolute;
+  left:4px;
+  bottom:4px;
+  background:rgba(0,0,0,.65);
+  border-radius:5px;
+  padding:3px 5px;
+  font-size:10px;
+}
+.slotNum{
+  position:absolute;
+  right:4px;
+  top:4px;
+  border-radius:50%;
+  width:23px;
+  height:23px;
+  background:rgba(0,0,0,.67);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:10px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+.action{
+  border:0;
+  border-radius:8px;
+  padding:9px 3px;
+  background:#202735;
+  color:#fff;
+  font-size:12px;
+}
+.action:active{transform:scale(.97)}
+
+.chat{
+  border:1px solid #272e3a;
+  border-radius:10px;
+  overflow:hidden;
+  background:#0e1219;
+}
+.chatTitle{
+  padding:8px 10px;
+  font-weight:800;
+  border-bottom:1px solid #252b35;
+}
+.messages{
+  height:160px;
+  overflow-y:auto;
+  padding:8px;
+  font-size:13px;
+}
+.msg{
+  margin-bottom:7px;
+  line-height:1.4;
+}
+.system{
+  color:#ffd864;
+}
+.chatInput{
+  display:flex;
+  border-top:1px solid #252b35;
+}
+.chatInput input{
+  flex:1;
+  min-width:0;
+  padding:11px;
+  background:#151a23;
+  color:#fff;
+  border:0;
+  outline:0;
+}
+.send{
+  border:0;
+  width:65px;
+  background:#3268e8;
+  color:#fff;
+  font-weight:700;
+}
+
+.bottom{
+  position:sticky;
+  bottom:0;
+  background:#0d1017;
+  border-top:1px solid #262c35;
+  padding:7px;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+.ctrl{
+  border:0;
+  color:white;
+  background:#202735;
+  border-radius:20px;
+  padding:9px 14px;
+}
+.end{
+  background:#d9283c;
+}
+.promoteHint{
+  font-size:11px;
+  color:#8e99aa;
+  text-align:center;
+  margin-top:3px;
+}
+
+.giftBox{
+  position:fixed;
+  right:15px;
+  top:75px;
+  width:100px;
+  padding:10px 5px;
+  border:2px solid #ffd746;
+  background:#c62444;
+  border-radius:12px;
+  text-align:center;
+  display:none;
+  z-index:50;
+  box-shadow:0 5px 30px #000;
+}
+.giftBox .big{font-size:28px}
+.giftBox button{
+  margin-top:5px;
+  border:0;
+  border-radius:7px;
+  background:#ffd746;
+  padding:6px 10px;
+  font-weight:800;
+}
+.reward{
+  color:#ffe16c;
+  font-size:12px;
+}
+
+@media(max-width:760px){
+  .main{
+    display:block;
+    padding:5px;
   }
-
-  .host{height:285px}
-
-  .rightTitle{
-    height:27px;
-    font-size:9px;
-    padding:3px;
+  .stage{
+    min-height:260px;
+    margin-bottom:6px;
   }
-
-  .people{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:2px;
+  .stage video{
+    min-height:260px;
+    height:260px;
   }
-
-  .person{
-    height:61px;
-    font-size:8px;
+  .grid{
+    grid-template-columns:repeat(4,1fr);
   }
-
-  .lower{
-    grid-template-columns:1fr;
+  .slot,.slot video,.slotEmpty{
+    height:82px;
+    min-height:82px;
+  }
+  .messages{
+    height:130px;
+  }
+  .actions{
+    margin-top:6px;
   }
 }
 </style>
@@ -377,1606 +295,1041 @@ header{
 
 <body>
 
-<div class="app">
+<div class="top">
+  <div class="logo">K-Talk</div>
+  <div class="live">● LIVE</div>
+  <div id="status" class="status">입장 준비</div>
+  <button id="startBtn" class="startBtn">방송 시작</button>
+</div>
 
-<header>
-  <div>
-    <div class="logo">👑 K-Talk</div>
-    <div id="roomDescription" class="sub">
-      화상 방송방 · 최대 13명
+<div class="main">
+
+  <section class="stage">
+    <video id="stageVideo" autoplay playsinline></video>
+    <div class="stageInfo">
+      <div id="stageTitle" class="stageTitle">큰 방송 화면</div>
+      <div id="stageSub" class="stageSub">진행자 또는 노래하는 사람이 크게 표시됩니다.</div>
     </div>
-  </div>
+  </section>
 
-  <div class="onair">● ON AIR</div>
-</header>
+  <section class="side">
 
-<div class="notice">
-  ★ 출석체크 눌러주세요 ★　광고 문의 환영합니다 ★
-</div>
+    <div id="grid" class="grid"></div>
 
-<div class="modebar">
-  <button id="publicBtn"
-          class="active"
-          onclick="selectPublic()">
-    🌐 일반방 13명
-  </button>
-
-  <button id="secretBtn"
-          onclick="selectSecret()">
-    🔒 비밀방 6명
-  </button>
-</div>
-
-<div id="passwordBox" class="passwordBox">
-  <b>🔒 비밀방 비밀번호</b>
-
-  <input id="roomPassword"
-         type="password"
-         maxlength="12"
-         placeholder="비밀번호를 입력하세요">
-</div>
-
-<div class="layout">
-
-  <div>
-    <div class="host">
-      <video id="hostVideo"
-             autoplay
-             playsinline
-             muted></video>
-
-      <div id="hostEmpty"
-           class="hostEmpty">
-        방송 시작을 눌러주세요
-      </div>
-
-      <div class="hostTag">
-        ● ON AIR
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div id="roomTitle"
-         class="rightTitle">
-      👥 일반 방송방 · 최대 13명
+    <div class="promoteHint">
+      호스트는 참가자 화면을 누르면 큰 화면으로 올릴 수 있습니다.
     </div>
 
-    <div id="people"
-         class="people"></div>
-  </div>
-
-</div>
-
-<div class="controls">
-  <button class="start"
-          onclick="startBroadcast()">
-    📹 방송 시작
-  </button>
-
-  <button class="stop"
-          onclick="stopBroadcast()">
-    ⏹ 방송 종료
-  </button>
-</div>
-
-<div id="status" class="status">
-  방송 대기 중
-</div>
-
-<div class="lower">
-
-  <div class="panel">
-    <h3>💬 채팅</h3>
-
-    <div id="chat" class="chat">
-      <div>관리자 : K-Talk 방송방입니다.</div>
+    <div class="actions">
+      <button class="action" onclick="sendRose()">🌹 장미</button>
+      <button class="action" onclick="sendGift()">🎁 선물</button>
+      <button class="action" onclick="openGiftBox()">📦 선물상자</button>
+      <button class="action" onclick="lottery()">🎯 제비뽑기</button>
     </div>
 
-    <div class="chatInput">
-      <input id="chatText"
-             placeholder="메시지를 입력하세요"
-             onkeydown="if(event.key==='Enter')sendChat()">
-
-      <button onclick="sendChat()">
-        전송
-      </button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>🎁 선물 / 후원 · 테스트</h3>
-
-    <div class="gifts">
-
-      <div class="gift"
-           onclick="sendGift('장미')">
-        <b>🌹</b>
-        <small>장미<br>50원</small>
+    <div class="chat">
+      <div class="chatTitle">💬 실시간 채팅</div>
+      <div id="messages" class="messages">
+        <div class="msg system">K-Talk 방송방에 오신 것을 환영합니다.</div>
       </div>
-
-      <div class="gift"
-           onclick="sendGift('하트')">
-        <b>❤️</b>
-        <small>하트</small>
+      <div class="chatInput">
+        <input id="chatText" maxlength="150"
+               placeholder="메시지를 입력하세요">
+        <button class="send" onclick="sendChat()">전송</button>
       </div>
-
-      <div class="gift"
-           onclick="sendGift('별')">
-        <b>⭐</b>
-        <small>별</small>
-      </div>
-
-      <div class="gift"
-           onclick="sendGift('풍선')">
-        <b>🎈</b>
-        <small>풍선</small>
-      </div>
-
-      <div class="gift"
-           onclick="sendGift('선물상자')">
-        <b>🎁</b>
-        <small>선물상자</small>
-      </div>
-
     </div>
 
-    <div class="events">
-      <button onclick="attendance()">
-        💗 출석체크
-      </button>
-
-      <button onclick="lottery()">
-        🎰 제비뽑기
-      </button>
-
-      <button onclick="importantNotice()">
-        📢 공지
-      </button>
-    </div>
-  </div>
-
+  </section>
 </div>
 
+<div class="bottom">
+  <button id="micBtn" class="ctrl" onclick="toggleMic()">🎤 마이크</button>
+  <button id="camBtn" class="ctrl" onclick="toggleCam()">📷 카메라</button>
+  <button class="ctrl" onclick="copyInvite()">🔗 초대</button>
+  <button class="ctrl end" onclick="leaveRoom()">☎ 나가기</button>
 </div>
+
+<div id="giftBox" class="giftBox">
+  <div class="big">🎁</div>
+  <div><b>선물상자</b></div>
+  <div id="giftCount" class="reward">10초</div>
+  <button id="giftReceive" onclick="receiveGift()" disabled>받기</button>
+</div>
+
 
 <script>
+/****************************************************
+ K-TALK 13명 실시간 방송
+ - PeerJS 기반
+ - 별도 가입 없이 URL 공유
+ - 13자리 자동 배정
+ - 1번 자리 = 기본 호스트
+ - 참가자 화면 클릭 → 큰 화면
+ - 채팅 / 장미 / 선물 / 선물상자 / 제비뽑기
+****************************************************/
 
-/* ======================================
-   K-TALK
-   일반방 13명 / 비밀방 6명
-   실제 돈/코인 계산 OFF
-====================================== */
+const MAX_USERS = 13;
 
-let roomMode="public";
-let MAX_USERS=13;
+const params = new URLSearchParams(location.search);
+const ROOM = (params.get("room") || "main")
+  .replace(/[^a-zA-Z0-9_-]/g,"")
+  .slice(0,30);
 
-let peer=null;
-let localStream=null;
-let mySlot=0;
+const BASE = "ktalk-" + ROOM + "-";
 
-let syncTimer=null;
-let reconnectTimer=null;
+let peer = null;
+let stream = null;
+let mySlot = null;
 
-const calls=new Map();
-const pending=new Map();
-const retryAfter=new Map();
+let dataPeers = {};
+let calls = {};
+let streams = {};
 
-const $=id=>document.getElementById(id);
+let promotedSlot = 1;
+let micOn = true;
+let camOn = true;
 
+let giftTimer = null;
+let giftSeconds = 0;
+let giftReceived = false;
 
-/* ======================================
-   방 주소
-====================================== */
+const statusEl = document.getElementById("status");
+const startBtn = document.getElementById("startBtn");
+const stageVideo = document.getElementById("stageVideo");
+const stageTitle = document.getElementById("stageTitle");
+const stageSub = document.getElementById("stageSub");
+const messages = document.getElementById("messages");
 
-function simpleHash(text){
+function peerId(slot){
+  return BASE + slot;
+}
 
-  let h=0;
-
-  for(let i=0;i<text.length;i++){
-
-    h=((h<<5)-h)+text.charCodeAt(i);
-
-    h|=0;
-  }
-
-  return Math.abs(h);
+function slotFromPeer(id){
+  if(!id || !id.startsWith(BASE)) return null;
+  const n = Number(id.substring(BASE.length));
+  return Number.isInteger(n) && n>=1 && n<=MAX_USERS ? n : null;
 }
 
 
-function currentRoomKey(){
+/* --------------------------
+   13자리 화면 먼저 생성
+-------------------------- */
 
-  if(roomMode==="public"){
-
-    return "ktalk-live-public-20260817-v4-";
-  }
-
-  const pw=$("roomPassword").value.trim();
-
-  return "ktalk-live-secret-"+
-         simpleHash(pw)+
-         "-v4-";
-}
-
-
-/* ======================================
-   일반방
-====================================== */
-
-function selectPublic(){
-
-  if(localStream){
-
-    alert("방송을 먼저 종료해 주세요.");
-
-    return;
-  }
-
-  roomMode="public";
-
-  MAX_USERS=13;
-
-  $("publicBtn").classList.add("active");
-
-  $("secretBtn").classList.remove("active");
-
-  $("passwordBox").style.display="none";
-
-  $("roomDescription").textContent=
-    "화상 방송방 · 최대 13명";
-
-  $("roomTitle").textContent=
-    "👥 일반 방송방 · 최대 13명";
-
-  buildPeople();
-}
-
-
-/* ======================================
-   비밀방
-====================================== */
-
-function selectSecret(){
-
-  if(localStream){
-
-    alert("방송을 먼저 종료해 주세요.");
-
-    return;
-  }
-
-  roomMode="secret";
-
-  MAX_USERS=6;
-
-  $("secretBtn").classList.add("active");
-
-  $("publicBtn").classList.remove("active");
-
-  $("passwordBox").style.display="block";
-
-  $("roomDescription").textContent=
-    "🔒 비밀 화상방 · 최대 6명";
-
-  $("roomTitle").textContent=
-    "🔒 비밀방 · 최대 6명";
-
-  buildPeople();
-}
-
-
-/* ======================================
-   참가자 칸
-====================================== */
-
-function buildPeople(){
-
-  const box=$("people");
-
-  box.innerHTML="";
+function buildSlots(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
   for(let i=1;i<=MAX_USERS;i++){
+    const box = document.createElement("div");
+    box.className = "slot";
+    box.id = "slot-" + i;
 
-    const d=document.createElement("div");
+    box.innerHTML = `
+      <div id="empty-${i}" class="slotEmpty">대기중</div>
+      <video id="video-${i}" autoplay playsinline></video>
+      <div id="name-${i}" class="slotName">참가자 ${i}</div>
+      <div class="slotNum">${i}</div>
+    `;
 
-    d.className="person";
+    const video = box.querySelector("video");
+    video.style.display = "none";
 
-    d.id="person-"+i;
+    box.onclick = ()=>{
+      if(mySlot === 1){
+        promote(i,true);
+      }
+    };
 
-    d.textContent=
-      i===1
-      ? "진행자"
-      : "참가자 "+i;
+    grid.appendChild(box);
+  }
+}
+buildSlots();
 
-    box.appendChild(d);
+
+/* --------------------------
+   카메라 시작
+-------------------------- */
+
+startBtn.onclick = startRoom;
+
+async function startRoom(){
+  if(stream) return;
+
+  try{
+    startBtn.disabled = true;
+    statusEl.textContent = "카메라 연결 중...";
+
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:"user",
+        width:{ideal:1280},
+        height:{ideal:720}
+      },
+      audio:{
+        echoCancellation:true,
+        noiseSuppression:true,
+        autoGainControl:true
+      }
+    });
+
+    await claimSlot(1);
+
+  }catch(err){
+    console.error(err);
+    startBtn.disabled = false;
+    statusEl.textContent = "카메라/마이크 허용이 필요합니다.";
+    alert("카메라와 마이크를 허용해 주세요.");
   }
 }
 
 
-buildPeople();
-
-
-function resetPerson(slot){
-
-  const box=$("person-"+slot);
-
-  if(!box)return;
-
-  box.className=
-    "person"+
-    (slot===mySlot ? " me" : "");
-
-  box.innerHTML="";
-
-  box.textContent=
-    slot===1
-    ? "진행자"
-    : "참가자 "+slot;
-}
-
-
-function showRemote(slot,stream){
-
-  if(!slot || slot===mySlot)return;
-
-  const box=$("person-"+slot);
-
-  if(!box)return;
-
-  box.innerHTML="";
-
-  const video=
-    document.createElement("video");
-
-  video.autoplay=true;
-
-  video.playsInline=true;
-
-  video.srcObject=stream;
-
-
-  const label=
-    document.createElement("div");
-
-  label.className="personLabel";
-
-  label.textContent=
-    slot===1
-    ? "진행자"
-    : "참가자 "+slot;
-
-
-  box.appendChild(video);
-
-  box.appendChild(label);
-
-
-  video.play().catch(()=>{});
-}
-
-
-/* ======================================
-   Peer 번호 읽기
-====================================== */
-
-function getSlot(peerId){
-
-  const m=
-    String(peerId||"")
-    .match(/-(\d+)$/);
-
-  return m
-    ? Number(m[1])
-    : 0;
-}
-
-
-/* ======================================
-   빈 자리 잡기
-====================================== */
+/* --------------------------
+   빈 자리 자동 찾기
+-------------------------- */
 
 function claimSlot(slot){
 
-  return new Promise(resolve=>{
-
-    const id=
-      currentRoomKey()+slot;
-
-    const p=
-      new Peer(id,{
-        debug:0,
-
-        config:{
-          iceServers:[
-
-            {
-              urls:
-              "stun:stun.l.google.com:19302"
-            },
-
-            {
-              urls:
-              "stun:stun1.l.google.com:19302"
-            },
-
-            {
-              urls:
-              "stun:stun2.l.google.com:19302"
-            }
-          ]
-        }
-      });
-
-
-    let finished=false;
-
-
-    function finish(value){
-
-      if(finished)return;
-
-      finished=true;
-
-      resolve(value);
-    }
-
-
-    p.on("open",()=>{
-
-      finish(p);
-    });
-
-
-    p.on("error",()=>{
-
-      try{
-
-        p.destroy();
-
-      }catch(e){}
-
-      finish(null);
-    });
-
-
-    setTimeout(()=>{
-
-      if(finished)return;
-
-      try{
-
-        p.destroy();
-
-      }catch(e){}
-
-      finish(null);
-
-    },2500);
-
-  });
-}
-
-
-/* ======================================
-   방송 시작
-====================================== */
-
-async function startBroadcast(){
-
-  if(localStream)return;
-
-
-  if(roomMode==="secret"){
-
-    const pw=
-      $("roomPassword")
-      .value
-      .trim();
-
-    if(pw.length<4){
-
-      alert(
-        "비밀방 비밀번호를 4자리 이상 입력하세요."
-      );
-
-      return;
-    }
-  }
-
-
-  if(
-    !navigator.mediaDevices ||
-    !navigator.mediaDevices.getUserMedia
-  ){
-
-    alert(
-      "이 브라우저에서는 카메라 방송을 사용할 수 없습니다."
-    );
-
-    return;
-  }
-
-
-  try{
-
-    localStream=
-      await navigator.mediaDevices
-      .getUserMedia({
-
-        video:{
-
-          facingMode:"user",
-
-          width:{ideal:640},
-
-          height:{ideal:480},
-
-          frameRate:{
-            ideal:15,
-            max:20
-          }
-        },
-
-        audio:{
-
-          echoCancellation:true,
-
-          noiseSuppression:true,
-
-          autoGainControl:true
-        }
-      });
-
-  }catch(e){
-
-    localStream=null;
-
-    alert(
-      "카메라와 마이크 사용을 허용해 주세요."
-    );
-
-    return;
-  }
-
-
-  $("hostVideo").srcObject=
-    localStream;
-
-  $("hostVideo")
-    .play()
-    .catch(()=>{});
-
-  $("hostEmpty").style.display=
-    "none";
-
-  $("status").textContent=
-    "방송 연결 중...";
-
-
-  /* 빈 번호 찾기 */
-
-  for(
-    let slot=1;
-    slot<=MAX_USERS;
-    slot++
-  ){
-
-    const candidate=
-      await claimSlot(slot);
-
-    if(candidate){
-
-      peer=candidate;
-
-      mySlot=slot;
-
-      break;
-    }
-  }
-
-
-  if(!peer){
-
-    alert(
-      "현재 방송방이 가득 찼습니다."
-    );
-
-    stopBroadcast();
-
-    return;
-  }
-
-
-  for(
-    let i=1;
-    i<=MAX_USERS;
-    i++
-  ){
-
-    resetPerson(i);
-  }
-
-
-  /* 상대방 전화 수신 */
-
-  peer.on("call",call=>{
-
-    const slot=
-      getSlot(call.peer);
-
-    if(
-      !slot ||
-      slot===mySlot
-    ){
-
-      try{
-
-        call.close();
-
-      }catch(e){}
-
+  return new Promise((resolve,reject)=>{
+
+    if(slot > MAX_USERS){
+      alert("현재 방송방이 가득 찼습니다.");
+      reject();
       return;
     }
 
+    statusEl.textContent = slot + "번 자리 확인 중...";
 
-    try{
+    const testPeer = new Peer(peerId(slot),{
+      debug:0
+    });
 
-      call.answer(
-        localStream
-      );
+    let finished = false;
 
-    }catch(e){}
+    testPeer.on("open",()=>{
 
+      if(finished) return;
+      finished = true;
 
-    attachCall(
-      slot,
-      call
-    );
-  });
+      peer = testPeer;
+      mySlot = slot;
 
+      streams[mySlot] = stream;
+      setVideo(mySlot,stream,true);
 
-  /* Peer 서버 연결 복구 */
+      statusEl.textContent =
+        "접속 완료 · " + mySlot + "번 자리";
 
-  peer.on(
-    "disconnected",
-    ()=>{
+      startBtn.style.display = "none";
 
-      $("status").textContent=
-        "연결 다시 잡는 중...";
+      setupPeerEvents();
 
-      if(reconnectTimer){
-
-        clearTimeout(
-          reconnectTimer
-        );
+      if(mySlot === 1){
+        promotedSlot = 1;
       }
 
-      reconnectTimer=
-        setTimeout(()=>{
+      promote(promotedSlot,false);
 
-          if(
-            peer &&
-            peer.disconnected &&
-            !peer.destroyed
-          ){
-
-            try{
-
-              peer.reconnect();
-
-            }catch(e){}
-          }
-
-        },800);
-    }
-  );
-
-
-  peer.on(
-    "open",
-    ()=>{
-
-      $("status").textContent=
-        "✅ 방송 연결됨 · 최대 "+
-        MAX_USERS+
-        "명";
-
-      setTimeout(
-        syncUsers,
-        300
+      addSystem(
+        "참가자 " + mySlot + "님이 입장했습니다."
       );
-    }
-  );
 
+      setTimeout(syncPeers,800);
+      resolve();
+    });
 
-  peer.on(
-    "close",
-    ()=>{
+    testPeer.on("error",(err)=>{
 
-      $("status").textContent=
-        "연결이 끊겼습니다.";
-    }
-  );
+      if(finished) return;
 
-
-  peer.on(
-    "error",
-    err=>{
-
-      if(!err)return;
-
-      if(
-        err.type===
-        "peer-unavailable"
-      ){
-
+      if(err.type === "unavailable-id"){
+        finished = true;
+        try{testPeer.destroy()}catch(e){}
+        setTimeout(()=>{
+          claimSlot(slot+1).then(resolve).catch(reject);
+        },100);
         return;
       }
 
+      console.error(err);
+
       if(
-        err.type===
-        "network"
+        err.type === "peer-unavailable" ||
+        err.type === "network" ||
+        err.type === "server-error"
       ){
-
-        $("status").textContent=
-          "네트워크 연결 복구 중...";
+        return;
       }
-    }
-  );
 
-
-  /* 바로 상대방 찾기 */
-
-  syncUsers();
-
-
-  syncTimer=
-    setInterval(
-      syncUsers,
-      1800
-    );
-
-
-  $("status").textContent=
-    "✅ "+
-    (
-      mySlot===1
-      ? "진행자"
-      : "참가자 "+mySlot
-    )+
-    " 입장 완료 · 최대 "+
-    MAX_USERS+
-    "명";
-
-
-  speakImportant(
-
-    mySlot===1
-
-    ? "케이톡 방송을 시작합니다."
-
-    : "케이톡 방송방에 입장했습니다."
-  );
+      statusEl.textContent = "연결 오류";
+    });
+  });
 }
 
 
-/* ======================================
-   상대 연결 등록
-====================================== */
+/* --------------------------
+   Peer 연결
+-------------------------- */
 
-function attachCall(
-  slot,
-  call
-){
+function setupPeerEvents(){
 
-  if(
-    !slot ||
-    slot===mySlot ||
-    !call
-  ){
+  peer.on("call",(call)=>{
 
-    return;
-  }
+    const slot = slotFromPeer(call.peer);
+    if(!slot) return;
+
+    call.answer(stream);
+    saveCall(slot,call);
+  });
 
 
-  const old=
-    calls.get(slot);
+  peer.on("connection",(conn)=>{
+    setupDataConnection(conn);
+  });
 
 
-  if(
-    old &&
-    old!==call
-  ){
-
+  peer.on("disconnected",()=>{
+    statusEl.textContent = "재연결 중...";
     try{
-
-      old.close();
-
-    }catch(e){}
-  }
-
-
-  calls.set(
-    slot,
-    call
-  );
-
-  pending.delete(slot);
-
-
-  call.on(
-    "stream",
-    stream=>{
-
-      calls.set(
-        slot,
-        call
-      );
-
-      pending.delete(slot);
-
-      retryAfter.delete(slot);
-
-      showRemote(
-        slot,
-        stream
-      );
-
-      $("status").textContent=
-        "✅ 연결됨 · 최대 "+
-        MAX_USERS+
-        "명";
-    }
-  );
-
-
-  call.on(
-    "close",
-    ()=>{
-
-      if(
-        calls.get(slot)===
-        call
-      ){
-
-        calls.delete(slot);
-
-        pending.delete(slot);
-
-        resetPerson(slot);
-
-        retryAfter.set(
-          slot,
-          Date.now()+900
-        );
-      }
-    }
-  );
-
-
-  call.on(
-    "error",
-    ()=>{
-
-      if(
-        calls.get(slot)===
-        call
-      ){
-
-        calls.delete(slot);
-
-        pending.delete(slot);
-
-        resetPerson(slot);
-
-        retryAfter.set(
-          slot,
-          Date.now()+900
-        );
-      }
-    }
-  );
-}
-
-
-/* ======================================
-   상대에게 연결
-====================================== */
-
-function dial(slot){
-
-  if(
-    !peer ||
-    !localStream ||
-    peer.destroyed ||
-    peer.disconnected
-  ){
-
-    return;
-  }
-
-
-  if(
-    slot===mySlot
-  ){
-
-    return;
-  }
-
-
-  if(
-    calls.has(slot)
-  ){
-
-    return;
-  }
-
-
-  if(
-    pending.has(slot)
-  ){
-
-    return;
-  }
-
-
-  if(
-    (
-      retryAfter.get(slot)
-      ||0
-    )>
-    Date.now()
-  ){
-
-    return;
-  }
-
-
-  pending.set(
-    slot,
-    Date.now()
-  );
-
-
-  let call=null;
-
-
-  try{
-
-    call=
-      peer.call(
-
-        currentRoomKey()+slot,
-
-        localStream,
-
-        {
-          metadata:{
-            slot:mySlot
-          }
-        }
-      );
-
-  }catch(e){
-
-    pending.delete(slot);
-
-    retryAfter.set(
-      slot,
-      Date.now()+1000
-    );
-
-    return;
-  }
-
-
-  if(!call){
-
-    pending.delete(slot);
-
-    retryAfter.set(
-      slot,
-      Date.now()+1000
-    );
-
-    return;
-  }
-
-
-  let gotStream=false;
-
-
-  call.on(
-    "stream",
-    stream=>{
-
-      gotStream=true;
-
-      calls.set(
-        slot,
-        call
-      );
-
-      pending.delete(slot);
-
-      retryAfter.delete(slot);
-
-      showRemote(
-        slot,
-        stream
-      );
-
-      $("status").textContent=
-        "✅ 참가자 연결됨";
-    }
-  );
-
-
-  call.on(
-    "close",
-    ()=>{
-
-      pending.delete(slot);
-
-      if(
-        calls.get(slot)===
-        call
-      ){
-
-        calls.delete(slot);
-
-        resetPerson(slot);
-      }
-
-
-      retryAfter.set(
-        slot,
-        Date.now()+900
-      );
-    }
-  );
-
-
-  call.on(
-    "error",
-    ()=>{
-
-      pending.delete(slot);
-
-      if(
-        calls.get(slot)===
-        call
-      ){
-
-        calls.delete(slot);
-      }
-
-
-      retryAfter.set(
-        slot,
-        Date.now()+900
-      );
-    }
-  );
-
-
-  setTimeout(
-    ()=>{
-
-      if(!gotStream){
-
-        pending.delete(slot);
-
-        try{
-
-          call.close();
-
-        }catch(e){}
-
-
-        if(
-          calls.get(slot)===
-          call
-        ){
-
-          calls.delete(slot);
-        }
-
-
-        retryAfter.set(
-          slot,
-          Date.now()+1000
-        );
-      }
-
-    },
-    5500
-  );
-}
-
-
-/* ======================================
-   참가자 자동 찾기 / 재연결
-====================================== */
-
-function syncUsers(){
-
-  if(
-    !peer ||
-    !localStream ||
-    !mySlot ||
-    peer.destroyed
-  ){
-
-    return;
-  }
-
-
-  if(peer.disconnected){
-
-    try{
-
       peer.reconnect();
-
     }catch(e){}
-
-    return;
-  }
+  });
 
 
-  for(
-    let slot=1;
-    slot<=MAX_USERS;
-    slot++
-  ){
+  peer.on("close",()=>{
+    statusEl.textContent = "연결 종료";
+  });
 
-    if(
-      slot===mySlot
-    ){
 
-      continue;
+  peer.on("error",(err)=>{
+    if(err.type !== "peer-unavailable"){
+      console.log("Peer error:",err);
     }
+  });
+}
 
 
-    if(
-      calls.has(slot)
-    ){
+/* --------------------------
+   다른 참가자 자동 연결
+-------------------------- */
 
-      const call=
-        calls.get(slot);
+function syncPeers(){
 
-      const pc=
-        call &&
-        call.peerConnection;
+  if(!peer || !stream || !mySlot) return;
 
-      const state=
-        pc
-        ? pc.connectionState
-        : "";
+  for(let slot=1;slot<=MAX_USERS;slot++){
 
+    if(slot === mySlot) continue;
 
-      if(
-        state==="failed" ||
-        state==="closed"
-      ){
+    /* 번호가 작은 사람이 연결을 시작
+       중복 연결 방지 */
+    if(mySlot < slot){
+
+      if(!dataPeers[slot] ||
+         !dataPeers[slot].open){
 
         try{
-
-          call.close();
-
+          const conn = peer.connect(peerId(slot),{
+            reliable:true
+          });
+          setupDataConnection(conn);
         }catch(e){}
-
-        calls.delete(slot);
-
-        resetPerson(slot);
-
-        retryAfter.set(
-          slot,
-          Date.now()+800
-        );
       }
 
-      else if(
-        state==="disconnected"
-      ){
+      if(!calls[slot]){
 
         try{
+          const call = peer.call(
+            peerId(slot),
+            stream
+          );
 
-          call.close();
-
+          if(call){
+            saveCall(slot,call);
+          }
         }catch(e){}
-
-        calls.delete(slot);
-
-        resetPerson(slot);
-
-        retryAfter.set(
-          slot,
-          Date.now()+1000
-        );
       }
-
-      else{
-
-        continue;
-      }
-    }
-
-
-    dial(slot);
-  }
-
-
-  /* 오래 걸리는 연결 정리 */
-
-  for(
-    const [
-      slot,
-      started
-    ]
-    of pending.entries()
-  ){
-
-    if(
-      Date.now()-started >
-      7000
-    ){
-
-      pending.delete(slot);
-
-      retryAfter.set(
-        slot,
-        Date.now()+800
-      );
     }
   }
 }
 
 
-/* ======================================
-   방송 종료
-====================================== */
+/* --------------------------
+   영상 통화 저장
+-------------------------- */
 
-function stopBroadcast(){
+function saveCall(slot,call){
 
-  if(syncTimer){
-
-    clearInterval(
-      syncTimer
-    );
-
-    syncTimer=null;
+  if(calls[slot] && calls[slot] !== call){
+    try{calls[slot].close()}catch(e){}
   }
 
+  calls[slot] = call;
 
-  if(reconnectTimer){
+  call.on("stream",(remoteStream)=>{
+    streams[slot] = remoteStream;
+    setVideo(slot,remoteStream,false);
 
-    clearTimeout(
-      reconnectTimer
-    );
-
-    reconnectTimer=null;
-  }
-
-
-  calls.forEach(
-    call=>{
-
-      try{
-
-        call.close();
-
-      }catch(e){}
+    if(slot === promotedSlot){
+      showOnStage(slot);
     }
-  );
+  });
+
+  call.on("close",()=>{
+    cleanupSlot(slot);
+  });
+
+  call.on("error",()=>{
+    cleanupSlot(slot);
+  });
+}
 
 
-  calls.clear();
+/* --------------------------
+   데이터 연결
+-------------------------- */
 
-  pending.clear();
+function setupDataConnection(conn){
 
-  retryAfter.clear();
+  const slot = slotFromPeer(conn.peer);
+  if(!slot) return;
+
+  dataPeers[slot] = conn;
+
+  conn.on("open",()=>{
+
+    sendOne(conn,{
+      type:"hello",
+      slot:mySlot,
+      promotedSlot
+    });
+
+    broadcastPresence();
+  });
+
+  conn.on("data",(data)=>{
+    handleData(data,slot);
+  });
+
+  conn.on("close",()=>{
+    if(dataPeers[slot] === conn){
+      delete dataPeers[slot];
+    }
+  });
+
+  conn.on("error",()=>{});
+}
 
 
-  if(peer){
+/* --------------------------
+   데이터 처리
+-------------------------- */
 
-    try{
+function handleData(data,fromSlot){
 
-      peer.destroy();
+  if(!data || typeof data !== "object") return;
 
-    }catch(e){}
+  if(data.type === "chat"){
+    addChat(data.slot,data.text);
   }
 
-
-  if(localStream){
-
-    localStream
-      .getTracks()
-      .forEach(
-        track=>
-          track.stop()
-      );
+  if(data.type === "system"){
+    addSystem(data.text);
   }
 
+  if(data.type === "promote"){
+    promotedSlot = data.slot;
+    showOnStage(promotedSlot);
+  }
 
-  peer=null;
+  if(data.type === "hello"){
+    if(data.promotedSlot){
+      promotedSlot = data.promotedSlot;
+      showOnStage(promotedSlot);
+    }
+  }
 
-  localStream=null;
+  if(data.type === "giftbox"){
+    startGiftBox(data.seconds || 10);
+  }
 
-  mySlot=0;
+  if(data.type === "rose"){
+    addSystem(
+      "🌹 참가자 " + data.slot +
+      "님이 장미를 보냈습니다."
+    );
+  }
 
+  if(data.type === "gift"){
+    addSystem(
+      "🎁 참가자 " + data.slot +
+      "님이 선물을 보냈습니다."
+    );
+  }
 
-  $("hostVideo")
-    .srcObject=null;
-
-
-  $("hostEmpty")
-    .style
-    .display="flex";
-
-
-  $("status")
-    .textContent=
-    "방송 대기 중";
-
-
-  buildPeople();
-
-
-  if(
-    "speechSynthesis"
-    in window
-  ){
-
-    speechSynthesis.cancel();
+  if(data.type === "lottery"){
+    addSystem(data.text);
   }
 }
 
 
-/* ======================================
-   채팅 AI 음성 읽기
-====================================== */
+/* --------------------------
+   영상 표시
+-------------------------- */
 
-let voiceEnabled=true;
+function setVideo(slot,s,muted){
+
+  const video =
+    document.getElementById("video-"+slot);
+
+  const empty =
+    document.getElementById("empty-"+slot);
+
+  if(!video) return;
+
+  video.srcObject = s;
+  video.muted = muted;
+  video.style.display = "block";
+
+  if(empty){
+    empty.style.display = "none";
+  }
+
+  if(slot === mySlot){
+    document.getElementById("name-"+slot)
+      .textContent =
+      slot === 1 ? "👑 호스트" : "나";
+  }
+}
 
 
-function speak(
-  text,
-  important=false
-){
+function cleanupSlot(slot){
 
-  if(
-    !voiceEnabled ||
-    !text
-  ){
+  delete calls[slot];
+  delete streams[slot];
 
+  const video =
+    document.getElementById("video-"+slot);
+
+  const empty =
+    document.getElementById("empty-"+slot);
+
+  if(video){
+    video.srcObject = null;
+    video.style.display = "none";
+  }
+
+  if(empty){
+    empty.style.display = "flex";
+  }
+
+  if(promotedSlot === slot){
+    promotedSlot = 1;
+    showOnStage(1);
+  }
+}
+
+
+/* --------------------------
+   큰 화면 올리기 / 내리기
+-------------------------- */
+
+function promote(slot,shouldBroadcast){
+
+  if(slot < 1 || slot > MAX_USERS) return;
+
+  promotedSlot = slot;
+
+  showOnStage(slot);
+
+  if(shouldBroadcast){
+    broadcast({
+      type:"promote",
+      slot
+    });
+
+    addSystem(
+      "참가자 " + slot +
+      "님이 큰 화면으로 이동했습니다."
+    );
+  }
+}
+
+
+function showOnStage(slot){
+
+  const s = streams[slot];
+
+  if(!s){
+    stageVideo.srcObject = null;
+    stageTitle.textContent =
+      "참가자 " + slot + "번";
+    stageSub.textContent =
+      "참가자를 기다리는 중입니다.";
     return;
   }
 
+  stageVideo.srcObject = s;
 
-  if(
-    !(
-      "speechSynthesis"
-      in window
-    )
-  ){
+  /* 내 영상이 큰 화면일 때 소리 울림 방지 */
+  stageVideo.muted = slot === mySlot;
 
-    return;
-  }
-
-
-  if(important){
-
-    speechSynthesis.cancel();
-  }
-
-
-  const msg=
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-
-  msg.lang="ko-KR";
-
-  msg.rate=1;
-
-  msg.pitch=1;
-
-  msg.volume=1;
-
-
-  speechSynthesis.speak(
-    msg
-  );
-}
-
-
-function speakImportant(text){
-
-  speak(
-    text,
-    true
-  );
-}
-
-
-function addChat(
-  name,
-  text,
-  important=false
-){
-
-  const row=
-    document.createElement(
-      "div"
-    );
-
-
-  row.textContent=
-    name+
-    " : "+
-    text;
-
-
-  $("chat")
-    .appendChild(
-      row
-    );
-
-
-  $("chat")
-    .scrollTop=
-    $("chat")
-    .scrollHeight;
-
-
-  if(important){
-
-    speakImportant(
-      name+
-      " 안내입니다. "+
-      text
-    );
-
+  if(slot === 1){
+    stageTitle.textContent = "👑 호스트";
   }else{
-
-    speak(
-      name+
-      "님, "+
-      text
-    );
+    stageTitle.textContent =
+      "🎤 참가자 " + slot;
   }
+
+  stageSub.textContent =
+    "현재 큰 방송 화면";
 }
 
+
+/* --------------------------
+   채팅
+-------------------------- */
 
 function sendChat(){
 
-  const input=
-    $("chatText");
+  const input =
+    document.getElementById("chatText");
 
+  const text =
+    input.value.trim();
 
-  const text=
-    input
-    .value
-    .trim();
+  if(!text || !mySlot) return;
 
+  addChat(mySlot,text);
 
-  if(!text)return;
-
-
-  addChat(
-    "나",
+  broadcast({
+    type:"chat",
+    slot:mySlot,
     text
-  );
-
+  });
 
   input.value="";
 }
 
 
-/* ======================================
-   중요 공지
-====================================== */
+document.getElementById("chatText")
+.addEventListener("keydown",(e)=>{
+  if(e.key === "Enter"){
+    sendChat();
+  }
+});
 
-function importantNotice(){
 
-  addChat(
-    "관리자",
-    "중요 공지사항을 확인해 주세요.",
-    true
+function addChat(slot,text){
+
+  const div =
+    document.createElement("div");
+
+  div.className="msg";
+
+  const safe =
+    String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+
+  div.innerHTML =
+    "<b>참가자 "+slot+"</b> : "+safe;
+
+  messages.appendChild(div);
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+
+function addSystem(text){
+
+  const div =
+    document.createElement("div");
+
+  div.className="msg system";
+  div.textContent=text;
+
+  messages.appendChild(div);
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+
+/* --------------------------
+   데이터 전송
+-------------------------- */
+
+function sendOne(conn,data){
+  try{
+    if(conn && conn.open){
+      conn.send(data);
+    }
+  }catch(e){}
+}
+
+
+function broadcast(data){
+
+  Object.values(dataPeers)
+  .forEach(conn=>{
+    sendOne(conn,data);
+  });
+}
+
+
+function broadcastPresence(){
+  broadcast({
+    type:"hello",
+    slot:mySlot,
+    promotedSlot
+  });
+}
+
+
+/* --------------------------
+   장미 / 선물
+-------------------------- */
+
+function sendRose(){
+
+  if(!mySlot) return;
+
+  addSystem(
+    "🌹 참가자 " + mySlot +
+    "님이 장미를 보냈습니다."
+  );
+
+  broadcast({
+    type:"rose",
+    slot:mySlot
+  });
+}
+
+
+function sendGift(){
+
+  if(!mySlot) return;
+
+  addSystem(
+    "🎁 참가자 " + mySlot +
+    "님이 선물을 보냈습니다."
+  );
+
+  broadcast({
+    type:"gift",
+    slot:mySlot
+  });
+}
+
+
+/* --------------------------
+   선물상자
+-------------------------- */
+
+function openGiftBox(){
+
+  if(!mySlot) return;
+
+  startGiftBox(10);
+
+  broadcast({
+    type:"giftbox",
+    seconds:10
+  });
+
+  addSystem(
+    "📦 선물상자가 열렸습니다!"
   );
 }
 
 
-/* ======================================
-   선물 테스트
-   실제 돈/코인 차감 없음
-====================================== */
+function startGiftBox(seconds){
 
-function sendGift(name){
+  clearInterval(giftTimer);
 
-  addChat(
-    "선물",
-    name+
-    " 선물이 전송되었습니다. 테스트 선물입니다.",
-    true
-  );
+  giftSeconds=seconds;
+  giftReceived=false;
+
+  const box =
+    document.getElementById("giftBox");
+
+  const count =
+    document.getElementById("giftCount");
+
+  const btn =
+    document.getElementById("giftReceive");
+
+  box.style.display="block";
+  btn.disabled=true;
+
+  count.textContent=
+    giftSeconds+"초";
+
+  giftTimer=setInterval(()=>{
+
+    giftSeconds--;
+
+    if(giftSeconds>0){
+      count.textContent=
+        giftSeconds+"초";
+    }else{
+
+      clearInterval(giftTimer);
+
+      count.textContent=
+        "지금 누르세요!";
+
+      btn.disabled=false;
+
+      setTimeout(()=>{
+        if(!giftReceived){
+          box.style.display="none";
+        }
+      },7000);
+    }
+
+  },1000);
 }
 
 
-/* ======================================
-   출석 체크
-====================================== */
+function receiveGift(){
 
-function attendance(){
+  if(giftReceived) return;
 
-  addChat(
-    "출석체크",
-    "출석체크가 완료되었습니다."
+  giftReceived=true;
+
+  const reward=
+    Math.floor(Math.random()*5)+1;
+
+  document.getElementById("giftCount")
+    .textContent=
+    "🌹 장미 "+reward+"개 당첨";
+
+  document.getElementById("giftReceive")
+    .disabled=true;
+
+  addSystem(
+    "🎉 참가자 "+mySlot+
+    "님이 선물상자에서 장미 "+
+    reward+"개를 받았습니다."
   );
+
+  setTimeout(()=>{
+    document.getElementById("giftBox")
+      .style.display="none";
+  },3000);
 }
 
 
-/* ======================================
+/* --------------------------
    제비뽑기
-====================================== */
+-------------------------- */
 
 function lottery(){
 
-  const results=[
+  if(!mySlot) return;
 
-    "꽝",
-
-    "꽝",
-
-    "장미 1송이",
-
-    "장미 2송이",
-
-    "장미 3송이",
-
-    "장미 4송이",
-
-    "장미 5송이"
+  const prizes=[
+    0,0,1,2,3,4,5
   ];
 
-
   const result=
-
-    results[
+    prizes[
       Math.floor(
-        Math.random()*
-        results.length
+        Math.random()*prizes.length
       )
     ];
 
+  let text;
 
-  addChat(
-    "제비뽑기",
-    result+
-    "입니다."
-  );
+  if(result===0){
+    text=
+      "🎯 참가자 "+mySlot+
+      "님 제비뽑기 결과: 꽝";
+  }else{
+    text=
+      "🎯 참가자 "+mySlot+
+      "님 제비뽑기 결과: 🌹 장미 "+
+      result+"개";
+  }
+
+  addSystem(text);
+
+  broadcast({
+    type:"lottery",
+    text
+  });
 }
 
 
-/* ======================================
-   페이지 종료
-====================================== */
+/* --------------------------
+   마이크 / 카메라
+-------------------------- */
+
+function toggleMic(){
+
+  if(!stream) return;
+
+  micOn=!micOn;
+
+  stream.getAudioTracks()
+    .forEach(t=>{
+      t.enabled=micOn;
+    });
+
+  document.getElementById("micBtn")
+    .textContent=
+    micOn ? "🎤 마이크" : "🔇 음소거";
+}
+
+
+function toggleCam(){
+
+  if(!stream) return;
+
+  camOn=!camOn;
+
+  stream.getVideoTracks()
+    .forEach(t=>{
+      t.enabled=camOn;
+    });
+
+  document.getElementById("camBtn")
+    .textContent=
+    camOn ? "📷 카메라" : "🚫 카메라";
+}
+
+
+/* --------------------------
+   초대주소
+-------------------------- */
+
+async function copyInvite(){
+
+  const url=
+    location.origin+
+    location.pathname+
+    "?room="+ROOM;
+
+  try{
+    await navigator.clipboard.writeText(url);
+    alert("초대 주소를 복사했습니다.");
+  }catch(e){
+    prompt("주소를 복사하세요.",url);
+  }
+}
+
+
+/* --------------------------
+   나가기
+-------------------------- */
+
+function leaveRoom(){
+
+  Object.values(calls)
+    .forEach(c=>{
+      try{c.close()}catch(e){}
+    });
+
+  Object.values(dataPeers)
+    .forEach(c=>{
+      try{c.close()}catch(e){}
+    });
+
+  if(stream){
+    stream.getTracks()
+      .forEach(t=>t.stop());
+  }
+
+  if(peer){
+    try{peer.destroy()}catch(e){}
+  }
+
+  location.reload();
+}
+
+
+/* --------------------------
+   끊긴 참가자 자동 복구
+-------------------------- */
+
+const lostSince={};
+
+setInterval(()=>{
+
+  if(!peer || !stream || !mySlot) return;
+
+  Object.keys(calls)
+    .forEach(key=>{
+
+      const slot=Number(key);
+      const call=calls[slot];
+
+      if(!call) return;
+
+      const pc=call.peerConnection;
+
+      const state=
+        pc ? pc.connectionState : "";
+
+      if(state==="connected"){
+        delete lostSince[slot];
+        return;
+      }
+
+      if(
+        state==="disconnected" ||
+        state==="failed" ||
+        state==="closed"
+      ){
+
+        if(!lostSince[slot]){
+          lostSince[slot]=Date.now();
+        }
+
+        if(
+          Date.now()-
+          lostSince[slot] > 4000
+        ){
+
+          try{
+            call.close();
+          }catch(e){}
+
+          delete calls[slot];
+          delete lostSince[slot];
+
+          cleanupSlot(slot);
+
+          setTimeout(syncPeers,500);
+        }
+      }
+    });
+
+  syncPeers();
+
+},2500);
+
+
+/* 화면 꺼짐 등에서 돌아왔을 때 재연결 */
+document.addEventListener(
+  "visibilitychange",
+  ()=>{
+    if(!document.hidden){
+      setTimeout(syncPeers,500);
+    }
+  }
+);
 
 window.addEventListener(
   "beforeunload",
   ()=>{
-
     try{
-
-      stopBroadcast();
-
+      if(peer) peer.destroy();
     }catch(e){}
   }
 );
-
 </script>
 
 </body>
- </html>
+</html>
