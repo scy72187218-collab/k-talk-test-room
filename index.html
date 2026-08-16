@@ -5,286 +5,462 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>K-Talk LIVE</title>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
-
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#08070d;color:#fff;
- font-family:Arial,"Noto Sans KR",sans-serif
-}
-.app{max-width:480px;margin:auto;min-height:100vh;background:#0c0912}
-header{
- display:flex;align-items:center;justify-content:space-between;
- padding:13px 14px;background:#15101d;position:sticky;top:0;z-index:10
-}
-.logo{font-size:22px;font-weight:900;color:#ff4fa3}
-.live{background:#ff245f;padding:5px 9px;border-radius:8px;font-size:12px}
-.auth button{
- border:0;border-radius:15px;padding:7px 10px;margin-left:4px;
- background:#7c3cff;color:#fff;font-weight:bold
-}
-.notice{
- padding:9px 12px;text-align:center;font-size:12px;
- background:#241632;color:#ffd9eb
-}
-.grid{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:4px;padding:5px
-}
-.slot{
- position:relative;background:#17131e;border-radius:9px;
- overflow:hidden;aspect-ratio:3/4;border:1px solid #2c2436
-}
-.slot.host{grid-column:span 2;aspect-ratio:4/3}
-video{width:100%;height:100%;object-fit:cover;background:#111}
-.tag{
- position:absolute;top:5px;left:5px;background:#5d496e;
- border-radius:8px;padding:3px 6px;font-size:10px
-}
-.name{
- position:absolute;bottom:34px;left:5px;right:5px;
- font-size:12px;font-weight:bold;text-shadow:0 1px 3px #000
-}
-.gift{
- position:absolute;bottom:5px;left:5px;
- border:0;border-radius:14px;background:#e9277d;
- color:#fff;padding:5px 9px;font-size:12px;font-weight:bold
-}
-.join{
- position:absolute;bottom:5px;right:5px;
- border:0;border-radius:50%;width:27px;height:27px;
- background:#444;color:white;font-size:18px
-}
-.controls{
- padding:8px;display:flex;gap:6px;background:#100c17;
- position:sticky;bottom:0
-}
-.controls button{
- border:0;border-radius:18px;padding:10px;
- background:#292131;color:white;font-weight:bold
-}
-.controls .start{background:#7c3cff;flex:1}
-.controls .rose{background:#d91f73}
-.chat{flex:1;background:#292131;border:0;border-radius:18px;padding:10px;color:white}
-
-.membership{
- margin:10px;padding:12px;background:#17111f;border-radius:12px
-}
-.membership h3{margin:0 0 8px;color:#ff63ad}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.plan{
- background:#251b31;border-radius:10px;padding:8px 5px;
- text-align:center;font-size:11px
-}
-.plan b{display:block;font-size:13px;color:#ffd05c}
-.plan.vip{border:1px solid #ffc52c}
-.level{
- margin:8px 10px;padding:9px;background:#14101b;
- border-radius:10px;font-size:12px
-}
-.toast{
- display:none;position:fixed;left:50%;bottom:85px;
- transform:translateX(-50%);background:#000e;
- padding:10px 16px;border-radius:20px;z-index:50
-}
+body{margin:0;background:#08070d;color:#fff;font-family:Arial,"Noto Sans KR",sans-serif}
+.wrap{max-width:520px;margin:auto;padding:10px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:25px;font-weight:900;color:#ffd54a}
+.sub{font-size:12px;color:#ddd}
+.on{background:#e90046;padding:7px 10px;border-radius:8px;font-weight:900}
+.notice{margin:9px 0;padding:9px;text-align:center;border:1px solid #392448;border-radius:9px;font-weight:800}
+.check{color:#ffd43b}
+.main{position:relative;background:#15121a;border:1px solid #3b2450;border-radius:12px;overflow:hidden;aspect-ratio:16/10}
+.main video,.slot video{width:100%;height:100%;object-fit:cover}
+.placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aaa}
+.controls{display:flex;gap:7px;margin-top:8px}
+button{border:0;border-radius:10px;padding:10px;color:white;font-weight:900}
+.start{background:#8b39e8;flex:1}.stop{background:#333;flex:1}
+.status{padding:8px;color:#ffd76a;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.slot{height:78px;background:#19131f;border:1px solid #432a50;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;font-size:10px}
+.slot.me{border:2px solid #ffd700}
+.label{position:absolute;bottom:3px;left:3px;background:#000b;padding:2px 4px;border-radius:4px}
+.panel{margin-top:10px;border:1px solid #432451;border-radius:12px;padding:10px;background:#100b15}
+.title{font-weight:900;margin-bottom:8px}
+.gifts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.gift{background:#17101d;border:1px solid #4c285b;border-radius:10px;text-align:center;padding:9px 3px}
+.rose{font-size:30px}
+.coin{font-size:12px;color:#ffc83d;margin-top:4px}
+.box{border:1px solid #8c3cff;background:#190d24}
+.boxIcon{font-size:34px}
+.attendance{width:100%;margin-top:9px;background:linear-gradient(90deg,#7b18a9,#d7196b);font-size:16px}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:20;align-items:center;justify-content:center;padding:20px}
+.modalIn{width:100%;max-width:430px;background:#160e1d;border:2px solid #873cff;border-radius:15px;padding:15px}
+.biggrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.big{background:#24132e;border:1px solid #633377;border-radius:12px;text-align:center;padding:15px;font-size:17px}
+.close{width:100%;background:#444;margin-top:12px}
 </style>
 </head>
-
 <body>
-<div class="app">
 
-<header>
- <div class="logo">K-Talk <span class="live">LIVE</span></div>
- <div class="auth">
-  <button onclick="login()">로그인</button>
-  <button onclick="signup()">가입</button>
+<div class="wrap">
+
+<div class="top">
+ <div>
+  <div class="brand">♛ K-Talk</div>
+  <div class="sub">화상 방송방 · 최대 13명</div>
  </div>
-</header>
+ <div class="on">● ON AIR</div>
+</div>
 
 <div class="notice">
- QR로 바로 방송 구경 · 채팅/선물/참여는 가입 후 이용
+ <span class="check">★ 출석체크 눌러주세요 ★</span>
 </div>
 
-<div class="grid" id="grid"></div>
-
-<div class="level">
- ⭐ 내 레벨 <b id="level">1</b> · 🎁 선물 활동으로 레벨 UP
- · 일반회원은 <b>Lv.10부터 비밀방 개설</b>
-</div>
-
-<div class="membership">
- <h3>💎 K-Talk 구독 혜택</h3>
- <div class="plans">
-  <div class="plan">
-   <b>일반회원</b>
-   월 5,000원<br>장미 5% 할인<br>비밀방 입장
-  </div>
-  <div class="plan">
-   <b>중회원</b>
-   월 14,900원<br>장미 10% 할인<br>비밀방 입장
-  </div>
-  <div class="plan vip">
-   <b>👑 VIP</b>
-   월 19,900원<br>장미 15% 할인<br>비밀방 입장<br>같이보기
-  </div>
- </div>
+<div class="main">
+ <div id="ph" class="placeholder">방송 시작을 눌러주세요</div>
+ <video id="localVideo" autoplay playsinline muted></video>
 </div>
 
 <div class="controls">
- <input class="chat" placeholder="입력하세요...">
- <button>👥</button>
- <button class="rose" onclick="gift(1)">🌹</button>
- <button onclick="giftBox()">🎁</button>
- <button class="start" onclick="startCamera()">방송 시작</button>
+ <button class="start" onclick="startRoom()">📹 방송 시작</button>
+ <button class="stop" onclick="stopRoom()">방송 종료</button>
+</div>
+
+<div id="status" class="status">대기 중</div>
+<div id="grid" class="grid"></div>
+
+<div class="panel">
+ <div class="title">🌹 장미 선물</div>
+ <div class="gifts">
+
+  <div class="gift" onclick="roseGift(1)">
+   <div class="rose">🌹</div>
+   <b>1송이</b>
+   <div class="coin">🪙 10</div>
+  </div>
+
+  <div class="gift" onclick="roseGift(5)">
+   <div class="rose">🌹🌹</div>
+   <b>5송이</b>
+   <div class="coin">🪙 50</div>
+  </div>
+
+  <div class="gift" onclick="roseGift(10)">
+   <div class="rose">💐</div>
+   <b>10송이</b>
+   <div class="coin">🪙 100</div>
+  </div>
+
+  <div class="gift" onclick="roseGift(50)">
+   <div class="rose">💐</div>
+   <b>50송이</b>
+   <div class="coin">🪙 500</div>
+  </div>
+
+  <div class="gift" onclick="roseGift(100)">
+   <div class="rose">🌹💐</div>
+   <b>100송이</b>
+   <div class="coin">🪙 1,000</div>
+  </div>
+
+  <div class="gift box" onclick="openBox()">
+   <div class="boxIcon">🎁</div>
+   <b>선물 상자</b>
+   <div class="coin">큰 선물</div>
+  </div>
+
+ </div>
+
+ <button class="attendance" onclick="attendance()">⭐ 출석체크 · 🪙 20</button>
 </div>
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div id="giftModal" class="modal">
+ <div class="modalIn">
+  <div class="title">🎁 선물 상자</div>
+  <div class="biggrid">
+   <div class="big" onclick="bigGift('🐋 고래')">🐋<br>고래</div>
+   <div class="big" onclick="bigGift('🚗 자동차')">🚗<br>자동차</div>
+   <div class="big" onclick="bigGift('🚀 우주선')">🚀<br>우주선</div>
+   <div class="big" onclick="bigGift('👑 왕관')">👑<br>왕관</div>
+   <div class="big" onclick="bigGift('💎 다이아몬드')">💎<br>다이아몬드</div>
+   <div class="big" onclick="bigGift('🎆 축하폭죽')">🎆<br>축하폭죽</div>
+  </div>
+  <button class="close" onclick="closeBox()">닫기</button>
+ </div>
+</div>
 
 <script>
-const MAX=13;
-let stream=null;
+const MAX_USERS=13;
+const BASE='ktalk-final13-v20260817-slot-';
+
+let localStream=null;
 let peer=null;
 let mySlot=0;
-let calls={};
-let level=1;
-let giftPoints=0;
+let syncTimer=null;
 
-const grid=document.getElementById("grid");
+const calls=new Map();
+const pending=new Map();
+const lastSeen=new Map();
+const retryAfter=new Map();
 
-function buildSlots(){
- grid.innerHTML="";
- for(let i=0;i<MAX;i++){
-  const d=document.createElement("div");
-  d.className="slot"+(i===0?" host":"");
-  d.id="slot"+i;
-  d.innerHTML=
-   '<video id="v'+i+'" autoplay playsinline></video>'+
-   '<span class="tag">'+(i===0?"호스트":"게스트 "+i)+'</span>'+
-   '<div class="name" id="n'+i+'">'+(i===0?"호스트":"참가자")+'</div>'+
-   '<button class="gift" onclick="giftTo('+i+')">🌹 선물</button>'+
-   '<button class="join" onclick="joinPerson('+i+')">+</button>';
-  grid.appendChild(d);
+function $(id){return document.getElementById(id)}
+function setStatus(t){$('status').textContent=t}
+function slotName(n){return n===1?'진행자':'참가자 '+n}
+
+function buildGrid(){
+ const g=$('grid');g.innerHTML='';
+ for(let i=1;i<=MAX_USERS;i++){
+  const d=document.createElement('div');
+  d.className='slot';
+  d.id='slot-'+i;
+  d.textContent=slotName(i);
+  g.appendChild(d);
  }
 }
-buildSlots();
+buildGrid();
 
-function msg(t){
- const x=document.getElementById("toast");
- x.innerText=t;x.style.display="block";
- setTimeout(()=>x.style.display="none",1800);
+function resetSlot(n){
+ const b=$('slot-'+n);if(!b)return;
+ b.className='slot'+(n===mySlot?' me':'');
+ b.innerHTML=n===mySlot?slotName(n)+'<br>· 나 ·':slotName(n);
 }
 
-function signup(){
- const nick=prompt("사용할 닉네임을 입력하세요.");
- if(nick){
-  localStorage.setItem("ktalkUser",nick);
-  msg(nick+"님 가입되었습니다.");
- }
+function getSlotFromPeerId(id){
+ const m=String(id||'').match(/slot-(\d+)$/);
+ return m?Number(m[1]):0;
 }
 
-function login(){
- const nick=prompt("닉네임을 입력하세요.");
- if(nick){
-  localStorage.setItem("ktalkUser",nick);
-  msg(nick+"님 로그인되었습니다.");
- }
+function renderRemote(n,stream){
+ if(!n||n===mySlot)return;
+ const b=$('slot-'+n);if(!b)return;
+ b.innerHTML='';
+ const v=document.createElement('video');
+ v.autoplay=true;v.playsInline=true;v.srcObject=stream;
+ const l=document.createElement('div');
+ l.className='label';l.textContent=slotName(n);
+ b.appendChild(v);b.appendChild(l);
+ lastSeen.set(n,Date.now());
 }
 
-function userCheck(){
- if(!localStorage.getItem("ktalkUser")){
-  if(confirm("이 기능은 가입 후 이용할 수 있습니다.\n지금 가입하시겠습니까?")){
-   signup();
+function closeSlot(n,reset=true){
+ const c=calls.get(n);
+ if(c){try{c.close()}catch(e){}}
+ calls.delete(n);pending.delete(n);lastSeen.delete(n);
+ if(reset)resetSlot(n);
+}
+
+function attachCall(n,c){
+ if(!n||n===mySlot||!c)return;
+ const old=calls.get(n);
+ if(old&&old!==c){try{old.close()}catch(e){}}
+ calls.set(n,c);pending.delete(n);lastSeen.set(n,Date.now());
+
+ c.on('stream',s=>{
+  calls.set(n,c);pending.delete(n);lastSeen.set(n,Date.now());
+  renderRemote(n,s);
+  setStatus('✅ 연결됨 · 내 번호 '+mySlot+' · 최대 13명');
+ });
+
+ c.on('close',()=>{
+  if(calls.get(n)===c){
+   calls.delete(n);pending.delete(n);lastSeen.delete(n);
+   resetSlot(n);retryAfter.set(n,Date.now()+1200);
   }
-  return false;
- }
+ });
+
+ c.on('error',()=>{
+  if(calls.get(n)===c){
+   calls.delete(n);pending.delete(n);lastSeen.delete(n);
+   resetSlot(n);retryAfter.set(n,Date.now()+1200);
+  }
+ });
+}
+
+function claimSlot(n){
+ return new Promise(resolve=>{
+  const p=new Peer(BASE+n,{
+   debug:0,
+   config:{iceServers:[
+    {urls:'stun:stun.l.google.com:19302'},
+    {urls:'stun:stun1.l.google.com:19302'}
+   ]}
+  });
+
+  let doneFlag=false;
+  const done=v=>{
+   if(doneFlag)return;
+   doneFlag=true;resolve(v);
+  };
+
+  p.on('open',()=>done(p));
+  p.on('error',()=>{
+   try{p.destroy()}catch(e){}
+   done(null);
+  });
+
+  setTimeout(()=>{
+   if(!doneFlag){
+    try{p.destroy()}catch(e){}
+    done(null);
+   }
+  },2200);
+ });
+}
+
+function shouldDial(n){
+ if(!peer||!localStream||!mySlot)return false;
+ if(n<=0||n>=mySlot)return false;
+ if(calls.has(n)||pending.has(n))return false;
+ if((retryAfter.get(n)||0)>Date.now())return false;
  return true;
 }
 
-async function startCamera(){
- if(!userCheck())return;
+function dial(n){
+ if(!shouldDial(n))return;
+
+ pending.set(n,Date.now());
+ let c=null;
+
  try{
-  stream=await navigator.mediaDevices.getUserMedia({
-   video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},
-   audio:true
-  });
-  document.getElementById("v0").srcObject=stream;
-  document.getElementById("n0").innerText=
-   localStorage.getItem("ktalkUser")||"호스트";
-  startPeer();
-  msg("방송을 시작했습니다.");
+  c=peer.call(BASE+n,localStream,{metadata:{slot:mySlot}});
  }catch(e){
-  alert("카메라와 마이크를 허용해 주세요.");
+  pending.delete(n);
+  retryAfter.set(n,Date.now()+1500);
+  return;
+ }
+
+ if(!c){
+  pending.delete(n);
+  retryAfter.set(n,Date.now()+1500);
+  return;
+ }
+
+ let got=false;
+
+ c.on('stream',s=>{
+  got=true;attachCall(n,c);renderRemote(n,s);
+ });
+
+ c.on('close',()=>{
+  if(calls.get(n)===c)calls.delete(n);
+  pending.delete(n);lastSeen.delete(n);
+  resetSlot(n);retryAfter.set(n,Date.now()+1200);
+ });
+
+ c.on('error',()=>{
+  if(calls.get(n)===c)calls.delete(n);
+  pending.delete(n);lastSeen.delete(n);
+  resetSlot(n);retryAfter.set(n,Date.now()+1200);
+ });
+
+ setTimeout(()=>{
+  if(!got){
+   try{c.close()}catch(e){}
+   if(calls.get(n)===c)calls.delete(n);
+   pending.delete(n);
+   retryAfter.set(n,Date.now()+1500);
+   resetSlot(n);
+  }
+ },7000);
+}
+
+function syncPeers(){
+ if(!peer||!localStream||!mySlot)return;
+
+ for(let n=1;n<mySlot;n++){
+  if(shouldDial(n))dial(n);
+ }
+
+ for(const [n,c] of calls.entries()){
+  const pc=c&&c.peerConnection;
+  const state=pc?pc.connectionState:'';
+
+  if(state==='connected'){
+   lastSeen.set(n,Date.now());
+   continue;
+  }
+
+  if(state==='failed'||state==='closed'){
+   closeSlot(n);
+   retryAfter.set(n,Date.now()+1200);
+   continue;
+  }
+
+  if(state==='disconnected'){
+   const since=lastSeen.get(n)||Date.now();
+   if(Date.now()-since>4500){
+    closeSlot(n);
+    retryAfter.set(n,Date.now()+1200);
+   }
+  }
+ }
+
+ for(const [n,t] of pending.entries()){
+  if(Date.now()-t>9000){
+   pending.delete(n);
+   retryAfter.set(n,Date.now()+1200);
+  }
  }
 }
 
-function startPeer(){
- if(peer)return;
- const room=new URLSearchParams(location.search).get("room")||"main";
- const id="ktalk-"+room+"-"+Math.random().toString(36).slice(2,8);
- peer=new Peer(id);
+async function startRoom(){
+ if(localStream||peer)return;
 
- peer.on("open",()=>{
-  localStorage.setItem("ktalkPeer",id);
- });
-
- peer.on("call",call=>{
-  if(!stream)return;
-  call.answer(stream);
-  call.on("stream",remote=>{
-   const slot=findEmpty();
-   if(slot<0)return;
-   calls[slot]=call;
-   document.getElementById("v"+slot).srcObject=remote;
-   document.getElementById("n"+slot).innerText="게스트";
+ try{
+  localStream=await navigator.mediaDevices.getUserMedia({
+   video:{
+    facingMode:'user',
+    width:{ideal:640},
+    height:{ideal:360},
+    frameRate:{ideal:15,max:20}
+   },
+   audio:{
+    echoCancellation:true,
+    noiseSuppression:true,
+    autoGainControl:true
+   }
   });
- });
-}
 
-function findEmpty(){
- for(let i=1;i<MAX;i++){
-  const v=document.getElementById("v"+i);
-  if(v && !v.srcObject)return i;
+  $('localVideo').srcObject=localStream;
+  $('ph').style.display='none';
+
+ }catch(e){
+  localStream=null;
+  alert('카메라와 마이크를 허용해 주세요.');
+  return;
  }
- return -1;
+
+ setStatus('13명 방 연결 중...');
+
+ for(let i=1;i<=MAX_USERS;i++){
+  const p=await claimSlot(i);
+  if(p){peer=p;mySlot=i;break}
+ }
+
+ if(!peer){
+  localStream.getTracks().forEach(t=>t.stop());
+  localStream=null;
+  $('localVideo').srcObject=null;
+  $('ph').style.display='flex';
+  setStatus('⛔ 이 방은 최대 13명입니다.');
+  alert('현재 13명이 접속 중입니다.');
+  return;
+ }
+
+ for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
+
+ peer.on('call',c=>{
+  const n=getSlotFromPeerId(c.peer);
+  if(!n||n===mySlot){
+   try{c.close()}catch(e){}
+   return;
+  }
+  try{c.answer(localStream)}catch(e){}
+  attachCall(n,c);
+ });
+
+ peer.on('disconnected',()=>{
+  setStatus('연결 복구 중...');
+  try{peer.reconnect()}catch(e){}
+ });
+
+ peer.on('error',e=>{
+  if(e&&(e.type==='peer-unavailable'||e.type==='network'))return;
+ });
+
+ syncPeers();
+ syncTimer=setInterval(syncPeers,2000);
+
+ setStatus(mySlot===1
+  ?'✅ 진행자 입장 완료 · 최대 13명'
+  :'✅ 참가자 '+mySlot+' 입장 완료 · 최대 13명');
 }
 
-function joinPerson(i){
- if(!userCheck())return;
- msg(i===0?"호스트에게 참여 요청했습니다.":"게스트에게 참여 요청했습니다.");
+function stopRoom(){
+ if(syncTimer){clearInterval(syncTimer);syncTimer=null}
+
+ for(const n of Array.from(calls.keys()))closeSlot(n,false);
+
+ calls.clear();pending.clear();lastSeen.clear();retryAfter.clear();
+
+ try{if(peer)peer.destroy()}catch(e){}
+
+ if(localStream)localStream.getTracks().forEach(t=>t.stop());
+
+ localStream=null;peer=null;mySlot=0;
+ $('localVideo').srcObject=null;
+ $('ph').style.display='flex';
+
+ for(let i=1;i<=MAX_USERS;i++)resetSlot(i);
+ setStatus('대기 중');
 }
 
-function giftTo(i){
- if(!userCheck())return;
- giftPoints+=1;
- updateLevel();
- msg((i===0?"호스트":"게스트 "+i)+"에게 🌹 장미를 보냈습니다.");
+function roseGift(n){
+ alert('🌹 장미 '+n+'송이를 선물했습니다.');
 }
 
-function gift(n){
- if(!userCheck())return;
- giftPoints+=n;
- updateLevel();
- msg("🌹 장미 "+n+"송이를 보냈습니다.");
+function openBox(){
+ $('giftModal').style.display='flex';
 }
 
-function giftBox(){
- if(!userCheck())return;
- msg("🎁 선물박스가 올라왔습니다!");
+function closeBox(){
+ $('giftModal').style.display='none';
 }
 
-function updateLevel(){
- level=Math.min(50,1+Math.floor(giftPoints/10));
- document.getElementById("level").innerText=level;
- localStorage.setItem("ktalkLevel",level);
+function bigGift(name){
+ alert(name+' 선물을 선택했습니다.');
+ closeBox();
 }
 
-window.addEventListener("load",()=>{
- const lv=parseInt(localStorage.getItem("ktalkLevel")||"1");
- level=lv;
- document.getElementById("level").innerText=level;
-});
+function attendance(){
+ alert('⭐ 출석체크 완료 · 🪙 20');
+}
+
+window.addEventListener('beforeunload',stopRoom);
 </script>
 </body>
 </html>
