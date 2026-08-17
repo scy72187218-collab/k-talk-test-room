@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -6,7 +7,9 @@
 <title>K-Talk</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -18,23 +21,38 @@ html,body{
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
 
-button,input{font-family:inherit}
+button,input{
+  font-family:inherit;
+}
 
+/* ===== 전체 한 화면 고정 ===== */
 .app{
   width:100vw;
   height:100dvh;
   padding:4px;
   display:grid;
-  grid-template-rows:40px 31px 27px minmax(0,1fr) 175px 48px;
+
+  /* 핵심:
+     호스트 영역을 짧게 하고
+     채팅 영역을 위로 올림 */
+  grid-template-rows:
+    40px
+    32px
+    27px
+    31dvh
+    minmax(0,1fr)
+    48px;
+
   gap:4px;
   overflow:hidden;
 }
 
-/* 상단 */
+/* ===== 상단 ===== */
 .header{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
+  min-height:0;
 }
 
 .live{
@@ -67,7 +85,7 @@ button,input{font-family:inherit}
   font-size:9px;
 }
 
-/* 일반방 / 비밀방 */
+/* ===== 1번 일반방 / 2번 비밀방 ===== */
 .roomBar{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -79,7 +97,6 @@ button,input{font-family:inherit}
   border-radius:8px;
   font-size:10px;
   font-weight:900;
-  color:#fff;
 }
 
 .publicBtn{
@@ -89,13 +106,14 @@ button,input{font-family:inherit}
 
 .secretBtn{
   background:linear-gradient(135deg,#7132ff,#db2cff);
+  color:#fff;
 }
 
 .roomBtn.active{
   outline:2px solid #fff;
 }
 
-/* 안내 */
+/* ===== 안내 ===== */
 .notice{
   border:1px solid #5f266d;
   border-radius:7px;
@@ -107,18 +125,21 @@ button,input{font-family:inherit}
   white-space:nowrap;
 }
 
-/* 메인 방송 */
+/* ===== 메인 방송 ===== */
 .main{
   min-height:0;
   display:grid;
-  grid-template-columns:45% 55%;
+
+  /* 호스트 조금 넓게 */
+  grid-template-columns:46% 54%;
   gap:4px;
 }
 
-/* 호스트 */
+/* ===== 호스트 ===== */
 .host{
   position:relative;
   min-height:0;
+  height:100%;
   overflow:hidden;
   border:1px solid #6a2a7c;
   border-radius:8px;
@@ -129,6 +150,9 @@ button,input{font-family:inherit}
   width:100%;
   height:100%;
   object-fit:cover;
+
+  /* 얼굴/상체 중심 */
+  object-position:center 25%;
 }
 
 .hostLive{
@@ -140,7 +164,7 @@ button,input{font-family:inherit}
   font-weight:900;
 }
 
-/* 작고 예쁜 날개 하트 */
+/* 날개 하트 출석체크 */
 .attendance{
   position:absolute;
   top:5px;
@@ -159,7 +183,7 @@ button,input{font-family:inherit}
   position:absolute;
   bottom:5px;
   left:5px;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.72);
   border-radius:6px;
   padding:3px 6px;
   color:#ffd43c;
@@ -167,12 +191,15 @@ button,input{font-family:inherit}
   font-weight:900;
 }
 
-/* 게스트 13명 */
+/* ===== 게스트 12명 ===== */
 .guestGrid{
   min-height:0;
+
+  /* 12명 = 3열 × 4줄 */
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  grid-template-rows:repeat(5,1fr);
+  grid-template-rows:repeat(4,1fr);
+
   gap:3px;
 }
 
@@ -195,40 +222,61 @@ button,input{font-family:inherit}
   position:absolute;
   top:2px;
   left:2px;
-  width:16px;
-  height:16px;
+  width:17px;
+  height:17px;
   display:flex;
   align-items:center;
   justify-content:center;
   border-radius:4px;
   background:#777;
-  font-size:7px;
+  font-size:8px;
   font-weight:900;
 }
 
-.slot:nth-child(1) .slotNo{background:#ffd32d;color:#111}
-.slot:nth-child(2) .slotNo{background:#f43e93}
-.slot:nth-child(3) .slotNo{background:#e87818}
-.slot:nth-child(4) .slotNo{background:#1ea9d0}
-.slot:nth-child(5) .slotNo{background:#7431e7}
-.slot:nth-child(6) .slotNo{background:#26a964}
+.slot:nth-child(1) .slotNo{
+  background:#ffd32d;
+  color:#111;
+}
+
+.slot:nth-child(2) .slotNo{
+  background:#f43e93;
+}
+
+.slot:nth-child(3) .slotNo{
+  background:#e87818;
+}
+
+.slot:nth-child(4) .slotNo{
+  background:#1ea9d0;
+}
+
+.slot:nth-child(5) .slotNo{
+  background:#7431e7;
+}
+
+.slot:nth-child(6) .slotNo{
+  background:#26a964;
+}
 
 .slotName{
   position:absolute;
   left:2px;
   right:2px;
   bottom:1px;
-  padding:8px 2px 2px;
-  font-size:6.5px;
+  padding:9px 2px 2px;
+  font-size:7px;
   font-weight:900;
-  background:linear-gradient(transparent,rgba(0,0,0,.96));
+  background:linear-gradient(
+    transparent,
+    rgba(0,0,0,.96)
+  );
 }
 
 .slotRose{
   position:absolute;
   right:2px;
   bottom:1px;
-  font-size:9px;
+  font-size:10px;
 }
 
 .empty{
@@ -238,14 +286,14 @@ button,input{font-family:inherit}
   align-items:center;
   justify-content:center;
   color:#69626e;
-  font-size:6px;
+  font-size:7px;
 }
 
-/* 채팅 + 선물 */
+/* ===== 채팅 + 선물 ===== */
 .lower{
   min-height:0;
   display:grid;
-  grid-template-columns:45% 55%;
+  grid-template-columns:46% 54%;
   gap:4px;
 }
 
@@ -267,7 +315,7 @@ button,input{font-family:inherit}
   font-weight:900;
 }
 
-/* 채팅 글씨 조금 크게 */
+/* 채팅 */
 .messages{
   height:calc(100% - 55px);
   padding:5px;
@@ -308,10 +356,11 @@ button,input{font-family:inherit}
   padding:0 8px;
 }
 
+/* ===== 선물 ===== */
 .rightPanel{
   min-height:0;
   display:grid;
-  grid-template-rows:1fr 49px;
+  grid-template-rows:minmax(0,1fr) 48px;
   gap:4px;
 }
 
@@ -389,7 +438,11 @@ button,input{font-family:inherit}
 .giftBox{
   border:1px solid #a13cff;
   border-radius:6px;
-  background:linear-gradient(145deg,#411653,#15091d);
+  background:linear-gradient(
+    145deg,
+    #411653,
+    #15091d
+  );
   color:#fff;
   font-size:6px;
   font-weight:900;
@@ -400,13 +453,18 @@ button,input{font-family:inherit}
   font-size:22px;
 }
 
+/* ===== 제비뽑기 ===== */
 .lottery{
   display:flex;
   align-items:center;
   justify-content:space-between;
   border:1px solid #9e3bff;
   border-radius:7px;
-  background:linear-gradient(90deg,#270b33,#110812);
+  background:linear-gradient(
+    90deg,
+    #270b33,
+    #110812
+  );
   padding:4px;
 }
 
@@ -425,7 +483,7 @@ button,input{font-family:inherit}
   font-size:22px;
 }
 
-/* 아래 메뉴 */
+/* ===== 하단 메뉴 ===== */
 .bottomNav{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -459,6 +517,7 @@ button,input{font-family:inherit}
 
 <div class="app">
 
+  <!-- 상단 -->
   <div class="header">
 
     <div class="live">
@@ -468,7 +527,7 @@ button,input{font-family:inherit}
 
     <div class="logo">
       👑 K-Talk
-      <small>화상 방송 · 최대 13명</small>
+      <small>화상 방송 · 최대 12명</small>
     </div>
 
     <div class="viewer">
@@ -477,6 +536,7 @@ button,input{font-family:inherit}
 
   </div>
 
+  <!-- 큰 방 버튼 -->
   <div class="roomBar">
 
     <button
@@ -495,15 +555,22 @@ button,input{font-family:inherit}
 
   </div>
 
+  <!-- 안내 -->
   <div class="notice">
     ʚ 💗 출석체크 💗 ɞ　·　신청곡 5,000원　·　🌹 장미 1개 50원
   </div>
 
+  <!-- 방송 화면 -->
   <div class="main">
 
+    <!-- 호스트 -->
     <div class="host">
 
-      <video id="hostVideo" autoplay playsinline></video>
+      <video
+        id="hostVideo"
+        autoplay
+        playsinline>
+      </video>
 
       <div class="hostLive">
         ● ON AIR
@@ -513,16 +580,23 @@ button,input{font-family:inherit}
         ʚ 💗 출석체크 💗 ɞ
       </div>
 
-      <div class="hostName" id="hostName">
+      <div
+        class="hostName"
+        id="hostName">
         👑 호스트 대기
       </div>
 
     </div>
 
-    <div class="guestGrid" id="guestGrid"></div>
+    <!-- 게스트 12명 -->
+    <div
+      class="guestGrid"
+      id="guestGrid">
+    </div>
 
   </div>
 
+  <!-- 채팅 / 선물 -->
   <div class="lower">
 
     <div class="panel">
@@ -531,15 +605,37 @@ button,input{font-family:inherit}
         💬 실시간 채팅
       </div>
 
-      <div class="messages" id="messages">
-        <div><b>K-Talk</b> 방송방에 오신 것을 환영합니다.</div>
-        <div><b>안내</b> 즐겁게 이용해 주세요. ❤️</div>
-        <div><b>관리자</b> 좋은 방송 감사합니다. 💜</div>
+      <div
+        class="messages"
+        id="messages">
+
+        <div>
+          <b>K-Talk</b>
+          방송방에 오신 것을 환영합니다.
+        </div>
+
+        <div>
+          <b>안내</b>
+          즐겁게 이용해 주세요. ❤️
+        </div>
+
+        <div>
+          <b>관리자</b>
+          좋은 방송 감사합니다. 💜
+        </div>
+
       </div>
 
       <div class="chatInput">
-        <input id="chatText" placeholder="메시지 입력">
-        <button onclick="sendChat()">전송</button>
+
+        <input
+          id="chatText"
+          placeholder="메시지 입력">
+
+        <button onclick="sendChat()">
+          전송
+        </button>
+
       </div>
 
     </div>
@@ -554,31 +650,41 @@ button,input{font-family:inherit}
 
         <div class="giftRow">
 
-          <button class="gift" onclick="sendGift('장미',50)">
+          <button
+            class="gift"
+            onclick="sendGift('장미',50)">
             <span>🌹</span>
             장미
             <strong>50</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('하트',100)">
+          <button
+            class="gift"
+            onclick="sendGift('하트',100)">
             <span>💖</span>
             하트
             <strong>100</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('별',200)">
+          <button
+            class="gift"
+            onclick="sendGift('별',200)">
             <span>⭐</span>
             별
             <strong>200</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('자동차',500)">
+          <button
+            class="gift"
+            onclick="sendGift('자동차',500)">
             <span>🚗</span>
             자동차
             <strong>500</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('고래',1000)">
+          <button
+            class="gift"
+            onclick="sendGift('고래',1000)">
             <span>🐋</span>
             고래
             <strong>1000</strong>
@@ -618,20 +724,28 @@ button,input{font-family:inherit}
 
           </div>
 
-          <button class="giftBox" onclick="openGiftBox()">
+          <button
+            class="giftBox"
+            onclick="openGiftBox()">
+
             <span>🎁</span>
             선물상자
+
           </button>
 
         </div>
 
       </div>
 
-      <div class="lottery" onclick="drawLottery()">
+      <div
+        class="lottery"
+        onclick="drawLottery()">
 
         <div>
           <b>🎯 제비뽑기 이벤트</b>
-          <small>아침 · 점심 · 저녁 하루 3회</small>
+          <small>
+            아침 · 점심 · 저녁 하루 3회
+          </small>
         </div>
 
         <div class="machine">
@@ -644,6 +758,7 @@ button,input{font-family:inherit}
 
   </div>
 
+  <!-- 아래 메뉴 -->
   <div class="bottomNav">
 
     <div class="nav">
@@ -685,6 +800,7 @@ import {
 let room=null
 let stream=null
 let roomType='public'
+
 let myRole='guest'
 let myName='참가자'
 
@@ -694,8 +810,11 @@ const peerStreams={}
 const guestGrid=
 document.getElementById('guestGrid')
 
-/* 참가자 1~13 */
-for(let i=1;i<=13;i++){
+/* =========================
+   게스트 12개 자리
+========================= */
+
+for(let i=1;i<=12;i++){
 
   const slot=
   document.createElement('div')
@@ -703,7 +822,11 @@ for(let i=1;i<=13;i++){
   slot.className='slot'
 
   slot.innerHTML=`
-    <video id="video${i}" autoplay playsinline></video>
+    <video
+      id="video${i}"
+      autoplay
+      playsinline>
+    </video>
 
     <div
       class="empty"
@@ -729,7 +852,10 @@ for(let i=1;i<=13;i++){
   guestGrid.appendChild(slot)
 }
 
-/* 큰 버튼으로 바로 방 입장 */
+/* =========================
+   큰 버튼으로 방 입장
+========================= */
+
 window.enterRoom=
 async function(type){
 
@@ -784,7 +910,7 @@ async function(type){
   room=
   joinRoom(
     {
-      appId:'ktalk-final-layout-2026'
+      appId:'ktalk-final-12-2026'
     },
     roomName
   )
@@ -811,13 +937,16 @@ async function(type){
 
   peerStreams[selfId]=stream
 
+  /* 상대 정보 받기 */
   profile.onMessage=
   (data,{peerId})=>{
 
     peers[peerId]=data
+
     render()
   }
 
+  /* 채팅 받기 */
   chat.onMessage=
   data=>{
 
@@ -827,6 +956,7 @@ async function(type){
     )
   }
 
+  /* 선물 받기 */
   gift.onMessage=
   data=>{
 
@@ -836,6 +966,7 @@ async function(type){
     )
   }
 
+  /* 새 사람 입장 */
   room.onPeerJoin=
   peerId=>{
 
@@ -857,6 +988,7 @@ async function(type){
     )
   }
 
+  /* 사람 나감 */
   room.onPeerLeave=
   peerId=>{
 
@@ -866,13 +998,16 @@ async function(type){
     render()
   }
 
+  /* 영상 받기 */
   room.onPeerStream=
   (incoming,peerId)=>{
 
     peerStreams[peerId]=incoming
+
     render()
   }
 
+  /* 내 영상 보내기 */
   room.addStream(stream)
 
   profile.send({
@@ -882,7 +1017,8 @@ async function(type){
 
   render()
 
-  /* 방에 호스트가 없으면 첫 입장자가 호스트 */
+  /* 방에 호스트가 없으면
+     첫 번째 입장자가 자동 호스트 */
   setTimeout(()=>{
 
     const otherHost=
@@ -914,7 +1050,10 @@ async function(type){
   },1000)
 }
 
-/* 화면 표시 */
+/* =========================
+   화면 표시
+========================= */
+
 function render(){
 
   const ids=
@@ -972,7 +1111,8 @@ function render(){
     id=>id!==hostId
   )
 
-  for(let i=1;i<=13;i++){
+  /* 12명만 표시 */
+  for(let i=1;i<=12;i++){
 
     const peerId=
     guests[i-1]
@@ -1013,13 +1153,19 @@ function render(){
     }else{
 
       video.srcObject=null
+
       empty.style.display='flex'
-      name.textContent='빈자리'
+
+      name.textContent=
+      '빈자리'
     }
   }
 }
 
-/* 안전한 글자 */
+/* =========================
+   글자 안전 처리
+========================= */
+
 function safe(text){
 
   return String(text)
@@ -1028,8 +1174,14 @@ function safe(text){
   .replaceAll('>','&gt;')
 }
 
-/* 채팅 */
-function addMessage(name,text){
+/* =========================
+   채팅
+========================= */
+
+function addMessage(
+  name,
+  text
+){
 
   const line=
   document.createElement('div')
@@ -1073,7 +1225,10 @@ function(){
   input.value=''
 }
 
-/* 선물 */
+/* =========================
+   선물
+========================= */
+
 window.sendGift=
 function(name,price){
 
@@ -1093,7 +1248,10 @@ function(name,price){
   })
 }
 
-/* 장미 */
+/* =========================
+   장미
+========================= */
+
 window.sendRose=
 function(count){
 
@@ -1113,7 +1271,10 @@ function(count){
   })
 }
 
-/* 선물상자 */
+/* =========================
+   선물상자
+========================= */
+
 window.openGiftBox=
 function(){
 
@@ -1133,7 +1294,10 @@ function(){
   })
 }
 
-/* 제비뽑기 */
+/* =========================
+   제비뽑기
+========================= */
+
 window.drawLottery=
 function(){
 
@@ -1161,7 +1325,7 @@ function(){
   )
 }
 
-/* 엔터로 채팅 */
+/* 엔터키 채팅 */
 document
 .getElementById('chatText')
 .addEventListener(
@@ -1169,12 +1333,16 @@ document
   event=>{
 
     if(event.key==='Enter'){
+
       window.sendChat()
     }
   }
 )
 
-/* 시계 */
+/* =========================
+   시계
+========================= */
+
 setInterval(()=>{
 
   const now=
