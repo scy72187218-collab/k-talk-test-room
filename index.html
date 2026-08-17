@@ -1,9 +1,9 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>K-Talk</title>
 
 <style>
@@ -14,7 +14,7 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#030307;
+  background:#040407;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
@@ -26,7 +26,7 @@ button,input{font-family:inherit}
   height:100dvh;
   padding:5px;
   display:grid;
-  grid-template-rows:42px 38px 26px 1fr 52px;
+  grid-template-rows:40px 38px 25px 1fr 50px;
   gap:4px;
   overflow:hidden;
 }
@@ -45,7 +45,7 @@ button,input{font-family:inherit}
 
 .onair b{
   background:#ef174e;
-  padding:6px 8px;
+  padding:5px 7px;
   border-radius:6px;
 }
 
@@ -107,27 +107,32 @@ button,input{font-family:inherit}
   font-weight:900;
 }
 
-/* 전체 본문 */
+/* 본문 */
 .content{
   min-height:0;
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
   display:grid;
-  grid-template-columns:34% 66%;
-  gap:4px;
+  grid-template-columns:35% 65%;
+  gap:3px;
 }
 
 /* 왼쪽 */
 .left{
   min-height:0;
+  min-width:0;
   display:grid;
   grid-template-rows:48% 52%;
   gap:4px;
 }
 
-/* 호스트 - 사각형에 가깝게 */
+/* 호스트 */
 .host{
   position:relative;
-  overflow:hidden;
   min-height:0;
+  min-width:0;
+  overflow:hidden;
   border:1px solid #59305d;
   border-radius:5px;
   background:#09080b;
@@ -137,7 +142,7 @@ button,input{font-family:inherit}
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 30%;
+  object-position:center 28%;
 }
 
 .hostLive{
@@ -179,11 +184,11 @@ button,input{font-family:inherit}
 /* 채팅 */
 .chat{
   min-height:0;
+  overflow:hidden;
   display:grid;
   grid-template-rows:26px 1fr 34px;
   border:1px solid #38233f;
   border-radius:6px;
-  overflow:hidden;
   background:#08080b;
 }
 
@@ -210,7 +215,7 @@ button,input{font-family:inherit}
   overflow:hidden;
   padding:6px;
   font-size:7.5px;
-  line-height:1.55;
+  line-height:1.5;
 }
 
 .messages b{color:#37d6ff}
@@ -253,6 +258,9 @@ button,input{font-family:inherit}
 /* 오른쪽 */
 .right{
   min-height:0;
+  min-width:0;
+  width:100%;
+  overflow:hidden;
   display:grid;
   grid-template-rows:58% 42%;
   gap:4px;
@@ -261,17 +269,20 @@ button,input{font-family:inherit}
 /* 게스트 13명 */
 .guests{
   min-height:0;
+  min-width:0;
+  width:100%;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  grid-template-rows:repeat(5,1fr);
-  gap:3px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(5,minmax(0,1fr));
+  gap:2px;
 }
 
 .slot{
   position:relative;
-  overflow:hidden;
   min-width:0;
   min-height:0;
+  width:100%;
+  overflow:hidden;
   border:1px solid #2e2c33;
   border-radius:5px;
   background:#0c0c0f;
@@ -283,8 +294,6 @@ button,input{font-family:inherit}
   width:100%;
   height:100%;
   object-fit:cover;
-
-  /* 얼굴 + 어깨 위주 */
   object-position:center 28%;
 }
 
@@ -344,7 +353,6 @@ button,input{font-family:inherit}
   font-size:6px;
 }
 
-/* 마지막 13번은 첫 칸에 */
 .slot:nth-child(13){
   grid-column:1;
 }
@@ -359,6 +367,7 @@ button,input{font-family:inherit}
 
 .gifts{
   min-height:0;
+  overflow:hidden;
   border:1px solid #38233f;
   border-radius:6px;
   padding:4px;
@@ -372,8 +381,8 @@ button,input{font-family:inherit}
 
 .giftTop{
   display:grid;
-  grid-template-columns:repeat(5,1fr) 1.25fr;
-  gap:3px;
+  grid-template-columns:repeat(5,1fr) 1.15fr;
+  gap:2px;
 }
 
 .gift{
@@ -386,7 +395,7 @@ button,input{font-family:inherit}
 
 .gift span{
   display:block;
-  font-size:19px;
+  font-size:18px;
 }
 
 .gift strong{
@@ -406,7 +415,7 @@ button,input{font-family:inherit}
 
 .giftBox span{
   display:block;
-  font-size:24px;
+  font-size:23px;
 }
 
 .roses{
@@ -436,7 +445,7 @@ button,input{font-family:inherit}
 
 .roseBtn span{
   display:block;
-  font-size:16px;
+  font-size:15px;
 }
 
 /* 제비뽑기 */
@@ -461,7 +470,7 @@ button,input{font-family:inherit}
 }
 
 .machine{
-  font-size:32px;
+  font-size:30px;
 }
 
 /* 하단 */
@@ -514,21 +523,23 @@ button,input{font-family:inherit}
   </div>
 
   <div class="rooms">
-    <button id="publicBtn"
-            class="room public active"
-            onclick="enterRoom('public')">
+    <button
+      id="publicBtn"
+      class="room public active"
+      onclick="enterRoom('public')">
       📷 1번 일반 방송방
     </button>
 
-    <button id="secretBtn"
-            class="room secret"
-            onclick="enterRoom('secret')">
+    <button
+      id="secretBtn"
+      class="room secret"
+      onclick="enterRoom('secret')">
       🔒 2번 비밀방
     </button>
   </div>
 
   <div class="notice">
-    ⭐ 출석체크 눌러주세요 ⭐　 신청곡 5,000원　 🌹 광고 문의 환영합니다 🌹
+    ⭐ 출석체크 눌러주세요 ⭐　신청곡 5,000원　🌹 광고 문의 환영합니다 🌹
   </div>
 
   <div class="content">
@@ -617,17 +628,16 @@ button,input{font-family:inherit}
             <div class="rosesTitle">장미 선물</div>
 
             <div class="roseRow">
-
               <button class="roseBtn" onclick="sendRose(1)">
-                <span>🌹</span>장미 1송이
+                <span>🌹</span>1
               </button>
 
               <button class="roseBtn" onclick="sendRose(5)">
-                <span>🌹🌹</span>장미 5송이
+                <span>🌹🌹</span>5
               </button>
 
               <button class="roseBtn" onclick="sendRose(10)">
-                <span>🌹🌹🌹</span>장미 10송이
+                <span>🌹🌹🌹</span>10
               </button>
 
               <button class="roseBtn" onclick="sendRose(50)">
@@ -637,7 +647,6 @@ button,input{font-family:inherit}
               <button class="roseBtn" onclick="sendRose(100)">
                 <span>💐</span>100
               </button>
-
             </div>
           </div>
 
@@ -701,9 +710,7 @@ for(let i=1;i<=13;i++){
       빈자리
     </div>
 
-    <div class="slotNo">
-      ${i}
-    </div>
+    <div class="slotNo">${i}</div>
 
     <div class="slotName" id="name${i}">
       게스트${i}<br>♡ 0
@@ -715,7 +722,7 @@ for(let i=1;i<=13;i++){
   guestGrid.appendChild(slot)
 }
 
-/* 큰 1번/2번 버튼으로 입장 */
+/* 방 입장 */
 window.enterRoom=
 async function(type){
 
@@ -770,7 +777,7 @@ async function(type){
   room=
   joinRoom(
     {
-      appId:'ktalk-final-photo-layout-2026'
+      appId:'ktalk-final-fit-2026'
     },
     roomName
   )
@@ -865,7 +872,6 @@ async function(type){
 
   render()
 
-  /* 호스트가 없으면 첫 입장자가 호스트 */
   setTimeout(()=>{
 
     const otherHost=
@@ -897,6 +903,7 @@ async function(type){
   },1000)
 }
 
+/* 화면 표시 */
 function render(){
 
   const ids=
@@ -998,6 +1005,7 @@ function render(){
 
       video.srcObject=null
       empty.style.display='flex'
+
       name.innerHTML=
       '게스트'+i+
       '<br>♡ 0'
@@ -1179,4 +1187,4 @@ setInterval(()=>{
 </script>
 
 </body>
-</html>
+      </html>
