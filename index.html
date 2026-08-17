@@ -1,152 +1,208 @@
-
 <!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>K-Talk 방송방</title>
+<title>K-Talk</title>
 
 <style>
 *{box-sizing:border-box}
-body{
+html,body{
   margin:0;
-  background:#07090d;
+  padding:0;
+  background:#050509;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
+body{overflow-x:hidden}
 button,input{font-family:inherit}
-button{cursor:pointer}
 
-.top{
-  height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 12px;
-  background:#11151d;
-  border-bottom:1px solid #282e39;
+:root{
+  --purple:#a31cff;
+  --pink:#ff1f79;
+  --gold:#ffd331;
+  --line:#4a245d;
+  --panel:#0c0911;
 }
-.logo{
-  font-size:20px;
-  font-weight:900;
-  color:#ffd54a;
+
+.wrap{
+  width:100%;
+  max-width:1180px;
+  margin:auto;
+  padding:8px;
+}
+
+/* 상단 */
+.header{
+  height:58px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
 }
 .live{
-  background:#ed2d45;
-  padding:5px 10px;
-  border-radius:15px;
-  font-size:12px;
-  font-weight:900;
-}
-.count{
-  font-size:13px;
-  color:#d5d9e1;
-}
-
-.startBox{
-  padding:8px;
+  justify-self:start;
   display:flex;
+  align-items:center;
   gap:8px;
-  justify-content:center;
-  background:#0b0e14;
+  font-weight:800;
 }
-.startBox button{
-  border:0;
+.liveBadge{
+  background:#ec1745;
+  padding:7px 10px;
+  border-radius:8px;
+  font-size:13px;
+}
+.logo{
+  text-align:center;
+  color:#ffd74a;
+  font-size:30px;
+  font-weight:900;
+  line-height:1;
+}
+.sublogo{
+  display:block;
+  color:#fff;
+  font-size:12px;
+  margin-top:4px;
+}
+.viewer{
+  justify-self:end;
+  font-size:15px;
+}
+.noticebar{
+  border:1px solid #532663;
+  border-radius:9px;
+  padding:9px 12px;
+  text-align:center;
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.noticebar .yellow{color:#ffd633}
+.noticebar .pink{color:#ff2b9e}
+
+/* 메인 */
+.main{
+  display:grid;
+  grid-template-columns:46% 54%;
+  gap:8px;
+}
+.host{
+  border:1px solid #532663;
   border-radius:10px;
-  padding:10px 18px;
+  min-height:530px;
+  overflow:hidden;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 25%,#471060 0,#15051f 37%,#050509 78%);
+}
+.host video{
+  width:100%;
+  height:100%;
+  min-height:530px;
+  object-fit:cover;
+  background:#09080d;
+}
+.onair{
+  position:absolute;
+  top:10px;
+  left:10px;
+  color:#ff3b5e;
   font-weight:900;
   font-size:14px;
 }
-.hostStart{background:#ffd43b;color:#111}
-.guestStart{background:#22c777;color:#04170d}
-
-.stage{
-  width:100%;
-  display:grid;
-  grid-template-columns:minmax(210px,1.35fr) minmax(170px,1fr);
-  gap:6px;
-  padding:6px;
-}
-
-.hostBox{
-  position:relative;
-  background:#141822;
-  border-radius:13px;
-  overflow:hidden;
-  min-height:440px;
-  border:2px solid #e0b92e;
-}
-.hostBox video{
-  width:100%;
-  height:100%;
-  min-height:440px;
-  object-fit:cover;
-  background:#111;
-}
-.hostBadge{
+.check{
   position:absolute;
-  left:9px;
-  top:9px;
-  padding:5px 9px;
-  border-radius:16px;
-  background:rgba(0,0,0,.72);
-  color:#ffd640;
+  top:55px;
+  left:50%;
+  transform:translateX(-50%);
+  border:2px solid #ff2cce;
+  color:#ffd32d;
+  border-radius:30px;
+  padding:10px 18px;
   font-weight:900;
-  font-size:13px;
+  background:rgba(40,0,55,.65);
+  box-shadow:0 0 18px #ff28dc;
 }
-.hostName{
+.hostlabel{
   position:absolute;
-  bottom:10px;
   left:10px;
-  padding:5px 9px;
-  border-radius:10px;
+  bottom:10px;
   background:rgba(0,0,0,.65);
-  font-weight:800;
+  border-radius:8px;
+  padding:6px 9px;
+  color:#ffd633;
+  font-weight:900;
 }
 
-.guestGrid{
+/* 참가자 */
+.grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:5px;
+  gap:6px;
   align-content:start;
 }
 .slot{
   position:relative;
-  aspect-ratio:3/4;
-  min-height:102px;
+  aspect-ratio:1.42/1;
+  min-height:125px;
+  border:1px solid #3a3042;
   border-radius:9px;
   overflow:hidden;
-  background:#171b24;
-  border:1px solid #343b48;
+  background:#111;
 }
 .slot video{
   width:100%;
   height:100%;
   object-fit:cover;
-  background:#10131a;
+  background:#111;
 }
 .slotNo{
   position:absolute;
   top:5px;
   left:5px;
-  background:rgba(0,0,0,.65);
-  padding:3px 6px;
-  border-radius:8px;
-  font-size:10px;
+  min-width:26px;
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  background:rgba(120,120,120,.85);
   font-weight:900;
 }
+.slot:nth-child(1) .slotNo{background:#ffcc20;color:#111}
+.slot:nth-child(3) .slotNo{background:#e77600}
+.slot:nth-child(5) .slotNo{background:#14a7ce}
+.slot:nth-child(6) .slotNo{background:#6e1de0}
 .slotName{
   position:absolute;
-  bottom:4px;
-  left:4px;
-  right:4px;
-  background:rgba(0,0,0,.6);
-  padding:3px;
+  left:6px;
+  right:6px;
+  bottom:5px;
+  background:linear-gradient(transparent,rgba(0,0,0,.93));
+  padding:20px 4px 4px;
+  font-size:12px;
+  font-weight:800;
+}
+.mute{
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:25px;
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   border-radius:6px;
-  font-size:10px;
-  text-align:center;
-  overflow:hidden;
-  white-space:nowrap;
+  background:rgba(0,0,0,.65);
+  font-size:12px;
+}
+.rose{
+  position:absolute;
+  right:5px;
+  bottom:5px;
+  font-size:22px;
 }
 .empty{
   position:absolute;
@@ -154,770 +210,718 @@ button{cursor:pointer}
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#555f70;
-  font-size:26px;
+  color:#666;
+  font-size:14px;
 }
 
-.controlBar{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  padding:7px;
-  background:#0e1219;
-}
-.controlBar button{
-  border:0;
-  border-radius:22px;
-  min-width:78px;
-  padding:9px 12px;
-  background:#262c37;
-  color:#fff;
-  font-weight:800;
-}
-.controlBar .end{
-  background:#d92e40;
-}
-
-.bottom{
+/* 아래 */
+.lower{
   display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:6px;
-  padding:6px;
+  grid-template-columns:46% 54%;
+  gap:8px;
+  margin-top:8px;
 }
-
 .panel{
-  background:#121722;
-  border:1px solid #2b3340;
-  border-radius:12px;
+  border:1px solid #532663;
+  border-radius:10px;
+  background:#0a080e;
   overflow:hidden;
 }
 .panelTitle{
-  padding:8px 10px;
-  font-size:13px;
+  padding:10px 12px;
+  border-bottom:1px solid #3d214b;
   font-weight:900;
-  border-bottom:1px solid #292f39;
 }
-
+.chat{
+  min-height:270px;
+}
 .messages{
-  height:140px;
-  overflow-y:auto;
-  padding:8px;
-  font-size:12px;
-  line-height:1.6;
+  height:210px;
+  overflow:auto;
+  padding:10px 12px;
+  font-size:13px;
+  line-height:1.75;
 }
-.msg{
-  padding:3px 0;
-  border-bottom:1px solid rgba(255,255,255,.035);
-}
-.msg b{color:#ffd54a}
-
+.messages b{color:#36d8ff}
 .chatInput{
-  display:flex;
-  padding:7px;
+  display:grid;
+  grid-template-columns:1fr auto auto;
   gap:5px;
+  padding:8px;
 }
 .chatInput input{
-  flex:1;
-  border:1px solid #333b49;
-  background:#090c11;
+  background:#17141b;
+  border:1px solid #2c2632;
+  border-radius:8px;
+  padding:11px;
   color:#fff;
-  border-radius:18px;
-  padding:9px 12px;
-  outline:none;
+  min-width:0;
 }
 .chatInput button{
   border:0;
-  border-radius:18px;
-  background:#ffca28;
-  color:#111;
+  border-radius:8px;
+  color:#fff;
   font-weight:900;
   padding:0 14px;
 }
+.send{background:#7b2bd8}
+.boxmini{background:#28152e}
 
-.gifts{
-  padding:8px;
+.rightLower{
+  display:grid;
+  gap:8px;
 }
-.roseRow{
+.giftPanel{
+  padding:10px;
+}
+.giftTop{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:5px;
-}
-.giftBtn{
-  border:1px solid #3b4351;
-  background:#1b202a;
-  color:#fff;
-  border-radius:9px;
-  padding:7px 2px;
-  font-size:11px;
-  font-weight:800;
-}
-.giftBtn span{
-  display:block;
-  font-size:20px;
-}
-.eventRow{
-  margin-top:8px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
   gap:6px;
 }
-.eventBtn{
+.gift{
+  background:#110d16;
   border:0;
-  border-radius:9px;
-  padding:10px 4px;
-  font-weight:900;
+  color:#fff;
+  border-radius:8px;
+  padding:5px;
+  font-size:11px;
 }
-.giftBox{background:#714bff;color:#fff}
-.lottery{background:#ffb52b;color:#211400}
-
-.notice{
-  display:none;
-  position:fixed;
-  top:75px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:999;
-  background:rgba(0,0,0,.9);
-  border:1px solid #ffd54a;
-  border-radius:13px;
-  padding:13px 20px;
-  font-size:15px;
+.gift span{
+  display:block;
+  font-size:31px;
+}
+.gift small{
+  display:block;
+  margin-top:3px;
+  color:#ddd;
+}
+.giftBottom{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:8px;
+  margin-top:8px;
+}
+.rosePack{
+  border:1px solid #6c2d55;
+  border-radius:9px;
+  padding:8px;
+}
+.rosePackTitle{
+  color:#ffd43c;
   font-weight:900;
+  margin-bottom:6px;
+}
+.rosePacks{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+}
+.pack{
+  border:0;
+  background:#100c13;
+  color:#fff;
+  border-radius:8px;
+  padding:8px 3px;
+}
+.pack span{display:block;font-size:30px}
+.giftBox{
+  border:1px solid #8e2cff;
+  border-radius:9px;
+  background:linear-gradient(145deg,#261035,#08060d);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-weight:900;
+  box-shadow:0 0 15px rgba(180,45,255,.22);
+}
+.giftBox span{font-size:48px}
+.lottery{
+  border:1px solid #9b2dff;
+  border-radius:9px;
+  padding:9px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  background:linear-gradient(90deg,#260a30,#0b0610);
+}
+.lotteryTitle{
+  font-size:19px;
+  font-weight:900;
+  color:#ffb6ff;
+}
+.times{
+  display:flex;
+  gap:6px;
+  margin-top:7px;
+}
+.time{
+  background:#1b1021;
+  border-radius:8px;
+  padding:7px 8px;
+  font-size:11px;
   text-align:center;
 }
-
-@media(max-width:620px){
-  .top{height:48px}
-  .logo{font-size:17px}
-  .stage{
-    grid-template-columns:1.22fr 1fr;
-    gap:4px;
-    padding:4px;
-  }
-  .hostBox,.hostBox video{
-    min-height:350px;
-  }
-  .guestGrid{
-    grid-template-columns:repeat(2,1fr);
-    gap:4px;
-  }
-  .slot{
-    min-height:82px;
-  }
-  .bottom{
-    grid-template-columns:1fr;
-  }
-  .messages{height:105px}
-  .controlBar button{
-    min-width:67px;
-    padding:8px 7px;
-    font-size:12px;
-  }
+.machine{
+  font-size:62px;
 }
 
-@media(max-width:390px){
-  .hostBox,.hostBox video{
-    min-height:330px;
+/* 기능 버튼 */
+.controls{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin:8px 0 70px;
+}
+.controls button{
+  border:1px solid #3a263f;
+  border-radius:9px;
+  background:#0c0910;
+  color:#fff;
+  padding:12px 4px;
+  font-size:12px;
+}
+.controls span{
+  display:block;
+  font-size:24px;
+  margin-bottom:4px;
+}
+
+/* 하단 */
+.bottomNav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#12111a;
+  border-top:1px solid #27212e;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  align-items:center;
+  height:62px;
+  z-index:20;
+}
+.nav{
+  text-align:center;
+  font-size:11px;
+}
+.nav span{
+  display:block;
+  font-size:22px;
+}
+.charge{
+  background:#f9005b;
+  border-radius:30px;
+  margin:5px 10px;
+  padding:9px 4px;
+  font-weight:900;
+}
+
+/* 입장 버튼 */
+.enterButtons{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:8px;
+}
+.enterButtons button{
+  border:0;
+  border-radius:9px;
+  padding:10px 18px;
+  font-weight:900;
+}
+.hostBtn{background:#ffd43a}
+.guestBtn{background:#1dcc76}
+.status{
+  text-align:center;
+  font-size:12px;
+  color:#aaa;
+  margin:4px 0 8px;
+}
+
+/* 휴대폰에서 두 번째 사진처럼 한 화면 비율 */
+@media(max-width:700px){
+  .wrap{padding:4px}
+  .header{height:48px}
+  .logo{font-size:22px}
+  .sublogo{font-size:10px}
+  .liveBadge{font-size:11px;padding:5px 7px}
+  .viewer{font-size:12px}
+  .noticebar{
+    font-size:11px;
+    padding:7px 4px;
+    margin-bottom:4px;
   }
+  .enterButtons{margin-bottom:4px}
+  .enterButtons button{
+    font-size:11px;
+    padding:7px 10px;
+  }
+  .main{
+    grid-template-columns:46% 54%;
+    gap:4px;
+  }
+  .host,.host video{
+    min-height:390px;
+  }
+  .check{
+    font-size:10px;
+    top:36px;
+    padding:6px 9px;
+  }
+  .grid{gap:3px}
   .slot{
-    min-height:76px;
+    min-height:73px;
+    border-radius:5px;
   }
+  .slotNo{
+    min-width:18px;
+    height:18px;
+    font-size:10px;
+  }
+  .slotName{
+    font-size:8px;
+    padding:12px 2px 2px;
+  }
+  .mute{
+    width:17px;height:17px;font-size:8px;
+  }
+  .rose{
+    font-size:14px;
+  }
+  .lower{
+    grid-template-columns:46% 54%;
+    gap:4px;
+    margin-top:4px;
+  }
+  .panelTitle{
+    padding:7px;
+    font-size:10px;
+  }
+  .chat{min-height:215px}
+  .messages{
+    height:160px;
+    padding:6px;
+    font-size:9px;
+    line-height:1.6;
+  }
+  .chatInput{
+    padding:5px;
+    grid-template-columns:1fr auto;
+  }
+  .chatInput input{
+    padding:7px;
+    font-size:9px;
+  }
+  .chatInput button{
+    padding:0 8px;
+    font-size:9px;
+  }
+  .boxmini{display:none}
+  .giftPanel{padding:5px}
+  .giftTop{gap:2px}
+  .gift{
+    font-size:7px;
+    padding:3px 0;
+  }
+  .gift span{font-size:20px}
+  .gift small{font-size:7px}
+  .giftBottom{gap:4px;margin-top:4px}
+  .rosePack{padding:4px}
+  .rosePackTitle{font-size:9px}
+  .pack{font-size:7px;padding:3px 0}
+  .pack span{font-size:18px}
+  .giftBox{font-size:8px}
+  .giftBox span{font-size:30px}
+  .lottery{padding:5px}
+  .lotteryTitle{font-size:11px}
+  .times{gap:2px;margin-top:3px}
+  .time{font-size:7px;padding:3px}
+  .machine{font-size:38px}
+  .controls{
+    gap:3px;
+    margin-top:4px;
+    margin-bottom:65px;
+  }
+  .controls button{
+    font-size:8px;
+    padding:7px 1px;
+  }
+  .controls span{font-size:17px}
 }
 </style>
 </head>
 
 <body>
+<div class="wrap">
 
-<div class="top">
-  <div class="logo">👑 K-Talk</div>
-  <div class="live">● 방송중</div>
-  <div class="count">접속 <b id="peopleCount">0</b>명</div>
-</div>
+  <div class="header">
+    <div class="live">
+      <span class="liveBadge">● ON AIR</span>
+      <span id="clock">00:00:00</span>
+    </div>
 
-<div class="startBox" id="startBox">
-  <button class="hostStart" id="hostStart">👑 호스트 시작</button>
-  <button class="guestStart" id="guestStart">🎥 참가자 입장</button>
-</div>
+    <div class="logo">
+      ♛ K-Talk
+      <span class="sublogo">화상 방송방 · 최대 13명</span>
+    </div>
 
-<div class="stage">
-
-  <div class="hostBox">
-    <video id="hostVideo" autoplay playsinline></video>
-    <div class="hostBadge">👑 HOST</div>
-    <div class="hostName" id="hostName">호스트 대기중</div>
+    <div class="viewer">👤 <span id="viewerCount">0</span></div>
   </div>
 
-  <div class="guestGrid" id="guestGrid"></div>
-
-</div>
-
-<div class="controlBar">
-  <button id="micBtn">🎤 마이크</button>
-  <button id="camBtn">📷 카메라</button>
-  <button id="switchBtn">🔄 전환</button>
-  <button class="end" id="endBtn">☎ 종료</button>
-</div>
-
-<div class="bottom">
-
-  <div class="panel">
-    <div class="panelTitle">💬 실시간 채팅</div>
-    <div class="messages" id="messages">
-      <div class="msg"><b>K-Talk</b> 방송방에 오신 것을 환영합니다.</div>
-    </div>
-    <div class="chatInput">
-      <input id="chatText" placeholder="메시지 입력">
-      <button id="sendBtn">전송</button>
-    </div>
+  <div class="noticebar">
+    <span class="yellow">★ 출석체크 눌러주세요 ★</span>
+    &nbsp; 신청곡 5,000원 &nbsp;
+    <span class="pink">★ 광고 문의 환영합니다 ★</span>
   </div>
 
-  <div class="panel">
-    <div class="panelTitle">🎁 선물 / 이벤트</div>
-    <div class="gifts">
+  <div class="enterButtons" id="enterButtons">
+    <button class="hostBtn" onclick="enterRoom('host')">👑 호스트 시작</button>
+    <button class="guestBtn" onclick="enterRoom('guest')">🎥 참가자 입장</button>
+  </div>
 
-      <div class="roseRow">
-        <button class="giftBtn" data-rose="1"><span>🌹</span>1개</button>
-        <button class="giftBtn" data-rose="5"><span>🌹</span>5개</button>
-        <button class="giftBtn" data-rose="10"><span>🌹</span>10개</button>
-        <button class="giftBtn" data-rose="50"><span>🌹</span>50개</button>
-        <button class="giftBtn" data-rose="100"><span>🌹</span>100개</button>
+  <div class="status" id="status">입장 버튼을 눌러 주세요.</div>
+
+  <div class="main">
+
+    <div class="host">
+      <video id="hostVideo" autoplay playsinline></video>
+      <div class="onair">● ON AIR</div>
+      <div class="check">출석체크</div>
+      <div class="hostlabel" id="hostLabel">👑 호스트</div>
+    </div>
+
+    <div class="grid" id="guestGrid"></div>
+
+  </div>
+
+  <div class="lower">
+
+    <div class="panel chat">
+      <div class="panelTitle">채팅　　참가자 (13)</div>
+
+      <div class="messages" id="messages">
+        <div><b>채팅창 관리자</b> 좋은 방송 감사합니다! 💜</div>
+        <div><b>안내</b> 즐겁게 이용해 주세요. ❤️</div>
       </div>
 
-      <div class="eventRow">
-        <button class="eventBtn giftBox" id="giftBoxBtn">🎁 선물상자</button>
-        <button class="eventBtn lottery" id="lotteryBtn">🎯 제비뽑기</button>
+      <div class="chatInput">
+        <input id="chatText" placeholder="메시지를 입력하세요...">
+        <button class="send" onclick="sendChat()">전송</button>
+        <button class="boxmini" onclick="openGiftBox()">🎁</button>
+      </div>
+    </div>
+
+    <div class="rightLower">
+
+      <div class="panel giftPanel">
+
+        <div class="panelTitle">선물 / 후원</div>
+
+        <div class="giftTop">
+          <button class="gift" onclick="sendGift('장미',50)">
+            <span>🌹</span>장미<small>🪙 50</small>
+          </button>
+          <button class="gift" onclick="sendGift('하트',100)">
+            <span>❤️</span>하트<small>🪙 100</small>
+          </button>
+          <button class="gift" onclick="sendGift('별',200)">
+            <span>⭐</span>별<small>🪙 200</small>
+          </button>
+          <button class="gift" onclick="sendGift('풍선',300)">
+            <span>🎈</span>풍선<small>🪙 300</small>
+          </button>
+          <button class="gift" onclick="sendGift('슈퍼하트',500)">
+            <span>💖</span>슈퍼하트<small>🪙 500</small>
+          </button>
+        </div>
+
+        <div class="giftBottom">
+
+          <div class="rosePack">
+            <div class="rosePackTitle">장미 선물</div>
+            <div class="rosePacks">
+              <button class="pack" onclick="sendRose(1)">
+                <span>🌹</span>1송이
+              </button>
+              <button class="pack" onclick="sendRose(5)">
+                <span>💐</span>5송이
+              </button>
+              <button class="pack" onclick="sendRose(10)">
+                <span>🌹🌹</span>10송이
+              </button>
+            </div>
+          </div>
+
+          <button class="giftBox" onclick="openGiftBox()">
+            <span>🎁</span>
+            선물 상자
+          </button>
+
+        </div>
+      </div>
+
+      <div class="lottery" onclick="drawLottery()">
+        <div>
+          <div class="lotteryTitle">제비뽑기 이벤트</div>
+          <div class="times">
+            <div class="time">☀️ 아침<br>09:00</div>
+            <div class="time">☀️ 점심<br>13:00</div>
+            <div class="time">🌙 저녁<br>20:00</div>
+          </div>
+        </div>
+        <div class="machine">🎰</div>
       </div>
 
     </div>
   </div>
 
+  <div class="controls">
+    <button onclick="toggleMic()"><span>🎤</span>마이크</button>
+    <button onclick="toggleCam()"><span>📷</span>카메라</button>
+    <button onclick="switchCamera()"><span>🔄</span>화면전환</button>
+    <button onclick="shareRoom()"><span>🔗</span>공유하기</button>
+    <button onclick="leaveRoom()"><span>🚪</span>나가기</button>
+  </div>
+
 </div>
 
-<div class="notice" id="notice"></div>
+<div class="bottomNav">
+  <div class="nav"><span>🏠</span>홈</div>
+  <div class="nav"><span>👤</span>마이페이지</div>
+  <div class="nav charge"><span>🪙</span>충전하기</div>
+  <div class="nav"><span>🔔</span>알림</div>
+  <div class="nav"><span>⚙️</span>설정</div>
+</div>
 
 <script type="module">
+import {joinRoom,selfId} from 'https://esm.run/trystero'
 
-import {
-  joinRoom,
-  selfId
-} from 'https://esm.run/trystero'
+let room=null
+let stream=null
+let role=''
+let myName=''
+let facing='user'
 
-/* =========================
-   기본 설정
-========================= */
+const peerData={}
+const peerStreams={}
 
-const APP_ID = 'ktalk-live13-room-2026'
-const ROOM_ID = new URLSearchParams(location.search).get('room') || 'main-room'
-
-let room = null
-let localStream = null
-let localRole = ''
-let localName = ''
-let facingMode = 'user'
-
-const peerInfo = {}
-const peerStreams = {}
-
-const hostVideo = document.getElementById('hostVideo')
-const hostName = document.getElementById('hostName')
-const peopleCount = document.getElementById('peopleCount')
-const guestGrid = document.getElementById('guestGrid')
-const messages = document.getElementById('messages')
-const notice = document.getElementById('notice')
-
-/* =========================
-   참가자 칸 1~13 생성
-========================= */
+const guestGrid=document.getElementById('guestGrid')
 
 for(let i=1;i<=13;i++){
-  const box=document.createElement('div')
-  box.className='slot'
-  box.id='slot-'+i
-
-  box.innerHTML=`
-    <video id="video-${i}" autoplay playsinline></video>
-    <div class="empty" id="empty-${i}">👤</div>
+  const el=document.createElement('div')
+  el.className='slot'
+  el.innerHTML=`
+    <video id="v${i}" autoplay playsinline></video>
+    <div class="empty" id="e${i}">빈자리</div>
     <div class="slotNo">${i}</div>
-    <div class="slotName" id="name-${i}">빈자리</div>
+    <div class="mute">🔇</div>
+    <div class="slotName" id="n${i}">참가자 ${i}</div>
+    <div class="rose">🌹</div>
   `
-
-  guestGrid.appendChild(box)
+  guestGrid.appendChild(el)
 }
 
-/* =========================
-   안내
-========================= */
-
-function showNotice(text){
-  notice.textContent=text
-  notice.style.display='block'
-
-  clearTimeout(showNotice.timer)
-
-  showNotice.timer=setTimeout(()=>{
-    notice.style.display='none'
-  },2500)
+function setStatus(t){
+  document.getElementById('status').textContent=t
 }
 
-/* =========================
-   채팅 표시
-========================= */
-
-function addMessage(name,text){
-  const d=document.createElement('div')
-  d.className='msg'
-  d.innerHTML=`<b>${escapeHtml(name)}</b> ${escapeHtml(text)}`
-  messages.appendChild(d)
-  messages.scrollTop=messages.scrollHeight
-}
-
-function escapeHtml(v){
-  return String(v)
+function esc(t){
+  return String(t)
     .replaceAll('&','&amp;')
     .replaceAll('<','&lt;')
     .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
 }
 
-/* =========================
-   방 입장
-========================= */
+window.enterRoom=async function(r){
+  if(room)return
 
-async function start(role){
-
-  if(room) return
-
-  localRole=role
-
-  localName=prompt(
-    role==='host'
-      ? '호스트 이름을 입력하세요'
-      : '닉네임을 입력하세요',
-    role==='host'
-      ? '호스트'
-      : '참가자'
-  ) || (role==='host' ? '호스트' : '참가자')
+  role=r
+  myName=prompt(
+    r==='host'?'호스트 이름':'닉네임',
+    r==='host'?'호스트':'참가자'
+  ) || (r==='host'?'호스트':'참가자')
 
   try{
-
-    localStream=await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:facingMode,
-        width:{ideal:1280},
-        height:{ideal:720}
-      },
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:facing},
       audio:{
         echoCancellation:true,
         noiseSuppression:true,
         autoGainControl:true
       }
     })
-
-  }catch(e){
-    alert('카메라와 마이크 사용을 허용해 주세요.')
+  }catch(err){
+    alert('카메라와 마이크 허용을 눌러 주세요.')
     return
   }
 
   room=joinRoom(
-    {appId:APP_ID},
-    ROOM_ID
+    {appId:'k-talk-13-real-2026'},
+    new URLSearchParams(location.search).get('room') || 'main'
   )
 
-  peerInfo[selfId]={
-    id:selfId,
-    name:localName,
-    role:localRole
+  const profile=room.makeAction('profile')
+  const chat=room.makeAction('chat')
+  const gift=room.makeAction('gift')
+
+  window.ktProfile=profile
+  window.ktChat=chat
+  window.ktGift=gift
+
+  peerData[selfId]={name:myName,role}
+  peerStreams[selfId]=stream
+
+  profile.onMessage=(data,{peerId})=>{
+    peerData[peerId]=data
+    render()
   }
 
-  peerStreams[selfId]=localStream
-
-  const metaAction=room.makeAction('meta')
-  const chatAction=room.makeAction('chat')
-  const giftAction=room.makeAction('gift')
-
-  window.metaAction=metaAction
-  window.chatAction=chatAction
-  window.giftAction=giftAction
-
-  metaAction.onMessage=(data,{peerId})=>{
-    peerInfo[peerId]={
-      id:peerId,
-      name:data.name || '참가자',
-      role:data.role || 'guest'
-    }
-    renderPeople()
+  chat.onMessage=(data)=>{
+    addMessage(data.name,data.text)
   }
 
-  chatAction.onMessage=(data)=>{
-    addMessage(
-      data.name || '참가자',
-      data.text || ''
-    )
-  }
-
-  giftAction.onMessage=(data)=>{
-    if(data.type==='rose'){
-      addMessage(
-        data.name,
-        `🌹 장미 ${data.count}개를 보냈습니다.`
-      )
-      showNotice(`🌹 ${data.name}님 장미 ${data.count}개`)
-    }
-
-    if(data.type==='giftbox'){
-      showNotice(`🎁 ${data.name}님이 선물상자를 열었습니다!`)
-    }
-
-    if(data.type==='lottery'){
-      showNotice(`🎯 ${data.name}님 결과 : ${data.result}`)
-    }
+  gift.onMessage=(data)=>{
+    addMessage(data.name,data.text)
   }
 
   room.onPeerJoin=peerId=>{
+    profile.send(
+      {name:myName,role},
+      {target:peerId}
+    )
 
-    metaAction.send({
-      name:localName,
-      role:localRole
-    },{
-      target:peerId
-    })
-
-    if(localStream){
-      room.addStream(localStream,{
-        target:peerId
-      })
-    }
-
-    setTimeout(renderPeople,300)
+    room.addStream(
+      stream,
+      {target:peerId}
+    )
   }
 
   room.onPeerLeave=peerId=>{
-    delete peerInfo[peerId]
+    delete peerData[peerId]
     delete peerStreams[peerId]
-    renderPeople()
+    render()
   }
 
-  room.onPeerStream=(stream,peerId)=>{
-    peerStreams[peerId]=stream
-    renderPeople()
+  room.onPeerStream=(incoming,peerId)=>{
+    peerStreams[peerId]=incoming
+    render()
   }
 
-  room.addStream(localStream)
+  room.addStream(stream)
 
-  metaAction.send({
-    name:localName,
-    role:localRole
-  })
+  profile.send({name:myName,role})
 
-  document.getElementById('startBox').style.display='none'
-
-  renderPeople()
-
-  showNotice(
-    role==='host'
-      ? '👑 호스트 방송 시작'
-      : '🎥 방송방 입장 완료'
-  )
+  document.getElementById('enterButtons').style.display='none'
+  setStatus('방송방에 입장했습니다.')
+  render()
 }
 
-/* =========================
-   화면 배치
-========================= */
+function render(){
+  const ids=Object.keys(peerData)
 
-function renderPeople(){
+  document.getElementById('viewerCount').textContent=ids.length
 
-  const allIds=Object.keys(peerInfo)
-
-  peopleCount.textContent=allIds.length
-
-  let hostId=null
-
-  if(
-    peerInfo[selfId] &&
-    peerInfo[selfId].role==='host'
-  ){
-    hostId=selfId
-  }
-
-  if(!hostId){
-    hostId=allIds.find(
-      id=>peerInfo[id]?.role==='host'
-    )
-  }
+  let hostId=ids.find(id=>peerData[id]?.role==='host')
 
   if(hostId && peerStreams[hostId]){
-    hostVideo.srcObject=peerStreams[hostId]
-    hostVideo.muted=(hostId===selfId)
+    const hv=document.getElementById('hostVideo')
+    hv.srcObject=peerStreams[hostId]
+    hv.muted=(hostId===selfId)
 
-    hostName.textContent=
-      peerInfo[hostId]?.name || '호스트'
-  }else{
-    hostVideo.srcObject=null
-    hostName.textContent='호스트 대기중'
+    document.getElementById('hostLabel').textContent=
+      '👑 '+(peerData[hostId]?.name || '호스트')
   }
 
-  const guests=allIds
-    .filter(id=>id!==hostId)
-    .sort()
+  const guests=ids.filter(id=>id!==hostId)
 
   for(let i=1;i<=13;i++){
+    const id=guests[i-1]
+    const v=document.getElementById('v'+i)
+    const e=document.getElementById('e'+i)
+    const n=document.getElementById('n'+i)
 
-    const video=document.getElementById('video-'+i)
-    const name=document.getElementById('name-'+i)
-    const empty=document.getElementById('empty-'+i)
+    if(id){
+      n.textContent=peerData[id]?.name || '참가자 '+i
+      e.style.display='none'
 
-    const peerId=guests[i-1]
-
-    if(peerId){
-
-      name.textContent=
-        peerInfo[peerId]?.name || `참가자 ${i}`
-
-      empty.style.display='none'
-
-      if(peerStreams[peerId]){
-        video.srcObject=peerStreams[peerId]
-        video.muted=(peerId===selfId)
-      }else{
-        video.srcObject=null
+      if(peerStreams[id]){
+        v.srcObject=peerStreams[id]
+        v.muted=(id===selfId)
       }
-
     }else{
-
-      video.srcObject=null
-      name.textContent='빈자리'
-      empty.style.display='flex'
+      v.srcObject=null
+      e.style.display='flex'
+      n.textContent='빈자리'
     }
   }
 }
 
-/* =========================
-   버튼
-========================= */
-
-document.getElementById('hostStart')
-.onclick=()=>start('host')
-
-document.getElementById('guestStart')
-.onclick=()=>start('guest')
-
-document.getElementById('micBtn')
-.onclick=()=>{
-
-  if(!localStream) return
-
-  const track=localStream.getAudioTracks()[0]
-
-  if(!track) return
-
-  track.enabled=!track.enabled
-
-  document.getElementById('micBtn').textContent=
-    track.enabled
-      ? '🎤 마이크'
-      : '🔇 음소거'
+function addMessage(name,text){
+  const m=document.createElement('div')
+  m.innerHTML='<b>'+esc(name)+'</b> '+esc(text)
+  document.getElementById('messages').appendChild(m)
 }
 
-document.getElementById('camBtn')
-.onclick=()=>{
+window.sendChat=function(){
+  if(!window.ktChat)return
 
-  if(!localStream) return
-
-  const track=localStream.getVideoTracks()[0]
-
-  if(!track) return
-
-  track.enabled=!track.enabled
-
-  document.getElementById('camBtn').textContent=
-    track.enabled
-      ? '📷 카메라'
-      : '🚫 카메라'
-}
-
-/* =========================
-   전면 / 후면 카메라
-========================= */
-
-document.getElementById('switchBtn')
-.onclick=async()=>{
-
-  if(!room || !localStream) return
-
-  try{
-
-    const oldTrack=localStream.getVideoTracks()[0]
-
-    facingMode=
-      facingMode==='user'
-        ? 'environment'
-        : 'user'
-
-    const newStream=
-      await navigator.mediaDevices.getUserMedia({
-        video:{facingMode},
-        audio:false
-      })
-
-    const newTrack=newStream.getVideoTracks()[0]
-
-    await room.replaceTrack(
-      oldTrack,
-      newTrack
-    )
-
-    localStream.removeTrack(oldTrack)
-    oldTrack.stop()
-    localStream.addTrack(newTrack)
-
-    peerStreams[selfId]=localStream
-
-    renderPeople()
-
-  }catch(e){
-    showNotice('카메라 전환을 할 수 없습니다.')
-  }
-}
-
-/* =========================
-   종료
-========================= */
-
-document.getElementById('endBtn')
-.onclick=()=>{
-
-  if(localStream){
-    localStream
-      .getTracks()
-      .forEach(t=>t.stop())
-  }
-
-  if(room){
-    room.leave()
-  }
-
-  location.reload()
-}
-
-/* =========================
-   채팅 전송
-========================= */
-
-function sendChat(){
-
-  if(!window.chatAction){
-    showNotice('먼저 방송방에 입장하세요.')
-    return
-  }
-
-  const input=
-    document.getElementById('chatText')
-
+  const input=document.getElementById('chatText')
   const text=input.value.trim()
 
-  if(!text) return
+  if(!text)return
 
-  addMessage(localName,text)
+  addMessage(myName,text)
 
-  window.chatAction.send({
-    name:localName,
-    text:text
+  window.ktChat.send({
+    name:myName,
+    text
   })
 
   input.value=''
 }
 
-document.getElementById('sendBtn')
-.onclick=sendChat
+window.sendGift=function(name,price){
+  if(!window.ktGift)return
 
-document.getElementById('chatText')
-.addEventListener('keydown',e=>{
-  if(e.key==='Enter'){
-    sendChat()
-  }
-})
+  const text=`${name} 선물 🪙${price}`
 
-/* =========================
-   장미
-========================= */
+  addMessage(myName,text)
 
-document.querySelectorAll('[data-rose]')
-.forEach(btn=>{
-
-  btn.onclick=()=>{
-
-    if(!window.giftAction){
-      showNotice('먼저 방송방에 입장하세요.')
-      return
-    }
-
-    const count=
-      Number(btn.dataset.rose)
-
-    addMessage(
-      localName,
-      `🌹 장미 ${count}개를 보냈습니다.`
-    )
-
-    window.giftAction.send({
-      type:'rose',
-      name:localName,
-      count
-    })
-
-    showNotice(`🌹 장미 ${count}개`)
-  }
-})
-
-/* =========================
-   선물상자
-========================= */
-
-document.getElementById('giftBoxBtn')
-.onclick=()=>{
-
-  if(!window.giftAction){
-    showNotice('먼저 방송방에 입장하세요.')
-    return
-  }
-
-  let sec=5
-
-  showNotice(`🎁 선물상자 ${sec}초`)
-
-  const timer=setInterval(()=>{
-
-    sec--
-
-    if(sec>0){
-      showNotice(`🎁 선물상자 ${sec}초`)
-    }else{
-
-      clearInterval(timer)
-
-      showNotice('🎁 선물상자 열림!')
-
-      window.giftAction.send({
-        type:'giftbox',
-        name:localName
-      })
-    }
-
-  },1000)
+  window.ktGift.send({
+    name:myName,
+    text
+  })
 }
 
-/* =========================
-   제비뽑기
-========================= */
+window.sendRose=function(count){
+  if(!window.ktGift)return
 
-document.getElementById('lotteryBtn')
-.onclick=()=>{
+  const text=`🌹 장미 ${count}송이 선물`
 
-  if(!window.giftAction){
-    showNotice('먼저 방송방에 입장하세요.')
-    return
-  }
+  addMessage(myName,text)
 
+  window.ktGift.send({
+    name:myName,
+    text
+  })
+}
+
+window.openGiftBox=function(){
+  if(!window.ktGift)return
+
+  const text='🎁 선물상자를 올렸습니다.'
+
+  addMessage(myName,text)
+
+  window.ktGift.send({
+    name:myName,
+    text
+  })
+}
+
+window.drawLottery=function(){
   const prizes=[
     '꽝',
     '꽝',
@@ -928,21 +932,91 @@ document.getElementById('lotteryBtn')
     '장미 5개'
   ]
 
-  const result=
-    prizes[
-      Math.floor(
-        Math.random()*prizes.length
-      )
-    ]
-
-  showNotice(`🎯 ${result}`)
-
-  window.giftAction.send({
-    type:'lottery',
-    name:localName,
-    result
-  })
+  const result=prizes[Math.floor(Math.random()*prizes.length)]
+  alert('제비뽑기 결과: '+result)
 }
+
+window.toggleMic=function(){
+  if(!stream)return
+
+  const t=stream.getAudioTracks()[0]
+  if(t)t.enabled=!t.enabled
+}
+
+window.toggleCam=function(){
+  if(!stream)return
+
+  const t=stream.getVideoTracks()[0]
+  if(t)t.enabled=!t.enabled
+}
+
+window.switchCamera=async function(){
+  if(!room || !stream)return
+
+  try{
+    const oldTrack=stream.getVideoTracks()[0]
+
+    facing=facing==='user'?'environment':'user'
+
+    const s=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:facing},
+      audio:false
+    })
+
+    const newTrack=s.getVideoTracks()[0]
+
+    await room.replaceTrack(oldTrack,newTrack)
+
+    stream.removeTrack(oldTrack)
+    oldTrack.stop()
+    stream.addTrack(newTrack)
+
+    peerStreams[selfId]=stream
+    render()
+
+  }catch(e){
+    alert('카메라 전환을 할 수 없습니다.')
+  }
+}
+
+window.shareRoom=async function(){
+  try{
+    if(navigator.share){
+      await navigator.share({
+        title:'K-Talk',
+        url:location.href
+      })
+    }else{
+      await navigator.clipboard.writeText(location.href)
+      alert('주소를 복사했습니다.')
+    }
+  }catch(e){}
+}
+
+window.leaveRoom=function(){
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop())
+  }
+
+  if(room){
+    room.leave()
+  }
+
+  location.reload()
+}
+
+document.getElementById('chatText')
+.addEventListener('keydown',e=>{
+  if(e.key==='Enter')window.sendChat()
+})
+
+setInterval(()=>{
+  const d=new Date()
+  document.getElementById('clock').textContent=
+    String(d.getHours()).padStart(2,'0')+':'+
+    String(d.getMinutes()).padStart(2,'0')+':'+
+    String(d.getSeconds()).padStart(2,'0')
+},1000)
 
 </script>
 </body>
