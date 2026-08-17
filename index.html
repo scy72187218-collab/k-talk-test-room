@@ -7,6 +7,7 @@
 
 <style>
 *{box-sizing:border-box}
+
 html,body{
   margin:0;
   width:100%;
@@ -66,7 +67,7 @@ button,input{font-family:inherit}
   font-size:9px;
 }
 
-/* 일반방/비밀방 */
+/* 큰 입장 버튼 */
 .roomBar{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -78,6 +79,7 @@ button,input{font-family:inherit}
   border-radius:8px;
   font-size:10px;
   font-weight:900;
+  cursor:pointer;
 }
 
 .publicBtn{
@@ -88,6 +90,10 @@ button,input{font-family:inherit}
 .secretBtn{
   background:linear-gradient(135deg,#7a2cff,#d72cf6);
   color:#fff;
+}
+
+.roomBtn:active{
+  transform:scale(.97);
 }
 
 /* 안내 */
@@ -198,11 +204,26 @@ button,input{font-family:inherit}
   font-weight:900;
 }
 
-.slot:nth-child(1) .slotNo{background:#ffd326;color:#111}
-.slot:nth-child(2) .slotNo{background:#f43c91}
-.slot:nth-child(3) .slotNo{background:#e97418}
-.slot:nth-child(4) .slotNo{background:#20abd2}
-.slot:nth-child(5) .slotNo{background:#712ee5}
+.slot:nth-child(1) .slotNo{
+  background:#ffd326;
+  color:#111;
+}
+
+.slot:nth-child(2) .slotNo{
+  background:#f43c91;
+}
+
+.slot:nth-child(3) .slotNo{
+  background:#e97418;
+}
+
+.slot:nth-child(4) .slotNo{
+  background:#20abd2;
+}
+
+.slot:nth-child(5) .slotNo{
+  background:#712ee5;
+}
 
 .slotName{
   position:absolute;
@@ -443,33 +464,6 @@ button,input{font-family:inherit}
   background:#f9005d;
   font-weight:900;
 }
-
-/* 입장 버튼은 화면 위에 작게 */
-.enterOverlay{
-  position:absolute;
-  z-index:20;
-  top:116px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:5px;
-}
-
-.enterOverlay button{
-  border:0;
-  border-radius:12px;
-  padding:6px 10px;
-  font-size:8px;
-  font-weight:900;
-}
-
-.hostEnter{
-  background:linear-gradient(135deg,#ffd44b,#ff8d00);
-}
-
-.guestEnter{
-  background:linear-gradient(135deg,#2fd56f,#19ae51);
-}
 </style>
 </head>
 
@@ -478,6 +472,7 @@ button,input{font-family:inherit}
 <div class="app">
 
   <div class="header">
+
     <div class="live">
       <b>● ON AIR</b>
       <span id="clock">00:00:00</span>
@@ -491,15 +486,26 @@ button,input{font-family:inherit}
     <div class="viewer">
       👤 <span id="viewerCount">0</span>
     </div>
+
   </div>
 
+  <!-- 큰 버튼만 작동 -->
   <div class="roomBar">
-    <button class="roomBtn publicBtn" onclick="selectRoom('public')">
+
+    <button
+      class="roomBtn publicBtn"
+      id="publicBtn"
+      onclick="enterRoom('public')">
       📺 1번 일반 방송방
     </button>
-    <button class="roomBtn secretBtn" onclick="selectRoom('secret')">
+
+    <button
+      class="roomBtn secretBtn"
+      id="secretBtn"
+      onclick="enterRoom('secret')">
       🔐 2번 비밀방
     </button>
+
   </div>
 
   <div class="notice">
@@ -509,7 +515,12 @@ button,input{font-family:inherit}
   <div class="main">
 
     <div class="host">
-      <video id="hostVideo" autoplay playsinline></video>
+
+      <video
+        id="hostVideo"
+        autoplay
+        playsinline>
+      </video>
 
       <div class="hostLive">
         ● ON AIR
@@ -519,32 +530,62 @@ button,input{font-family:inherit}
         ʚ 💗 출석체크 💗 ɞ
       </div>
 
-      <div class="hostName" id="hostName">
+      <div
+        class="hostName"
+        id="hostName">
         👑 호스트
       </div>
+
     </div>
 
-    <div class="guestGrid" id="guestGrid"></div>
+    <div
+      class="guestGrid"
+      id="guestGrid">
+    </div>
 
   </div>
 
   <div class="lower">
 
     <div class="panel">
+
       <div class="title">
         💬 실시간 채팅
       </div>
 
-      <div class="messages" id="messages">
-        <div><b>K-Talk</b> 방송방에 오신 것을 환영합니다.</div>
-        <div><b>안내</b> 즐겁게 이용해 주세요. ❤️</div>
-        <div><b>관리자</b> 좋은 방송 감사합니다. 💜</div>
+      <div
+        class="messages"
+        id="messages">
+
+        <div>
+          <b>K-Talk</b>
+          방송방에 오신 것을 환영합니다.
+        </div>
+
+        <div>
+          <b>안내</b>
+          즐겁게 이용해 주세요. ❤️
+        </div>
+
+        <div>
+          <b>관리자</b>
+          좋은 방송 감사합니다. 💜
+        </div>
+
       </div>
 
       <div class="chatInput">
-        <input id="chatText" placeholder="메시지 입력">
-        <button onclick="sendChat()">전송</button>
+
+        <input
+          id="chatText"
+          placeholder="메시지 입력">
+
+        <button onclick="sendChat()">
+          전송
+        </button>
+
       </div>
+
     </div>
 
     <div class="rightPanel">
@@ -556,33 +597,57 @@ button,input{font-family:inherit}
         </div>
 
         <div class="giftRow">
-          <button class="gift" onclick="sendGift('장미',50)">
-            <span>🌹</span>장미<strong>50</strong>
+
+          <button
+            class="gift"
+            onclick="sendGift('장미',50)">
+            <span>🌹</span>
+            장미
+            <strong>50</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('하트',100)">
-            <span>💖</span>하트<strong>100</strong>
+          <button
+            class="gift"
+            onclick="sendGift('하트',100)">
+            <span>💖</span>
+            하트
+            <strong>100</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('별',200)">
-            <span>⭐</span>별<strong>200</strong>
+          <button
+            class="gift"
+            onclick="sendGift('별',200)">
+            <span>⭐</span>
+            별
+            <strong>200</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('자동차',500)">
-            <span>🚗</span>자동차<strong>500</strong>
+          <button
+            class="gift"
+            onclick="sendGift('자동차',500)">
+            <span>🚗</span>
+            자동차
+            <strong>500</strong>
           </button>
 
-          <button class="gift" onclick="sendGift('고래',1000)">
-            <span>🐋</span>고래<strong>1000</strong>
+          <button
+            class="gift"
+            onclick="sendGift('고래',1000)">
+            <span>🐋</span>
+            고래
+            <strong>1000</strong>
           </button>
+
         </div>
 
         <div class="giftBottom">
 
           <div class="roseArea">
+
             <b>🌹 장미 선물</b>
 
             <div class="roseBtns">
+
               <button onclick="sendRose(1)">
                 <span>🌹</span>1
               </button>
@@ -602,27 +667,39 @@ button,input{font-family:inherit}
               <button onclick="sendRose(100)">
                 <span>💐</span>100
               </button>
+
             </div>
+
           </div>
 
-          <button class="giftBox" onclick="openGiftBox()">
+          <button
+            class="giftBox"
+            onclick="openGiftBox()">
+
             <span>🎁</span>
             선물상자
+
           </button>
 
         </div>
 
       </div>
 
-      <div class="lottery" onclick="drawLottery()">
+      <div
+        class="lottery"
+        onclick="drawLottery()">
+
         <div>
           <b>🎯 제비뽑기 이벤트</b>
-          <small>아침 · 점심 · 저녁 하루 3회</small>
+          <small>
+            아침 · 점심 · 저녁 하루 3회
+          </small>
         </div>
 
         <div class="machine">
           🎰
         </div>
+
       </div>
 
     </div>
@@ -630,6 +707,7 @@ button,input{font-family:inherit}
   </div>
 
   <div class="bottomNav">
+
     <div class="nav">
       <span>🏠</span>
       홈
@@ -654,18 +732,9 @@ button,input{font-family:inherit}
       <span>⚙️</span>
       설정
     </div>
+
   </div>
 
-</div>
-
-<div class="enterOverlay" id="enterOverlay">
-  <button class="hostEnter" onclick="enterRoom('host')">
-    👑 호스트 시작
-  </button>
-
-  <button class="guestEnter" onclick="enterRoom('guest')">
-    🎥 참가자 입장
-  </button>
 </div>
 
 <script type="module">
@@ -677,10 +746,10 @@ import {
 
 let room=null
 let stream=null
+
 let selectedRoom='public'
-let myRole=''
-let myName=''
-let facingMode='user'
+let myRole='guest'
+let myName='참가자'
 
 const peers={}
 const peerStreams={}
@@ -688,6 +757,7 @@ const peerStreams={}
 const guestGrid=
 document.getElementById('guestGrid')
 
+/* 참가자 1~13 */
 for(let i=1;i<=13;i++){
 
   const box=
@@ -696,35 +766,46 @@ for(let i=1;i<=13;i++){
   box.className='slot'
 
   box.innerHTML=`
-    <video id="video${i}" autoplay playsinline></video>
-    <div class="empty" id="empty${i}">빈자리</div>
-    <div class="slotNo">${i}</div>
-    <div class="slotName" id="name${i}">빈자리</div>
-    <div class="rose">🌹</div>
+    <video
+      id="video${i}"
+      autoplay
+      playsinline>
+    </video>
+
+    <div
+      class="empty"
+      id="empty${i}">
+      빈자리
+    </div>
+
+    <div class="slotNo">
+      ${i}
+    </div>
+
+    <div
+      class="slotName"
+      id="name${i}">
+      빈자리
+    </div>
+
+    <div class="rose">
+      🌹
+    </div>
   `
 
   guestGrid.appendChild(box)
 }
 
-window.selectRoom=
-function(type){
-
-  selectedRoom=type
-}
-
+/* 큰 버튼 누르면 바로 입장 */
 window.enterRoom=
-async function(role){
+async function(type){
 
   if(room)return
 
-  myRole=role
-  myName=
-  role==='host'
-  ?'호스트'
-  :'참가자'
+  selectedRoom=type
 
   const roomName=
-  selectedRoom==='secret'
+  type==='secret'
   ?'ktalk-secret-7777'
   :'ktalk-public-main'
 
@@ -734,9 +815,7 @@ async function(role){
     await navigator.mediaDevices
     .getUserMedia({
 
-      video:{
-        facingMode:facingMode
-      },
+      video:true,
 
       audio:{
         echoCancellation:true,
@@ -772,8 +851,17 @@ async function(role){
   const gift=
   room.makeAction('gift')
 
+  window.profileAction=profile
   window.chatAction=chat
   window.giftAction=gift
+
+  /*
+    처음에는 참가자로 입장.
+    방에 호스트가 없으면
+    첫 입장자가 자동 호스트가 됨.
+  */
+  myRole='guest'
+  myName='참가자'
 
   peers[selfId]={
     name:myName,
@@ -786,6 +874,7 @@ async function(role){
   (data,{peerId})=>{
 
     peers[peerId]=data
+
     render()
   }
 
@@ -841,6 +930,7 @@ async function(role){
   (incoming,peerId)=>{
 
     peerStreams[peerId]=incoming
+
     render()
   }
 
@@ -851,13 +941,44 @@ async function(role){
     role:myRole
   })
 
-  document
-  .getElementById('enterOverlay')
-  .style.display='none'
-
   render()
+
+  /*
+    호스트가 없으면
+    첫 번째 사람이 자동 호스트
+  */
+  setTimeout(()=>{
+
+    const hostExists=
+    Object.keys(peers)
+    .some(
+      id=>
+      id!==selfId &&
+      peers[id]?.role==='host'
+    )
+
+    if(!hostExists){
+
+      myRole='host'
+      myName='호스트'
+
+      peers[selfId]={
+        name:myName,
+        role:'host'
+      }
+
+      profile.send({
+        name:myName,
+        role:'host'
+      })
+
+      render()
+    }
+
+  },1000)
 }
 
+/* 화면 */
 function render(){
 
   const ids=
@@ -899,6 +1020,15 @@ function render(){
       ||
       '호스트'
     )
+
+  }else{
+
+    hostVideo.srcObject=null
+
+    document
+    .getElementById('hostName')
+    .textContent=
+    '👑 호스트 대기'
   }
 
   const guests=
@@ -947,12 +1077,15 @@ function render(){
     }else{
 
       video.srcObject=null
+
       empty.style.display='flex'
+
       name.textContent='빈자리'
     }
   }
 }
 
+/* 글자 안전 처리 */
 function safe(text){
 
   return String(text)
@@ -961,6 +1094,7 @@ function safe(text){
   .replaceAll('>','&gt;')
 }
 
+/* 채팅 추가 */
 function addMessage(
   name,
   text
@@ -975,14 +1109,12 @@ function addMessage(
   '</b> '+
   safe(text)
 
-  const box=
-  document.getElementById(
-    'messages'
-  )
-
-  box.appendChild(line)
+  document
+  .getElementById('messages')
+  .appendChild(line)
 }
 
+/* 채팅 전송 */
 window.sendChat=
 function(){
 
@@ -1011,6 +1143,7 @@ function(){
   input.value=''
 }
 
+/* 선물 */
 window.sendGift=
 function(name,price){
 
@@ -1030,6 +1163,7 @@ function(name,price){
   })
 }
 
+/* 장미 */
 window.sendRose=
 function(count){
 
@@ -1049,6 +1183,7 @@ function(count){
   })
 }
 
+/* 선물상자 */
 window.openGiftBox=
 function(){
 
@@ -1068,6 +1203,7 @@ function(){
   })
 }
 
+/* 제비 */
 window.drawLottery=
 function(){
 
@@ -1095,6 +1231,20 @@ function(){
   )
 }
 
+/* 엔터 채팅 */
+document
+.getElementById('chatText')
+.addEventListener(
+  'keydown',
+  event=>{
+
+    if(event.key==='Enter'){
+      window.sendChat()
+    }
+  }
+)
+
+/* 시계 */
 setInterval(()=>{
 
   const now=
