@@ -25,18 +25,9 @@ button,input{font-family:inherit}
   height:100dvh;
   padding:4px;
   display:grid;
-
-  /* 채팅을 조금 위로 올린 새 비율 */
-  grid-template-rows:
-    42px
-    42px
-    38px
-    minmax(0,42vh)
-    minmax(0,1fr)
-    52px;
-
+  grid-template-rows:40px 31px 27px minmax(0,1fr) 175px 48px;
   gap:4px;
-  background:#050409;
+  overflow:hidden;
 }
 
 /* 상단 */
@@ -47,19 +38,19 @@ button,input{font-family:inherit}
 }
 
 .live{
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 }
 
 .live b{
-  background:#ef1f50;
-  padding:5px 7px;
-  border-radius:7px;
+  background:#f01850;
+  padding:5px 6px;
+  border-radius:6px;
 }
 
 .logo{
   text-align:center;
-  color:#ffd63b;
+  color:#ffd43c;
   font-size:18px;
   font-weight:900;
 }
@@ -68,62 +59,60 @@ button,input{font-family:inherit}
   display:block;
   color:#fff;
   font-size:7px;
+  margin-top:1px;
 }
 
 .viewer{
   text-align:right;
-  font-size:10px;
+  font-size:9px;
 }
 
-/* 큰 입장 버튼 */
+/* 일반방 / 비밀방 */
 .roomBar{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:5px;
+  gap:4px;
 }
 
 .roomBtn{
   border:0;
-  border-radius:10px;
-  font-size:11px;
+  border-radius:8px;
+  font-size:10px;
   font-weight:900;
-}
-
-.publicBtn{
-  background:linear-gradient(135deg,#ffc72f,#ff7900);
-  color:#181000;
-}
-
-.secretBtn{
-  background:linear-gradient(135deg,#762cff,#dc2cf4);
   color:#fff;
 }
 
-.roomBtn:active{
-  transform:scale(.97);
+.publicBtn{
+  background:linear-gradient(135deg,#ffc928,#ff7900);
+  color:#1b1100;
+}
+
+.secretBtn{
+  background:linear-gradient(135deg,#7132ff,#db2cff);
+}
+
+.roomBtn.active{
+  outline:2px solid #fff;
 }
 
 /* 안내 */
 .notice{
-  border:1px solid #552162;
-  border-radius:8px;
+  border:1px solid #5f266d;
+  border-radius:7px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:8px;
+  font-size:7px;
   font-weight:900;
   white-space:nowrap;
 }
 
-/* 방송 영역 */
+/* 메인 방송 */
 .main{
-  display:grid;
-
-  /* 호스트 조금 줄이고 게스트 조금 넓게 */
-  grid-template-columns:45% 55%;
-
-  gap:4px;
   min-height:0;
+  display:grid;
+  grid-template-columns:45% 55%;
+  gap:4px;
 }
 
 /* 호스트 */
@@ -131,9 +120,9 @@ button,input{font-family:inherit}
   position:relative;
   min-height:0;
   overflow:hidden;
-  border:1px solid #702d82;
+  border:1px solid #6a2a7c;
   border-radius:8px;
-  background:#0c0810;
+  background:#0b0810;
 }
 
 .host video{
@@ -146,52 +135,54 @@ button,input{font-family:inherit}
   position:absolute;
   top:5px;
   left:5px;
-  color:#ff315e;
+  color:#ff365e;
   font-size:8px;
   font-weight:900;
 }
 
+/* 작고 예쁜 날개 하트 */
 .attendance{
   position:absolute;
   top:5px;
   right:5px;
-  border:1px solid #ff39d3;
-  border-radius:15px;
-  background:rgba(55,0,65,.78);
+  background:rgba(55,0,67,.78);
+  border:1px solid #ff42d6;
+  border-radius:20px;
   padding:2px 5px;
+  color:#ffe24b;
   font-size:7px;
-  color:#ffd74a;
-  box-shadow:0 0 7px rgba(255,46,210,.55);
+  font-weight:900;
+  box-shadow:0 0 7px rgba(255,42,210,.55);
 }
 
 .hostName{
   position:absolute;
-  left:5px;
   bottom:5px;
-  background:rgba(0,0,0,.72);
-  padding:4px 7px;
+  left:5px;
+  background:rgba(0,0,0,.7);
   border-radius:6px;
-  color:#ffd642;
-  font-size:9px;
+  padding:3px 6px;
+  color:#ffd43c;
+  font-size:8px;
   font-weight:900;
 }
 
 /* 게스트 13명 */
 .guestGrid{
+  min-height:0;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   grid-template-rows:repeat(5,1fr);
   gap:3px;
-  min-height:0;
 }
 
 .slot{
   position:relative;
   min-height:0;
   overflow:hidden;
-  border:1px solid #45364d;
-  border-radius:6px;
   background:#111015;
+  border:1px solid #39313f;
+  border-radius:5px;
 }
 
 .slot video{
@@ -202,56 +193,42 @@ button,input{font-family:inherit}
 
 .slotNo{
   position:absolute;
-  top:3px;
-  left:3px;
-  width:17px;
-  height:17px;
-  border-radius:4px;
-  background:#777;
+  top:2px;
+  left:2px;
+  width:16px;
+  height:16px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:8px;
+  border-radius:4px;
+  background:#777;
+  font-size:7px;
   font-weight:900;
 }
 
-.slot:nth-child(1) .slotNo{
-  background:#ffd326;
-  color:#111;
-}
-
-.slot:nth-child(2) .slotNo{
-  background:#f43c91;
-}
-
-.slot:nth-child(3) .slotNo{
-  background:#e97418;
-}
-
-.slot:nth-child(4) .slotNo{
-  background:#20abd2;
-}
-
-.slot:nth-child(5) .slotNo{
-  background:#712ee5;
-}
+.slot:nth-child(1) .slotNo{background:#ffd32d;color:#111}
+.slot:nth-child(2) .slotNo{background:#f43e93}
+.slot:nth-child(3) .slotNo{background:#e87818}
+.slot:nth-child(4) .slotNo{background:#1ea9d0}
+.slot:nth-child(5) .slotNo{background:#7431e7}
+.slot:nth-child(6) .slotNo{background:#26a964}
 
 .slotName{
   position:absolute;
-  left:3px;
-  right:3px;
-  bottom:2px;
+  left:2px;
+  right:2px;
+  bottom:1px;
   padding:8px 2px 2px;
-  font-size:7px;
+  font-size:6.5px;
   font-weight:900;
-  background:linear-gradient(transparent,rgba(0,0,0,.95));
+  background:linear-gradient(transparent,rgba(0,0,0,.96));
 }
 
-.rose{
+.slotRose{
   position:absolute;
-  right:3px;
-  bottom:2px;
-  font-size:10px;
+  right:2px;
+  bottom:1px;
+  font-size:9px;
 }
 
 .empty{
@@ -260,132 +237,132 @@ button,input{font-family:inherit}
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#615867;
-  font-size:7px;
+  color:#69626e;
+  font-size:6px;
 }
 
-/* 아래 채팅 + 선물 */
+/* 채팅 + 선물 */
 .lower{
+  min-height:0;
   display:grid;
   grid-template-columns:45% 55%;
   gap:4px;
-  min-height:0;
 }
 
 .panel{
+  min-height:0;
+  overflow:hidden;
   border:1px solid #59266a;
   border-radius:8px;
   background:#0d0912;
-  overflow:hidden;
-  min-height:0;
 }
 
 .title{
-  height:27px;
+  height:24px;
   display:flex;
   align-items:center;
-  padding:0 7px;
-  border-bottom:1px solid #40204c;
-  font-size:9px;
+  padding:0 6px;
+  border-bottom:1px solid #43204e;
+  font-size:8px;
   font-weight:900;
 }
 
 /* 채팅 글씨 조금 크게 */
 .messages{
-  height:calc(100% - 61px);
+  height:calc(100% - 55px);
+  padding:5px;
   overflow:hidden;
-  padding:6px;
-  font-size:8.5px;
-  line-height:1.5;
+  font-size:8px;
+  line-height:1.55;
 }
 
 .messages b{
-  color:#42dfff;
+  color:#45ddff;
 }
 
 .chatInput{
-  height:34px;
+  height:31px;
   display:grid;
   grid-template-columns:1fr auto;
-  gap:4px;
+  gap:3px;
   padding:3px;
 }
 
 .chatInput input{
   min-width:0;
   border:1px solid #3b3043;
-  background:#17121c;
-  color:#fff;
   border-radius:6px;
-  padding:5px;
-  font-size:8px;
+  background:#18121d;
+  color:#fff;
+  padding:4px;
+  font-size:7px;
 }
 
 .chatInput button{
   border:0;
   border-radius:6px;
-  background:#8a2edb;
+  background:#8c30df;
   color:#fff;
-  font-size:8px;
+  font-size:7px;
   font-weight:900;
-  padding:0 10px;
+  padding:0 8px;
 }
 
-/* 선물 */
 .rightPanel{
-  display:grid;
-  grid-template-rows:1fr 58px;
-  gap:4px;
   min-height:0;
+  display:grid;
+  grid-template-rows:1fr 49px;
+  gap:4px;
 }
 
 .giftWrap{
-  padding:4px;
+  padding:3px;
 }
 
 .giftRow{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:3px;
+  gap:2px;
 }
 
 .gift{
-  border:1px solid #54265f;
-  background:#151019;
+  border:1px solid #482750;
+  border-radius:5px;
+  background:#17101b;
   color:#fff;
-  border-radius:6px;
-  padding:3px 0;
-  font-size:7px;
+  padding:2px 0;
+  font-size:6px;
 }
 
 .gift span{
   display:block;
-  font-size:18px;
+  font-size:17px;
 }
 
 .gift strong{
   display:block;
   color:#ffd63c;
-  font-size:7px;
+  font-size:6px;
+  margin-top:1px;
 }
 
 .giftBottom{
-  margin-top:4px;
   display:grid;
   grid-template-columns:2fr 1fr;
-  gap:4px;
+  gap:3px;
+  margin-top:3px;
 }
 
 .roseArea{
-  border:1px solid #6a2c55;
+  border:1px solid #6e2c57;
   border-radius:6px;
   padding:3px;
 }
 
 .roseArea b{
   display:block;
-  font-size:7px;
-  color:#ffd43c;
+  color:#ffd53d;
+  font-size:6.5px;
   margin-bottom:2px;
 }
 
@@ -398,64 +375,63 @@ button,input{font-family:inherit}
 .roseBtns button{
   border:0;
   border-radius:4px;
-  background:#18101c;
+  background:#19111d;
   color:#fff;
-  font-size:6px;
+  font-size:5.5px;
   padding:2px 0;
 }
 
 .roseBtns span{
   display:block;
-  font-size:13px;
+  font-size:12px;
 }
 
 .giftBox{
-  border:1px solid #9d3eff;
+  border:1px solid #a13cff;
   border-radius:6px;
-  background:linear-gradient(145deg,#401552,#14091c);
+  background:linear-gradient(145deg,#411653,#15091d);
   color:#fff;
-  font-size:7px;
+  font-size:6px;
   font-weight:900;
 }
 
 .giftBox span{
   display:block;
-  font-size:25px;
+  font-size:22px;
 }
 
-/* 제비 */
 .lottery{
-  border:1px solid #9d3eff;
-  border-radius:7px;
-  background:linear-gradient(90deg,#260b31,#100812);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:5px;
+  border:1px solid #9e3bff;
+  border-radius:7px;
+  background:linear-gradient(90deg,#270b33,#110812);
+  padding:4px;
 }
 
 .lottery b{
-  font-size:8px;
-  color:#ffb7ff;
+  color:#ffb8ff;
+  font-size:7px;
 }
 
 .lottery small{
   display:block;
-  font-size:6px;
+  font-size:5.5px;
   margin-top:2px;
 }
 
 .machine{
-  font-size:25px;
+  font-size:22px;
 }
 
-/* 하단 */
+/* 아래 메뉴 */
 .bottomNav{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   align-items:center;
   background:#131019;
-  border-top:1px solid #302536;
+  border-top:1px solid #302537;
   border-radius:8px 8px 0 0;
 }
 
@@ -466,7 +442,7 @@ button,input{font-family:inherit}
 
 .nav span{
   display:block;
-  font-size:17px;
+  font-size:16px;
 }
 
 .charge{
@@ -501,16 +477,17 @@ button,input{font-family:inherit}
 
   </div>
 
-  <!-- 큰 버튼만 사용 -->
   <div class="roomBar">
 
     <button
-      class="roomBtn publicBtn"
+      id="publicBtn"
+      class="roomBtn publicBtn active"
       onclick="enterRoom('public')">
       📺 1번 일반 방송방
     </button>
 
     <button
+      id="secretBtn"
       class="roomBtn secretBtn"
       onclick="enterRoom('secret')">
       🔐 2번 비밀방
@@ -519,18 +496,14 @@ button,input{font-family:inherit}
   </div>
 
   <div class="notice">
-    💗 출석체크 · 신청곡 5,000원 · 🌹 장미 1개 50원
+    ʚ 💗 출석체크 💗 ɞ　·　신청곡 5,000원　·　🌹 장미 1개 50원
   </div>
 
   <div class="main">
 
     <div class="host">
 
-      <video
-        id="hostVideo"
-        autoplay
-        playsinline>
-      </video>
+      <video id="hostVideo" autoplay playsinline></video>
 
       <div class="hostLive">
         ● ON AIR
@@ -540,18 +513,13 @@ button,input{font-family:inherit}
         ʚ 💗 출석체크 💗 ɞ
       </div>
 
-      <div
-        class="hostName"
-        id="hostName">
-        👑 호스트
+      <div class="hostName" id="hostName">
+        👑 호스트 대기
       </div>
 
     </div>
 
-    <div
-      class="guestGrid"
-      id="guestGrid">
-    </div>
+    <div class="guestGrid" id="guestGrid"></div>
 
   </div>
 
@@ -563,37 +531,15 @@ button,input{font-family:inherit}
         💬 실시간 채팅
       </div>
 
-      <div
-        class="messages"
-        id="messages">
-
-        <div>
-          <b>K-Talk</b>
-          방송방에 오신 것을 환영합니다.
-        </div>
-
-        <div>
-          <b>안내</b>
-          즐겁게 이용해 주세요. ❤️
-        </div>
-
-        <div>
-          <b>관리자</b>
-          좋은 방송 감사합니다. 💜
-        </div>
-
+      <div class="messages" id="messages">
+        <div><b>K-Talk</b> 방송방에 오신 것을 환영합니다.</div>
+        <div><b>안내</b> 즐겁게 이용해 주세요. ❤️</div>
+        <div><b>관리자</b> 좋은 방송 감사합니다. 💜</div>
       </div>
 
       <div class="chatInput">
-
-        <input
-          id="chatText"
-          placeholder="메시지 입력">
-
-        <button onclick="sendChat()">
-          전송
-        </button>
-
+        <input id="chatText" placeholder="메시지 입력">
+        <button onclick="sendChat()">전송</button>
       </div>
 
     </div>
@@ -608,41 +554,31 @@ button,input{font-family:inherit}
 
         <div class="giftRow">
 
-          <button
-            class="gift"
-            onclick="sendGift('장미',50)">
+          <button class="gift" onclick="sendGift('장미',50)">
             <span>🌹</span>
             장미
             <strong>50</strong>
           </button>
 
-          <button
-            class="gift"
-            onclick="sendGift('하트',100)">
+          <button class="gift" onclick="sendGift('하트',100)">
             <span>💖</span>
             하트
             <strong>100</strong>
           </button>
 
-          <button
-            class="gift"
-            onclick="sendGift('별',200)">
+          <button class="gift" onclick="sendGift('별',200)">
             <span>⭐</span>
             별
             <strong>200</strong>
           </button>
 
-          <button
-            class="gift"
-            onclick="sendGift('자동차',500)">
+          <button class="gift" onclick="sendGift('자동차',500)">
             <span>🚗</span>
             자동차
             <strong>500</strong>
           </button>
 
-          <button
-            class="gift"
-            onclick="sendGift('고래',1000)">
+          <button class="gift" onclick="sendGift('고래',1000)">
             <span>🐋</span>
             고래
             <strong>1000</strong>
@@ -682,22 +618,16 @@ button,input{font-family:inherit}
 
           </div>
 
-          <button
-            class="giftBox"
-            onclick="openGiftBox()">
-
+          <button class="giftBox" onclick="openGiftBox()">
             <span>🎁</span>
             선물상자
-
           </button>
 
         </div>
 
       </div>
 
-      <div
-        class="lottery"
-        onclick="drawLottery()">
+      <div class="lottery" onclick="drawLottery()">
 
         <div>
           <b>🎯 제비뽑기 이벤트</b>
@@ -754,6 +684,7 @@ import {
 
 let room=null
 let stream=null
+let roomType='public'
 let myRole='guest'
 let myName='참가자'
 
@@ -763,30 +694,62 @@ const peerStreams={}
 const guestGrid=
 document.getElementById('guestGrid')
 
-/* 13개 게스트 자리 */
+/* 참가자 1~13 */
 for(let i=1;i<=13;i++){
 
-  const box=
+  const slot=
   document.createElement('div')
 
-  box.className='slot'
+  slot.className='slot'
 
-  box.innerHTML=`
+  slot.innerHTML=`
     <video id="video${i}" autoplay playsinline></video>
-    <div class="empty" id="empty${i}">빈자리</div>
-    <div class="slotNo">${i}</div>
-    <div class="slotName" id="name${i}">빈자리</div>
-    <div class="rose">🌹</div>
+
+    <div
+      class="empty"
+      id="empty${i}">
+      빈자리
+    </div>
+
+    <div class="slotNo">
+      ${i}
+    </div>
+
+    <div
+      class="slotName"
+      id="name${i}">
+      빈자리
+    </div>
+
+    <div class="slotRose">
+      🌹
+    </div>
   `
 
-  guestGrid.appendChild(box)
+  guestGrid.appendChild(slot)
 }
 
-/* 큰 버튼 입장 */
+/* 큰 버튼으로 바로 방 입장 */
 window.enterRoom=
 async function(type){
 
   if(room)return
+
+  roomType=type
+
+  document
+  .getElementById('publicBtn')
+  .classList.toggle(
+    'active',
+    type==='public'
+  )
+
+  document
+  .getElementById('secretBtn')
+  .classList.toggle(
+    'active',
+    type==='secret'
+  )
 
   const roomName=
   type==='secret'
@@ -821,7 +784,7 @@ async function(type){
   room=
   joinRoom(
     {
-      appId:'ktalk-fit-screen-2026'
+      appId:'ktalk-final-layout-2026'
     },
     roomName
   )
@@ -837,6 +800,9 @@ async function(type){
 
   window.chatAction=chat
   window.giftAction=gift
+
+  myRole='guest'
+  myName='참가자'
 
   peers[selfId]={
     name:myName,
@@ -916,7 +882,7 @@ async function(type){
 
   render()
 
-  /* 첫 입장자가 자동 호스트 */
+  /* 방에 호스트가 없으면 첫 입장자가 호스트 */
   setTimeout(()=>{
 
     const otherHost=
@@ -994,6 +960,11 @@ function render(){
   }else{
 
     hostVideo.srcObject=null
+
+    document
+    .getElementById('hostName')
+    .textContent=
+    '👑 호스트 대기'
   }
 
   const guests=
@@ -1048,7 +1019,7 @@ function render(){
   }
 }
 
-/* 글자 안전 처리 */
+/* 안전한 글자 */
 function safe(text){
 
   return String(text)
@@ -1162,7 +1133,7 @@ function(){
   })
 }
 
-/* 제비 */
+/* 제비뽑기 */
 window.drawLottery=
 function(){
 
@@ -1190,7 +1161,7 @@ function(){
   )
 }
 
-/* 엔터키 */
+/* 엔터로 채팅 */
 document
 .getElementById('chatText')
 .addEventListener(
@@ -1234,4 +1205,4 @@ setInterval(()=>{
 </script>
 
 </body>
-</html>
+  </html>
