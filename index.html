@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -6,16 +7,14 @@
 <title>K-Talk</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#030306;
+  background:#030305;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
@@ -29,15 +28,12 @@ button,input{
   height:100dvh;
   padding:5px;
   display:grid;
-  grid-template-rows:40px 38px 27px 1fr 52px;
+  grid-template-rows:42px 30px 1fr 54px;
   gap:4px;
   overflow:hidden;
 }
 
-/* =========================
-   상단
-========================= */
-
+/* 상단 */
 .header{
   display:grid;
   grid-template-columns:1fr auto 1fr;
@@ -50,6 +46,7 @@ button,input{
 }
 
 .onair b{
+  display:inline-block;
   background:#ef174e;
   padding:5px 7px;
   border-radius:6px;
@@ -58,7 +55,7 @@ button,input{
 .logo{
   text-align:center;
   color:#ffd52e;
-  font-size:18px;
+  font-size:19px;
   font-weight:900;
 }
 
@@ -74,43 +71,9 @@ button,input{
   font-size:9px;
 }
 
-/* =========================
-   1번 일반방 / 2번 비밀방
-========================= */
-
-.rooms{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px;
-}
-
-.room{
-  border:0;
-  border-radius:7px;
-  font-size:10px;
-  font-weight:900;
-}
-
-.public{
-  background:linear-gradient(90deg,#ffc42b,#ff7900);
-  color:#160d00;
-}
-
-.secret{
-  background:linear-gradient(90deg,#5727ef,#d51ad8);
-  color:#fff;
-}
-
-.room.active{
-  outline:2px solid #fff;
-}
-
-/* =========================
-   위 광고판
-========================= */
-
+/* 광고판 */
 .notice{
-  border:1px solid #5b275f;
+  border:1px solid #4a244f;
   border-radius:6px;
   display:flex;
   align-items:center;
@@ -120,47 +83,31 @@ button,input{
   white-space:nowrap;
 }
 
-/* =========================
-   본문
-========================= */
+.notice .yellow{color:#ffd52f}
+.notice .pink{color:#ff49b3}
 
-.content{
+/* 전체 본문 */
+.main{
   min-height:0;
-  min-width:0;
-  width:100%;
-  max-width:100%;
   display:grid;
-
-  /* 게스트가 옆으로 너무 퍼지지 않게 */
-  grid-template-columns:35% 65%;
-
-  gap:3px;
-  overflow:hidden;
-}
-
-/* =========================
-   왼쪽
-========================= */
-
-.left{
-  min-height:0;
-  min-width:0;
-  display:grid;
-  grid-template-rows:47% 53%;
+  grid-template-columns:40% 60%;
   gap:4px;
 }
 
-/* =========================
-   호스트
-========================= */
+/* 왼쪽 */
+.left{
+  min-height:0;
+  display:grid;
+  grid-template-rows:60% 40%;
+  gap:4px;
+}
 
+/* 호스트 */
 .host{
   position:relative;
-  min-height:0;
-  min-width:0;
   overflow:hidden;
-  border:1px solid #5d2c66;
-  border-radius:6px;
+  border:1px solid #572d61;
+  border-radius:7px;
   background:#08080b;
 }
 
@@ -168,71 +115,61 @@ button,input{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 28%;
+  object-position:center 25%;
 }
 
 .hostLive{
   position:absolute;
-  top:6px;
-  left:6px;
-  background:#f02049;
+  top:5px;
+  left:5px;
+  background:#ee1c4d;
   border-radius:5px;
-  padding:4px 7px;
+  padding:3px 6px;
   font-size:7px;
   font-weight:900;
 }
 
-.hostBadge{
+.attendance{
   position:absolute;
-  top:6px;
-  right:6px;
-  border:1px solid #dcae00;
-  border-radius:6px;
-  background:rgba(0,0,0,.8);
-  color:#ffd52b;
-  padding:4px 8px;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
+  border:1px solid #ff30cc;
+  border-radius:18px;
+  padding:3px 8px;
+  background:rgba(55,0,60,.82);
+  color:#ffd530;
   font-size:7px;
   font-weight:900;
 }
 
 .hostName{
   position:absolute;
-  left:7px;
-  bottom:7px;
-  border:1px solid #b98d00;
-  border-radius:6px;
-  background:rgba(0,0,0,.84);
-  color:#ffd72c;
-  padding:5px 8px;
+  left:6px;
+  bottom:6px;
+  padding:4px 7px;
+  background:rgba(0,0,0,.82);
+  border-radius:5px;
+  color:#ffd62d;
   font-size:7px;
   font-weight:900;
 }
 
-.hostName small{
-  display:block;
-  color:#fff;
-  font-size:5.5px;
-  margin-top:2px;
-}
-
-/* =========================
-   채팅
-========================= */
-
+/* 채팅 */
 .chat{
   min-height:0;
-  overflow:hidden;
   display:grid;
-  grid-template-rows:27px 1fr 35px;
-  border:1px solid #45264c;
-  border-radius:6px;
-  background:#07070a;
+  grid-template-rows:27px 1fr 34px;
+  border:1px solid #432449;
+  border-radius:7px;
+  overflow:hidden;
+  background:#08080b;
 }
 
 .chatTabs{
   display:grid;
   grid-template-columns:1fr 1fr;
-  border-bottom:1px solid #37213c;
+  border-bottom:1px solid #38203e;
 }
 
 .chatTabs div{
@@ -244,28 +181,20 @@ button,input{
 }
 
 .chatTabs div:first-child{
-  color:#f2b0ff;
-  text-shadow:0 0 7px #d841ff;
+  color:#f1b1ff;
+  text-shadow:0 0 7px #d83cff;
 }
 
 .messages{
-  overflow:hidden;
   padding:7px;
+  overflow:hidden;
   font-size:7px;
   line-height:1.55;
 }
 
-.messages b{
-  color:#40dcff;
-}
-
-.messages .green{
-  color:#32dc73;
-}
-
-.messages .pink{
-  color:#ff5ca9;
-}
+.messages b{color:#3edcff}
+.messages .green{color:#36dd70}
+.messages .pink{color:#ff5ba9}
 
 .chatInput{
   display:grid;
@@ -276,7 +205,7 @@ button,input{
 
 .chatInput input{
   min-width:0;
-  border:1px solid #302634;
+  border:1px solid #312536;
   border-radius:5px;
   background:#171419;
   color:#fff;
@@ -287,55 +216,42 @@ button,input{
 .send{
   border:0;
   border-radius:5px;
-  background:#8b2edc;
+  background:#8a2ed8;
   color:#fff;
   font-size:7px;
   font-weight:900;
 }
 
 .miniGift{
-  border:1px solid #6b242d;
+  border:1px solid #69252d;
   border-radius:5px;
   background:#12090b;
-  font-size:15px;
+  font-size:14px;
 }
 
-/* =========================
-   오른쪽
-========================= */
-
+/* 오른쪽 */
 .right{
   min-height:0;
-  min-width:0;
-  width:100%;
-  padding-right:2px;
   display:grid;
-  grid-template-rows:46% 54%;
+  grid-template-rows:60% 40%;
   gap:4px;
-  overflow:hidden;
 }
 
-/* =========================
-   게스트 13명
-========================= */
-
+/* 게스트 13명 */
 .guests{
   min-height:0;
-  min-width:0;
-  width:100%;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   grid-template-rows:repeat(5,minmax(0,1fr));
-  gap:2px;
+  gap:3px;
 }
 
 .slot{
   position:relative;
   min-width:0;
   min-height:0;
-  width:100%;
   overflow:hidden;
-  border:1px solid #37343d;
+  border:1px solid #343039;
   border-radius:6px;
   background:#0b0b0e;
 }
@@ -351,12 +267,12 @@ button,input{
 
 .slotNo{
   position:absolute;
-  top:4px;
-  left:4px;
+  top:3px;
+  left:3px;
   z-index:4;
-  width:19px;
-  height:19px;
-  border-radius:5px;
+  width:18px;
+  height:18px;
+  border-radius:4px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -365,47 +281,37 @@ button,input{
   font-weight:900;
 }
 
-.slot:nth-child(1) .slotNo{
-  background:#f6c313;
-  color:#111;
-}
-
-.slot:nth-child(2) .slotNo{
-  background:#ed1c68;
-}
-
-.slot:nth-child(3) .slotNo{
-  background:#f3780c;
-}
-
-.slot:nth-child(4) .slotNo{
-  background:#1da8df;
-}
-
-.slot:nth-child(5) .slotNo{
-  background:#6327ea;
-}
-
-.slot:nth-child(6) .slotNo{
-  background:#21bf54;
-}
+.slot:nth-child(1) .slotNo{background:#f5c315;color:#111}
+.slot:nth-child(2) .slotNo{background:#ec1b67}
+.slot:nth-child(3) .slotNo{background:#f47c0e}
+.slot:nth-child(4) .slotNo{background:#1ba8df}
+.slot:nth-child(5) .slotNo{background:#6427ea}
+.slot:nth-child(6) .slotNo{background:#23bd54}
 
 .slotName{
   position:absolute;
-  left:5px;
-  bottom:5px;
+  left:4px;
+  bottom:4px;
   z-index:4;
-  font-size:6.5px;
-  font-weight:900;
+  font-size:6px;
   line-height:1.3;
+  font-weight:900;
 }
 
 .mute{
   position:absolute;
-  right:5px;
-  bottom:5px;
+  right:4px;
+  top:4px;
   z-index:5;
-  font-size:10px;
+  font-size:8px;
+}
+
+.roseMini{
+  position:absolute;
+  right:4px;
+  bottom:4px;
+  z-index:5;
+  font-size:11px;
 }
 
 .empty{
@@ -422,25 +328,20 @@ button,input{
   grid-column:1;
 }
 
-/* =========================
-   선물 + 슬로모션
-========================= */
-
-.giftArea{
+/* 아래 오른쪽 */
+.bottomRight{
   min-height:0;
-  min-width:0;
   display:grid;
-  grid-template-rows:minmax(0,1fr) 92px;
+  grid-template-rows:46% 54%;
   gap:4px;
-  overflow:hidden;
 }
 
+/* 선물 */
 .gifts{
   min-height:0;
-  min-width:0;
   overflow:hidden;
-  border:1px solid #44244b;
-  border-radius:6px;
+  border:1px solid #432449;
+  border-radius:7px;
   background:#08080b;
   padding:5px;
 }
@@ -450,46 +351,35 @@ button,input{
   margin-bottom:4px;
 }
 
-/* =========================
-   위 선물
-========================= */
-
 .giftTop{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr)) 1.12fr;
+  grid-template-columns:repeat(5,minmax(0,1fr)) 1.15fr;
   gap:2px;
 }
 
 .gift{
-  min-width:0;
   border:0;
   background:transparent;
   color:#fff;
-  text-align:center;
   font-size:6px;
+  text-align:center;
 }
 
 .gift span{
   display:block;
-  font-size:19px;
+  font-size:18px;
 }
 
 .gift strong{
   display:block;
-  color:#ffd32b;
+  color:#ffd132;
   font-size:6px;
-  margin-top:1px;
 }
 
-/* =========================
-   선물상자
-========================= */
-
 .giftBox{
-  min-width:0;
-  border:1px solid #a43bf3;
+  border:1px solid #9f34ed;
   border-radius:6px;
-  background:linear-gradient(145deg,#3d154e,#16091b);
+  background:linear-gradient(145deg,#3c154d,#16091c);
   color:#fff;
   font-size:6px;
   font-weight:900;
@@ -497,146 +387,118 @@ button,input{
 
 .giftBox span{
   display:block;
-  font-size:25px;
+  font-size:23px;
 }
 
-/* =========================
-   장미 선물
-========================= */
-
+/* 장미 */
 .roseArea{
-  display:block;
-  width:100%;
-  margin-top:5px;
-  border-top:1px solid #332735;
+  margin-top:4px;
+  border-top:1px solid #332634;
   padding-top:4px;
-  overflow:hidden;
 }
 
 .roseTitle{
-  display:block;
-  color:#ffd430;
+  color:#ffd332;
   font-size:7px;
   font-weight:900;
-  margin-bottom:4px;
+  margin-bottom:3px;
 }
 
 .roseRow{
   display:grid;
-  grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:2px;
-  width:100%;
-}
-
-.roseBtn{
-  display:block;
-  min-width:0;
-  border:1px solid #29222c;
-  border-radius:5px;
-  background:#0d0b0f;
-  color:#fff;
-  padding:2px 1px;
-  font-size:5.2px;
-  text-align:center;
-}
-
-.roseBtn .rose{
-  display:block;
-  font-size:15px;
-  line-height:16px;
-}
-
-.roseBtn .money{
-  display:block;
-  color:#ffd32e;
-  font-weight:900;
-  margin-top:1px;
-}
-
-/* =========================
-   슬로모션
-========================= */
-
-.slow{
-  border:1px solid #9c35c1;
-  border-radius:7px;
-  background:linear-gradient(90deg,#240c2e,#100713);
-  padding:5px;
-}
-
-.slowTitle{
-  color:#ffb1ff;
-  font-size:8px;
-  font-weight:900;
-  margin-bottom:4px;
-}
-
-.slowBody{
-  display:grid;
-  grid-template-columns:repeat(3,1fr) 68px;
+  grid-template-columns:repeat(3,1fr);
   gap:3px;
 }
 
-.slowBox{
-  border:1px solid #3c2844;
+.roseBtn{
+  border:1px solid #2a222d;
+  border-radius:5px;
+  background:#100c12;
+  color:#fff;
+  font-size:6px;
+  padding:3px 1px;
+}
+
+.roseBtn span{
+  display:block;
+  font-size:18px;
+}
+
+.roseBtn strong{
+  display:block;
+  color:#ffd333;
+  font-size:6px;
+}
+
+/* 제비뽑기 */
+.lottery{
+  min-height:0;
+  border:1px solid #9b35c1;
+  border-radius:7px;
+  background:linear-gradient(90deg,#250d30,#100713);
+  padding:6px;
+  display:grid;
+  grid-template-columns:1fr 82px;
+  gap:5px;
+}
+
+.lotteryInfo{
+  min-width:0;
+}
+
+.lotteryTitle{
+  color:#ffb2ff;
+  font-size:9px;
+  font-weight:900;
+  text-align:center;
+  margin-bottom:5px;
+}
+
+.times{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+}
+
+.timeBox{
+  border:1px solid #3d2944;
   border-radius:5px;
   background:#120d16;
-  padding:3px;
   text-align:center;
+  padding:4px 2px;
 }
 
-.slowBox b{
+.timeBox b{
   display:block;
-  color:#ffd35a;
+  color:#ffd45b;
   font-size:6px;
-  margin-bottom:3px;
 }
 
-.numbers{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:2px;
+.timeBox small{
+  display:block;
+  font-size:5.5px;
+  margin:2px 0;
 }
 
-.numbers button{
-  border:0;
-  border-radius:3px;
-  background:#841529;
-  color:#fff;
-  font-size:6px;
-  padding:2px 0;
-}
-
-.slowStart{
+.drawBtn{
   width:100%;
-  margin-top:3px;
   border:0;
   border-radius:4px;
-  background:#087e24;
+  background:#7d218a;
   color:#fff;
   font-size:6px;
-  font-weight:900;
   padding:3px;
 }
 
-.status{
-  border:1px solid #7c237e;
-  border-radius:5px;
-  padding:4px;
-  text-align:center;
-  font-size:5.5px;
-  line-height:1.55;
+.machine{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:46px;
 }
 
-.status b{
-  color:#ffd737;
-}
-
-/* =========================
-   하단
-========================= */
-
-.bottom{
+/* 하단 메뉴 */
+.bottomNav{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   align-items:center;
@@ -668,9 +530,7 @@ button,input{
 
 <div class="app">
 
-  <!-- 상단 -->
   <div class="header">
-
     <div class="onair">
       <b>● ON AIR</b>
       <span id="clock">00:00:00</span>
@@ -684,66 +544,35 @@ button,input{
     <div class="viewer">
       👤 <span id="viewerCount">0</span>　🔔 ⋮
     </div>
-
   </div>
 
-  <!-- 큰 방 버튼 -->
-  <div class="rooms">
-
-    <button
-      id="publicBtn"
-      class="room public active"
-      onclick="enterRoom('public')">
-      📷 1번 일반 방송방
-    </button>
-
-    <button
-      id="secretBtn"
-      class="room secret"
-      onclick="enterRoom('secret')">
-      🔒 2번 비밀방
-    </button>
-
-  </div>
-
-  <!-- 위 광고판 -->
   <div class="notice">
-    ⭐ 출석체크 해주세요 ⭐　 신청곡 5,000원　 🌹 광고 문의 환영합니다 🌹
+    <span class="yellow">⭐ 출석체크 눌러주세요 ⭐</span>
+    &nbsp;&nbsp; 신청곡 5,000원 &nbsp;&nbsp;
+    <span class="pink">★ 광고 문의 환영합니다 ★</span>
   </div>
 
-  <!-- 본문 -->
-  <div class="content">
+  <div class="main">
 
     <!-- 왼쪽 -->
     <div class="left">
 
-      <!-- 호스트 -->
       <div class="host">
-
-        <video
-          id="hostVideo"
-          autoplay
-          playsinline>
-        </video>
+        <video id="hostVideo" autoplay playsinline></video>
 
         <div class="hostLive">
-          ON AIR
+          ● ON AIR
         </div>
 
-        <div class="hostBadge">
-          👑 호스트
+        <div class="attendance">
+          💗 출석체크
         </div>
 
-        <div
-          class="hostName"
-          id="hostName">
+        <div class="hostName" id="hostName">
           👑 호스트 대기
-          <small>방송 준비중</small>
         </div>
-
       </div>
 
-      <!-- 채팅 -->
       <div class="chat">
 
         <div class="chatTabs">
@@ -751,67 +580,23 @@ button,input{
           <div>참가자 (13)</div>
         </div>
 
-        <div
-          class="messages"
-          id="messages">
-
-          <div>
-            <b>채팅방 관리자</b>
-            방송에 참여해주셔서 감사합니다! 💜
-          </div>
-
-          <div class="green">
-            민수는 1위~ 즐겁게 듣고 있어요! ❤️
-          </div>
-
-          <div>
-            <b>이태훈</b>
-            신청곡 너무 좋아요 👍
-          </div>
-
-          <div>
-            <b>시청★</b>
-            출석체크 완료! 감사합니다 😍
-          </div>
-
-          <div>
-            <b>감성남자님</b>
-            100개 선물! 🎁
-          </div>
-
-          <div class="green">
-            해피걸 우와~ 노래 최고예요! 👏
-          </div>
-
-          <div>
-            <b>강민수</b>
-            추천곡~ 늘 믿겠어요!
-          </div>
-
-          <div class="green">
-            루이 즐거운 방송 감사합니다 💕
-          </div>
-
+        <div class="messages" id="messages">
+          <div><b>채팅방 관리자</b> 방송에 참여해주셔서 감사합니다! 💜</div>
+          <div class="green">민수는 1위~ 즐겁게 듣고 있어요! ❤️</div>
+          <div><b>이태훈</b> 신곡 너무 좋아요 👍</div>
+          <div><b>시청★</b> 신청곡 이벤트도 최고!</div>
+          <div><b>감성남자님</b> 100개 선물! 🎁</div>
+          <div class="green">해피걸 우와~ 노래 최고예요! 👏</div>
+          <div><b>강민수</b> 추천곡~ 늘 믿겠어요!</div>
+          <div class="green">루이 즐거운 방송 감사합니다 💚</div>
+          <div><b>도레미~비디</b> 역시 신곡 센스 짱! 🎵</div>
+          <div class="pink">지수 매일 듣고 있어요~💕</div>
         </div>
 
         <div class="chatInput">
-
-          <input
-            id="chatText"
-            placeholder="메시지를 입력하세요...">
-
-          <button
-            class="send"
-            onclick="sendChat()">
-            전송
-          </button>
-
-          <button
-            class="miniGift"
-            onclick="openGiftBox()">
-            🎁
-          </button>
-
+          <input id="chatText" placeholder="메시지를 입력하세요...">
+          <button class="send" onclick="sendChat()">전송</button>
+          <button class="miniGift" onclick="openGiftBox()">🎁</button>
         </div>
 
       </div>
@@ -821,16 +606,10 @@ button,input{
     <!-- 오른쪽 -->
     <div class="right">
 
-      <!-- 게스트 -->
-      <div
-        class="guests"
-        id="guestGrid">
-      </div>
+      <div class="guests" id="guestGrid"></div>
 
-      <!-- 선물 + 슬로모션 -->
-      <div class="giftArea">
+      <div class="bottomRight">
 
-        <!-- 선물 -->
         <div class="gifts">
 
           <div class="giftTitle">
@@ -839,58 +618,43 @@ button,input{
 
           <div class="giftTop">
 
-            <button
-              class="gift"
-              onclick="sendRose(1)">
+            <button class="gift" onclick="sendGift('장미',100)">
               <span>🌹</span>
               장미
-              <strong>🪙 50</strong>
+              <strong>🪙 100</strong>
             </button>
 
-            <button
-              class="gift"
-              onclick="sendGift('하트',300)">
-              <span>💗</span>
+            <button class="gift" onclick="sendGift('하트',300)">
+              <span>❤️</span>
               하트
               <strong>🪙 300</strong>
             </button>
 
-            <button
-              class="gift"
-              onclick="sendGift('별',500)">
+            <button class="gift" onclick="sendGift('별',500)">
               <span>⭐</span>
               별
               <strong>🪙 500</strong>
             </button>
 
-            <button
-              class="gift"
-              onclick="sendGift('풍선',1000)">
+            <button class="gift" onclick="sendGift('풍선',1000)">
               <span>🎈</span>
               풍선
               <strong>🪙 1,000</strong>
             </button>
 
-            <button
-              class="gift"
-              onclick="sendGift('슈퍼하트',10000)">
+            <button class="gift" onclick="sendGift('슈퍼하트',10000)">
               <span>❤️‍🔥</span>
               슈퍼하트
               <strong>🪙 10,000</strong>
             </button>
 
-            <button
-              class="giftBox"
-              onclick="openGiftBox()">
-
+            <button class="giftBox" onclick="openGiftBox()">
               <span>🎁</span>
               선물 상자
-
             </button>
 
           </div>
 
-          <!-- 장미 -->
           <div class="roseArea">
 
             <div class="roseTitle">
@@ -899,60 +663,22 @@ button,input{
 
             <div class="roseRow">
 
-              <button
-                class="roseBtn"
-                onclick="sendRose(1)">
-                <span class="rose">🌹</span>
-                1송이
-                <span class="money">🪙 50</span>
+              <button class="roseBtn" onclick="sendRose(1)">
+                <span>🌹</span>
+                장미 1송이
+                <strong>🪙 10</strong>
               </button>
 
-              <button
-                class="roseBtn"
-                onclick="sendRose(5)">
-                <span class="rose">🌹</span>
-                5송이
-                <span class="money">🪙 250</span>
+              <button class="roseBtn" onclick="sendRose(5)">
+                <span>🌹🌹</span>
+                장미 5송이
+                <strong>🪙 50</strong>
               </button>
 
-              <button
-                class="roseBtn"
-                onclick="sendRose(10)">
-                <span class="rose">🌹</span>
-                10송이
-                <span class="money">🪙 500</span>
-              </button>
-
-              <button
-                class="roseBtn"
-                onclick="sendRose(50)">
-                <span class="rose">🌹</span>
-                50송이
-                <span class="money">🪙 2,500</span>
-              </button>
-
-              <button
-                class="roseBtn"
-                onclick="sendRose(100)">
-                <span class="rose">🌹</span>
-                100송이
-                <span class="money">🪙 5,000</span>
-              </button>
-
-              <button
-                class="roseBtn"
-                onclick="sendRose(500)">
-                <span class="rose">🌹</span>
-                500송이
-                <span class="money">🪙 25,000</span>
-              </button>
-
-              <button
-                class="roseBtn"
-                onclick="sendRose(1000)">
-                <span class="rose">🌹</span>
-                1000송이
-                <span class="money">🪙 50,000</span>
+              <button class="roseBtn" onclick="sendRose(10)">
+                <span>🌹🌹🌹</span>
+                장미 10송이
+                <strong>🪙 100</strong>
               </button>
 
             </div>
@@ -961,95 +687,40 @@ button,input{
 
         </div>
 
-        <!-- 슬로모션 -->
-        <div class="slow">
+        <div class="lottery">
 
-          <div class="slowTitle">
-            슬로모션　(하루 3번 참여 가능)
+          <div class="lotteryInfo">
+
+            <div class="lotteryTitle">
+              제비뽑기 이벤트
+            </div>
+
+            <div class="times">
+
+              <div class="timeBox">
+                <b>☀️ 아침</b>
+                <small>09:00</small>
+                <button class="drawBtn" onclick="drawLottery()">뽑기 1/3</button>
+              </div>
+
+              <div class="timeBox">
+                <b>☀️ 점심</b>
+                <small>13:00</small>
+                <button class="drawBtn" onclick="drawLottery()">뽑기 1/3</button>
+              </div>
+
+              <div class="timeBox">
+                <b>🌙 저녁</b>
+                <small>20:00</small>
+                <button class="drawBtn" onclick="drawLottery()">뽑기 1/3</button>
+              </div>
+
+            </div>
+
           </div>
 
-          <div class="slowBody">
-
-            <!-- 아침 -->
-            <div class="slowBox">
-
-              <b>☀️ 아침 1회</b>
-
-              <div class="numbers">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-              </div>
-
-              <button
-                class="slowStart"
-                onclick="playSlow('아침')">
-                참여하기
-              </button>
-
-            </div>
-
-            <!-- 점심 -->
-            <div class="slowBox">
-
-              <b>☀️ 점심 1회</b>
-
-              <div class="numbers">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-              </div>
-
-              <button
-                class="slowStart"
-                onclick="playSlow('점심')">
-                참여하기
-              </button>
-
-            </div>
-
-            <!-- 저녁 -->
-            <div class="slowBox">
-
-              <b>🌙 저녁 1회</b>
-
-              <div class="numbers">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-              </div>
-
-              <button
-                class="slowStart"
-                onclick="playSlow('저녁')">
-                참여하기
-              </button>
-
-            </div>
-
-            <div class="status">
-
-              <b>오늘 참여 현황</b><br>
-
-              아침　
-              <span id="morningStatus">0/1</span>
-              <br>
-
-              점심　
-              <span id="lunchStatus">0/1</span>
-              <br>
-
-              저녁　
-              <span id="eveningStatus">0/1</span>
-
-            </div>
-
+          <div class="machine">
+            🎰
           </div>
 
         </div>
@@ -1060,44 +731,19 @@ button,input{
 
   </div>
 
-  <!-- 하단 -->
-  <div class="bottom">
-
-    <div class="nav">
-      <span>▶️</span>
-      홈
-    </div>
-
-    <div class="nav">
-      <span>👤</span>
-      마이페이지
-    </div>
-
-    <div class="nav charge">
-      <span>🪙</span>
-      충전하기
-    </div>
-
-    <div class="nav">
-      <span>🔔</span>
-      알림
-    </div>
-
-    <div class="nav">
-      <span>⚙️</span>
-      설정
-    </div>
-
+  <div class="bottomNav">
+    <div class="nav"><span>🏠</span>홈</div>
+    <div class="nav"><span>👤</span>마이페이지</div>
+    <div class="nav charge"><span>🪙</span>충전하기</div>
+    <div class="nav"><span>🔔</span>알림</div>
+    <div class="nav"><span>⚙️</span>설정</div>
   </div>
 
 </div>
 
 <script type="module">
 
-import {
-  joinRoom,
-  selfId
-} from 'https://esm.run/trystero'
+import {joinRoom,selfId} from 'https://esm.run/trystero'
 
 let room=null
 let stream=null
@@ -1107,36 +753,17 @@ let myName='참가자'
 const peers={}
 const peerStreams={}
 
-const slowUsed={
-  아침:false,
-  점심:false,
-  저녁:false
-}
-
-const guestGrid=
-document.getElementById('guestGrid')
-
-/* =========================
-   게스트 13자리
-========================= */
+const guestGrid=document.getElementById('guestGrid')
 
 for(let i=1;i<=13;i++){
 
-  const slot=
-  document.createElement('div')
-
+  const slot=document.createElement('div')
   slot.className='slot'
 
   slot.innerHTML=`
-    <video
-      id="video${i}"
-      autoplay
-      playsinline>
-    </video>
+    <video id="video${i}" autoplay playsinline></video>
 
-    <div
-      class="empty"
-      id="empty${i}">
+    <div class="empty" id="empty${i}">
       빈자리
     </div>
 
@@ -1144,91 +771,57 @@ for(let i=1;i<=13;i++){
       ${i}
     </div>
 
-    <div
-      class="slotName"
-      id="name${i}">
-      게스트 ${i}<br>♡ 0
-    </div>
-
     <div class="mute">
       🔇
+    </div>
+
+    <div class="slotName" id="name${i}">
+      게스트${i}<br>♡ 0
+    </div>
+
+    <div class="roseMini">
+      🌹
     </div>
   `
 
   guestGrid.appendChild(slot)
 }
 
-/* =========================
-   방 입장
-========================= */
-
-window.enterRoom=
-async function(type){
+window.enterRoom=async function(type){
 
   if(room)return
 
-  document
-  .getElementById('publicBtn')
-  .classList.toggle(
-    'active',
-    type==='public'
-  )
-
-  document
-  .getElementById('secretBtn')
-  .classList.toggle(
-    'active',
-    type==='secret'
-  )
-
   const roomName=
-  type==='secret'
-  ?'ktalk-secret-7777'
-  :'ktalk-public-main'
+    type==='secret'
+    ?'ktalk-secret-7777'
+    :'ktalk-public-main'
 
   try{
 
     stream=
-    await navigator.mediaDevices
-    .getUserMedia({
-
-      video:{
-        facingMode:'user'
-      },
-
+    await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:'user'},
       audio:{
         echoCancellation:true,
         noiseSuppression:true,
         autoGainControl:true
       }
-
     })
 
   }catch(e){
 
-    alert(
-      '카메라와 마이크 사용을 허용해 주세요.'
-    )
-
+    alert('카메라와 마이크 사용을 허용해 주세요.')
     return
   }
 
-  room=
-  joinRoom(
-    {
-      appId:'ktalk-final-all-fixed-2026'
-    },
+  room=joinRoom(
+    {appId:'ktalk-image-layout-final-2026'},
     roomName
   )
 
-  const profile=
-  room.makeAction('profile')
-
-  const chat=
-  room.makeAction('chat')
-
-  const gift=
-  room.makeAction('gift')
+  const profile=room.makeAction('profile')
+  const chat=room.makeAction('chat')
+  const gift=room.makeAction('gift')
 
   window.chatAction=chat
   window.giftAction=gift
@@ -1240,67 +833,40 @@ async function(type){
 
   peerStreams[selfId]=stream
 
-  profile.onMessage=
-  (data,{peerId})=>{
-
+  profile.onMessage=(data,{peerId})=>{
     peers[peerId]=data
-
     render()
   }
 
-  chat.onMessage=
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
+  chat.onMessage=data=>{
+    addMessage(data.name,data.text)
   }
 
-  gift.onMessage=
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
+  gift.onMessage=data=>{
+    addMessage(data.name,data.text)
   }
 
-  room.onPeerJoin=
-  peerId=>{
+  room.onPeerJoin=peerId=>{
 
     profile.send(
-      {
-        name:myName,
-        role:myRole
-      },
-      {
-        target:peerId
-      }
+      {name:myName,role:myRole},
+      {target:peerId}
     )
 
     room.addStream(
       stream,
-      {
-        target:peerId
-      }
+      {target:peerId}
     )
   }
 
-  room.onPeerLeave=
-  peerId=>{
-
+  room.onPeerLeave=peerId=>{
     delete peers[peerId]
     delete peerStreams[peerId]
-
     render()
   }
 
-  room.onPeerStream=
-  (incoming,peerId)=>{
-
+  room.onPeerStream=(incoming,peerId)=>{
     peerStreams[peerId]=incoming
-
     render()
   }
 
@@ -1316,12 +882,10 @@ async function(type){
   setTimeout(()=>{
 
     const otherHost=
-    Object.keys(peers)
-    .some(
-      id=>
-      id!==selfId &&
-      peers[id]?.role==='host'
-    )
+      Object.keys(peers).some(
+        id=>id!==selfId &&
+        peers[id]?.role==='host'
+      )
 
     if(!otherHost){
 
@@ -1344,176 +908,131 @@ async function(type){
   },1000)
 }
 
-/* =========================
-   화면
-========================= */
-
 function render(){
 
-  const ids=
-  Object.keys(peers)
+  const ids=Object.keys(peers)
 
-  document
-  .getElementById('viewerCount')
-  .textContent=
-  ids.length
+  document.getElementById('viewerCount')
+    .textContent=ids.length
 
   const hostId=
-  ids.find(
-    id=>
-    peers[id]?.role==='host'
-  )
+    ids.find(
+      id=>peers[id]?.role==='host'
+    )
 
   const hostVideo=
-  document.getElementById('hostVideo')
+    document.getElementById('hostVideo')
 
-  if(
-    hostId &&
-    peerStreams[hostId]
-  ){
+  if(hostId && peerStreams[hostId]){
 
     hostVideo.srcObject=
-    peerStreams[hostId]
+      peerStreams[hostId]
 
     hostVideo.muted=
-    hostId===selfId
+      hostId===selfId
 
-    document
-    .getElementById('hostName')
-    .innerHTML=
-    '👑 '+
-    (
-      peers[hostId]?.name
-      ||
-      '호스트'
-    )
-    +
-    '<small>방송 중</small>'
+    document.getElementById('hostName')
+      .textContent=
+      '👑 '+(
+        peers[hostId]?.name
+        ||
+        '호스트'
+      )
 
   }else{
 
     hostVideo.srcObject=null
 
-    document
-    .getElementById('hostName')
-    .innerHTML=
-    '👑 호스트 대기<small>방송 준비중</small>'
+    document.getElementById('hostName')
+      .textContent='👑 호스트 대기'
   }
 
   const guests=
-  ids.filter(
-    id=>id!==hostId
-  )
+    ids.filter(id=>id!==hostId)
 
   for(let i=1;i<=13;i++){
 
-    const peerId=
-    guests[i-1]
+    const peerId=guests[i-1]
 
     const video=
-    document.getElementById(
-      'video'+i
-    )
+      document.getElementById('video'+i)
 
     const empty=
-    document.getElementById(
-      'empty'+i
-    )
+      document.getElementById('empty'+i)
 
     const name=
-    document.getElementById(
-      'name'+i
-    )
+      document.getElementById('name'+i)
 
     if(peerId){
 
       empty.style.display='none'
 
       name.innerHTML=
-      (
-        peers[peerId]?.name
-        ||
-        '게스트 '+i
-      )
-      +
-      '<br>♡ 0'
+        (
+          peers[peerId]?.name
+          ||
+          '게스트'+i
+        )
+        +
+        '<br>♡ 0'
 
       if(peerStreams[peerId]){
 
         video.srcObject=
-        peerStreams[peerId]
+          peerStreams[peerId]
 
         video.muted=
-        peerId===selfId
+          peerId===selfId
       }
 
     }else{
 
       video.srcObject=null
-
       empty.style.display='flex'
 
       name.innerHTML=
-      '게스트 '+i+
-      '<br>♡ 0'
+        '게스트'+i+
+        '<br>♡ 0'
     }
   }
 }
 
-/* =========================
-   문자 안전 처리
-========================= */
-
 function safe(text){
 
   return String(text)
-  .replaceAll('&','&amp;')
-  .replaceAll('<','&lt;')
-  .replaceAll('>','&gt;')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
 }
 
-/* =========================
-   채팅
-========================= */
-
-function addMessage(
-  name,
-  text
-){
+function addMessage(name,text){
 
   const line=
-  document.createElement('div')
+    document.createElement('div')
 
   line.innerHTML=
-  '<b>'+
-  safe(name)+
-  '</b> '+
-  safe(text)
+    '<b>'+
+    safe(name)+
+    '</b> '+
+    safe(text)
 
-  document
-  .getElementById('messages')
-  .appendChild(line)
+  document.getElementById('messages')
+    .appendChild(line)
 }
 
-window.sendChat=
-function(){
+window.sendChat=function(){
 
   if(!window.chatAction)return
 
   const input=
-  document.getElementById(
-    'chatText'
-  )
+    document.getElementById('chatText')
 
   const text=
-  input.value.trim()
+    input.value.trim()
 
   if(!text)return
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   window.chatAction.send({
     name:myName,
@@ -1523,23 +1042,12 @@ function(){
   input.value=''
 }
 
-/* =========================
-   일반 선물
-========================= */
-
-window.sendGift=
-function(
-  name,
-  price
-){
+window.sendGift=function(name,price){
 
   const text=
-  `🎁 ${name} 🪙 ${price}`
+    `🎁 ${name} 🪙 ${price}`
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   if(window.giftAction){
 
@@ -1550,23 +1058,14 @@ function(
   }
 }
 
-/* =========================
-   장미
-========================= */
+window.sendRose=function(count){
 
-window.sendRose=
-function(count){
-
-  const price=
-  count*50
+  const price=count*10
 
   const text=
-  `🌹 장미 ${count}송이 🪙 ${price}`
+    `🌹 장미 ${count}송이 🪙 ${price}`
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   if(window.giftAction){
 
@@ -1577,20 +1076,12 @@ function(count){
   }
 }
 
-/* =========================
-   선물상자
-========================= */
-
-window.openGiftBox=
-function(){
+window.openGiftBox=function(){
 
   const text=
-  '🎁 선물상자를 열었습니다.'
+    '🎁 선물상자를 열었습니다.'
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   if(window.giftAction){
 
@@ -1601,107 +1092,54 @@ function(){
   }
 }
 
-/* =========================
-   슬로모션
-========================= */
+window.drawLottery=function(){
 
-window.playSlow=
-function(time){
-
-  if(slowUsed[time]){
-
-    alert(
-      time+
-      ' 참여는 오늘 이미 사용했습니다.'
-    )
-
-    return
-  }
-
-  slowUsed[time]=true
-
-  if(time==='아침'){
-
-    document
-    .getElementById('morningStatus')
-    .textContent='1/1'
-  }
-
-  if(time==='점심'){
-
-    document
-    .getElementById('lunchStatus')
-    .textContent='1/1'
-  }
-
-  if(time==='저녁'){
-
-    document
-    .getElementById('eveningStatus')
-    .textContent='1/1'
-  }
+  const prizes=[
+    '꽝',
+    '꽝',
+    '장미 1개',
+    '장미 2개',
+    '장미 3개',
+    '장미 4개',
+    '장미 5개'
+  ]
 
   const result=
-  Math.floor(
-    Math.random()*5
-  )+1
+    prizes[
+      Math.floor(
+        Math.random()*prizes.length
+      )
+    ]
 
   alert(
-    time+
-    ' 슬로모션 결과 : '+
+    '제비뽑기 결과 : '+
     result
   )
 }
 
-/* =========================
-   엔터 채팅
-========================= */
+document.getElementById('chatText')
+.addEventListener('keydown',e=>{
 
-document
-.getElementById('chatText')
-.addEventListener(
-  'keydown',
-  e=>{
-
-    if(e.key==='Enter'){
-
-      window.sendChat()
-    }
+  if(e.key==='Enter'){
+    window.sendChat()
   }
-)
-
-/* =========================
-   시계
-========================= */
+})
 
 setInterval(()=>{
 
-  const now=
-  new Date()
+  const now=new Date()
 
-  document
-  .getElementById('clock')
-  .textContent=
-
-  String(
-    now.getHours()
-  ).padStart(2,'0')
-  +
-  ':'
-  +
-  String(
-    now.getMinutes()
-  ).padStart(2,'0')
-  +
-  ':'
-  +
-  String(
-    now.getSeconds()
-  ).padStart(2,'0')
+  document.getElementById('clock')
+    .textContent=
+    String(now.getHours()).padStart(2,'0')
+    +':'
+    +String(now.getMinutes()).padStart(2,'0')
+    +':'
+    +String(now.getSeconds()).padStart(2,'0')
 
 },1000)
 
 </script>
 
 </body>
-                  </html>
+</html>
