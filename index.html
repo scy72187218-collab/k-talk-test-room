@@ -2,20 +2,18 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>K-Talk 화상 방송방</title>
 
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
   padding:0;
-  background:#05050a;
+  background:#050509;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
@@ -30,128 +28,130 @@ button{
 
 /* 상단 */
 .header{
-  height:58px;
+  height:55px;
   display:flex;
   align-items:center;
-  padding:8px 10px;
-  background:#090a0f;
-  border-bottom:1px solid #392143;
-  gap:8px;
+  gap:7px;
+  padding:7px 9px;
+  background:#08090d;
+  border-bottom:1px solid #42234c;
 }
 
 .logo{
-  font-size:23px;
+  color:#ffd74d;
+  font-size:21px;
   font-weight:900;
-  color:#ffd84d;
   white-space:nowrap;
 }
 
 .live{
-  background:#ed1745;
+  background:#ed2348;
+  padding:6px 8px;
   border-radius:9px;
-  padding:6px 9px;
-  font-size:12px;
-  font-weight:bold;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
 }
 
-.roomText{
-  font-size:12px;
-  color:#ccc;
+.roomTitle{
   flex:1;
   text-align:center;
+  color:#ddd;
+  font-size:10px;
 }
 
-.startButton{
+.startBtn{
   border:0;
   border-radius:9px;
-  background:#922ff1;
+  background:#9133e9;
   color:#fff;
+  padding:8px 9px;
   font-weight:800;
-  padding:9px 11px;
+  font-size:12px;
 }
 
 /* 공지 */
 .notice{
-  margin:7px;
-  padding:8px;
+  margin:6px;
+  padding:8px 4px;
   text-align:center;
-  border:1px solid #522566;
+  border:1px solid #532664;
   border-radius:9px;
-  color:#ffd963;
-  font-size:12px;
+  color:#ffd95f;
   background:#0e0912;
+  font-size:11px;
 }
 
-/* 메인 방송 */
+/* 위쪽 방송 영역 */
 .broadcast{
   display:grid;
   grid-template-columns:46% 54%;
   gap:5px;
   padding:0 6px;
+  align-items:start;
 }
 
-/* 큰 진행자 화면 */
+/* 왼쪽 큰 화면 */
 .mainStage{
   position:relative;
-  height:430px;
-  background:#13111a;
-  border:1px solid #5d2a70;
-  border-radius:10px;
+  height:335px;
   overflow:hidden;
+  border:1px solid #5c2b69;
+  border-radius:10px;
+  background:#101014;
 }
 
 .mainStage video{
   width:100%;
   height:100%;
   object-fit:cover;
-  background:#111;
+  background:#101014;
 }
 
-.stageOverlay{
+.stageInfo{
   position:absolute;
   left:7px;
   right:7px;
   bottom:7px;
-  background:rgba(0,0,0,.64);
+  padding:6px;
   border-radius:7px;
-  padding:6px 7px;
+  background:rgba(0,0,0,.68);
 }
 
 .stageName{
+  color:#ffd64c;
   font-weight:900;
-  font-size:13px;
-  color:#ffd64f;
+  font-size:12px;
 }
 
-.stageHelp{
-  font-size:10px;
+.stageText{
   color:#ddd;
+  font-size:9px;
   margin-top:2px;
 }
 
-/* 참가자 13자리 */
+/* 오른쪽 13자리 */
 .members{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:4px;
-  align-content:start;
 }
 
 .member{
-  height:82px;
-  background:#17131d;
-  border:1px solid #573063;
-  border-radius:8px;
-  overflow:hidden;
   position:relative;
+  height:64px;
+  overflow:hidden;
+  border-radius:7px;
+  border:1px solid #563061;
+  background:#17131d;
 }
 
 .member video{
   width:100%;
   height:100%;
   object-fit:cover;
-  background:#121017;
   display:none;
+  background:#111;
 }
 
 .empty{
@@ -160,76 +160,87 @@ button{
   display:flex;
   justify-content:center;
   align-items:center;
-  color:#82758b;
-  font-size:10px;
+  color:#817587;
+  font-size:9px;
 }
 
-.num{
+.slotNum{
   position:absolute;
-  top:3px;
-  left:3px;
-  background:rgba(0,0,0,.72);
-  width:18px;
-  height:18px;
-  border-radius:5px;
+  top:2px;
+  left:2px;
+  width:17px;
+  height:17px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:9px;
+  border-radius:5px;
+  background:rgba(0,0,0,.76);
+  font-size:8px;
 }
 
 .memberName{
   position:absolute;
-  left:3px;
-  bottom:3px;
-  max-width:75%;
+  left:2px;
+  bottom:2px;
+  max-width:78%;
   overflow:hidden;
   white-space:nowrap;
   text-overflow:ellipsis;
-  background:rgba(0,0,0,.72);
   border-radius:4px;
+  background:rgba(0,0,0,.76);
   padding:2px 3px;
-  font-size:8px;
+  font-size:7px;
 }
 
-.roseMini{
+.rose{
   position:absolute;
-  right:3px;
-  bottom:3px;
-  font-size:15px;
+  right:2px;
+  bottom:1px;
+  font-size:12px;
+}
+
+/* 연결 상태 */
+.status{
+  margin:6px;
+  padding:7px 8px;
+  border:1px solid #492655;
+  border-radius:8px;
+  background:#100b14;
+  color:#ffd861;
+  font-size:10px;
 }
 
 /* 채팅 + 선물 */
 .lower{
   display:grid;
   grid-template-columns:48% 52%;
-  gap:6px;
-  padding:7px 6px 85px 6px;
+  gap:5px;
+  padding:0 6px 7px;
 }
 
-/* 채팅 */
 .chat{
-  min-height:250px;
   border:1px solid #50265d;
-  border-radius:10px;
+  border-radius:9px;
   overflow:hidden;
-  background:#0d0911;
+  background:#0c0910;
 }
 
-.chatTitle{
-  padding:8px;
-  font-size:13px;
-  font-weight:900;
+.chatHead{
+  display:flex;
+  justify-content:space-between;
+  padding:7px;
   border-bottom:1px solid #41214a;
-  color:#f4d7ff;
+  color:#f3d8ff;
+  font-size:11px;
+  font-weight:900;
 }
 
 .messages{
-  height:185px;
-  padding:8px;
+  height:150px;
+  padding:7px;
   overflow-y:auto;
-  font-size:11px;
-  line-height:1.5;
+  font-size:10px;
+  line-height:1.45;
 }
 
 .message{
@@ -237,7 +248,7 @@ button{
 }
 
 .system{
-  color:#ffd85d;
+  color:#ffd860;
 }
 
 .chatInput{
@@ -246,219 +257,178 @@ button{
 }
 
 .chatInput input{
-  min-width:0;
   flex:1;
+  min-width:0;
   border:0;
   outline:0;
+  padding:9px 6px;
   background:#17111d;
   color:#fff;
-  padding:10px 7px;
-  font-size:11px;
+  font-size:10px;
 }
 
-.send{
-  width:50px;
+.sendBtn{
+  width:48px;
   border:0;
-  background:#7d31d5;
+  background:#8132d9;
   color:#fff;
-  font-size:11px;
-  font-weight:bold;
+  font-size:10px;
+  font-weight:800;
 }
 
 /* 선물 */
 .giftArea{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:5px;
 }
 
 .panel{
-  border:1px solid #50265d;
-  border-radius:10px;
-  background:#0d0911;
   overflow:hidden;
+  border:1px solid #50265d;
+  border-radius:9px;
+  background:#0c0910;
 }
 
 .panelTitle{
-  padding:7px 8px;
-  border-bottom:1px solid #3f2048;
-  font-size:12px;
+  padding:6px 7px;
+  border-bottom:1px solid #41214a;
+  font-size:10px;
   font-weight:900;
-  color:#f6ddff;
 }
 
-.giftButtons{
+.gifts{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:4px;
-  padding:6px;
+  gap:3px;
+  padding:5px;
 }
 
-.gift{
+.giftBtn{
   border:0;
-  border-radius:8px;
-  background:#1b1422;
-  color:white;
-  padding:6px 2px;
-  font-size:10px;
+  border-radius:7px;
+  padding:6px 1px;
+  background:#1c1422;
+  color:#fff;
+  font-size:8px;
 }
 
-.gift .emoji{
-  font-size:25px;
+.giftEmoji{
   display:block;
+  font-size:20px;
   margin-bottom:2px;
 }
 
-.specialButtons{
+.events{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:5px;
-  padding:6px;
+  gap:4px;
+  padding:5px;
 }
 
-.special{
-  border:1px solid #7e34a3;
-  border-radius:8px;
+.eventBtn{
+  border:1px solid #773895;
+  border-radius:7px;
+  padding:9px 3px;
   background:#211029;
-  color:white;
-  padding:11px 4px;
-  font-size:11px;
-  font-weight:bold;
+  color:#fff;
+  font-size:9px;
+  font-weight:800;
 }
 
-/* 상태 */
-.statusBox{
-  margin:0 6px 6px;
-  border:1px solid #482555;
-  border-radius:9px;
-  padding:7px 9px;
-  color:#ffd967;
-  font-size:11px;
-  background:#100b14;
-}
-
-/* 하단 고정 버튼 */
+/* 하단 버튼 */
 .controls{
-  position:fixed;
-  left:0;
-  right:0;
+  position:sticky;
   bottom:0;
   z-index:100;
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:4px;
-  padding:6px;
-  background:rgba(8,8,13,.97);
-  border-top:1px solid #44224d;
+  padding:5px 6px;
+  background:#09090e;
+  border-top:1px solid #402148;
 }
 
-.control{
+.controlBtn{
+  min-height:51px;
   border:0;
   border-radius:10px;
   background:#201728;
   color:#fff;
-  min-height:55px;
-  font-size:10px;
+  font-size:9px;
 }
 
-.control span{
+.controlBtn .icon{
   display:block;
-  font-size:19px;
+  font-size:18px;
   margin-bottom:2px;
 }
 
-.control.end{
-  background:#d92348;
+.controlBtn.end{
+  background:#dd264a;
 }
 
-/* 선물상자 팝업 */
+/* 선물상자 */
 .giftPopup{
+  display:none;
   position:fixed;
-  width:180px;
-  top:120px;
+  z-index:500;
+  top:115px;
   left:50%;
   transform:translateX(-50%);
-  z-index:500;
-  padding:15px 10px;
+  width:175px;
+  padding:14px 9px;
   text-align:center;
-  background:#24102d;
-  border:2px solid #bf4bff;
-  border-radius:15px;
-  box-shadow:0 0 35px #7b21a8;
-  display:none;
+  border:2px solid #b94aff;
+  border-radius:14px;
+  background:#22102b;
+  box-shadow:0 0 30px #672090;
 }
 
 .giftPopupIcon{
-  font-size:55px;
+  font-size:48px;
 }
 
 .giftPopup button{
-  margin-top:9px;
+  margin-top:8px;
   border:0;
-  border-radius:8px;
-  background:#ffd33d;
-  padding:8px 15px;
+  border-radius:7px;
+  padding:7px 12px;
+  background:#ffd43b;
   font-weight:900;
 }
 
-/* 휴대폰 */
-@media(max-width:760px){
-
-  .header{
-    height:54px;
-  }
-
-  .logo{
-    font-size:20px;
-  }
-
-  .roomText{
-    font-size:10px;
-  }
-
-  .startButton{
-    padding:8px 9px;
-    font-size:12px;
-  }
-
+/* 조금 큰 휴대폰 */
+@media(min-width:600px){
   .mainStage{
-    height:410px;
+    height:350px;
   }
 
   .member{
-    height:78px;
-  }
-
-  .lower{
-    grid-template-columns:48% 52%;
-  }
-
-  .chat{
-    min-height:235px;
+    height:67px;
   }
 
   .messages{
-    height:170px;
+    height:165px;
   }
 }
 
-/* 아주 작은 휴대폰 */
+/* 아주 작은 화면 */
 @media(max-width:380px){
-
   .broadcast{
     grid-template-columns:45% 55%;
   }
 
   .mainStage{
-    height:390px;
+    height:320px;
   }
 
   .member{
-    height:74px;
+    height:61px;
   }
 
-  .lower{
-    grid-template-columns:47% 53%;
+  .messages{
+    height:140px;
   }
 }
 </style>
@@ -466,90 +436,137 @@ button{
 
 <body>
 
-<header class="header">
+<div class="header">
   <div class="logo">♛ K-Talk</div>
   <div class="live">● ON AIR</div>
-  <div class="roomText">화상 방송방 · 최대 13명</div>
-  <button id="startBtn" class="startButton">방송 시작</button>
-</header>
+
+  <div class="roomTitle">
+    화상 방송방 · 최대 13명
+  </div>
+
+  <button id="startBtn" class="startBtn">
+    방송 시작
+  </button>
+</div>
 
 <div class="notice">
   ⭐ 출석체크 · 신청곡 · 선물 · 실시간 채팅 ⭐
 </div>
 
-<section class="broadcast">
+<div class="broadcast">
 
   <div class="mainStage">
-    <video id="stageVideo" autoplay playsinline></video>
 
-    <div class="stageOverlay">
-      <div id="stageName" class="stageName">진행자 큰 화면</div>
-      <div class="stageHelp">
-        호스트가 참가자를 누르면 이곳으로 올릴 수 있습니다.
+    <video id="stageVideo"
+           autoplay
+           playsinline>
+    </video>
+
+    <div class="stageInfo">
+
+      <div id="stageName"
+           class="stageName">
+        진행자 큰 화면
       </div>
+
+      <div class="stageText">
+        호스트가 참가자를 누르면
+        큰 화면으로 올릴 수 있습니다.
+      </div>
+
     </div>
+
   </div>
 
-  <div id="members" class="members"></div>
+  <div id="members"
+       class="members">
+  </div>
 
-</section>
+</div>
 
-<div id="statusBox" class="statusBox">
+<div id="status"
+     class="status">
   방송 시작을 눌러주세요.
 </div>
 
-<section class="lower">
+<div class="lower">
 
+  <!-- 채팅 -->
   <div class="chat">
-    <div class="chatTitle">💬 채팅</div>
 
-    <div id="messages" class="messages">
+    <div class="chatHead">
+      <span>💬 채팅</span>
+      <span>참가자 최대 13명</span>
+    </div>
+
+    <div id="messages"
+         class="messages">
+
       <div class="message system">
         관리자 : K-Talk 방송방입니다.
       </div>
+
     </div>
 
     <div class="chatInput">
-      <input id="chatText" type="text" maxlength="100"
+
+      <input id="chatText"
+             maxlength="120"
              placeholder="메시지를 입력하세요">
-      <button class="send" onclick="sendChat()">전송</button>
+
+      <button class="sendBtn"
+              onclick="sendChat()">
+        전송
+      </button>
+
     </div>
+
   </div>
 
+  <!-- 선물 -->
   <div class="giftArea">
 
     <div class="panel">
-      <div class="panelTitle">🎁 선물 / 후원</div>
 
-      <div class="giftButtons">
+      <div class="panelTitle">
+        🎁 선물 / 후원
+      </div>
 
-        <button class="gift" onclick="sendRose(1)">
-          <span class="emoji">🌹</span>
+      <div class="gifts">
+
+        <button class="giftBtn"
+                onclick="sendRose(1)">
+          <span class="giftEmoji">🌹</span>
           장미 1
         </button>
 
-        <button class="gift" onclick="sendRose(10)">
-          <span class="emoji">💐</span>
+        <button class="giftBtn"
+                onclick="sendRose(10)">
+          <span class="giftEmoji">💐</span>
           장미 10
         </button>
 
-        <button class="gift" onclick="sendRose(50)">
-          <span class="emoji">🌹</span>
+        <button class="giftBtn"
+                onclick="sendRose(50)">
+          <span class="giftEmoji">🌹</span>
           장미 50
         </button>
 
-        <button class="gift" onclick="sendNormalGift('❤️ 하트')">
-          <span class="emoji">❤️</span>
+        <button class="giftBtn"
+                onclick="sendGift('❤️ 하트')">
+          <span class="giftEmoji">❤️</span>
           하트
         </button>
 
-        <button class="gift" onclick="sendNormalGift('⭐ 별')">
-          <span class="emoji">⭐</span>
+        <button class="giftBtn"
+                onclick="sendGift('⭐ 별')">
+          <span class="giftEmoji">⭐</span>
           별
         </button>
 
-        <button class="gift" onclick="sendNormalGift('🐋 고래')">
-          <span class="emoji">🐋</span>
+        <button class="giftBtn"
+                onclick="sendGift('🐋 고래')">
+          <span class="giftEmoji">🐋</span>
           고래
         </button>
 
@@ -558,75 +575,118 @@ button{
 
     <div class="panel">
 
-      <div class="panelTitle">🎉 이벤트</div>
+      <div class="panelTitle">
+        🎉 이벤트
+      </div>
 
-      <div class="specialButtons">
-        <button class="special" onclick="openGiftBox()">
+      <div class="events">
+
+        <button class="eventBtn"
+                onclick="openGiftBox()">
           🎁 선물상자
         </button>
 
-        <button class="special" onclick="lottery()">
+        <button class="eventBtn"
+                onclick="lottery()">
           🎯 제비뽑기
         </button>
+
       </div>
 
     </div>
 
   </div>
 
-</section>
+</div>
 
 <div class="controls">
 
-  <button id="micBtn" class="control" onclick="toggleMic()">
-    <span>🎤</span>
+  <button id="micBtn"
+          class="controlBtn"
+          onclick="toggleMic()">
+
+    <span class="icon">🎤</span>
     마이크
+
   </button>
 
-  <button id="camBtn" class="control" onclick="toggleCam()">
-    <span>📷</span>
+  <button id="camBtn"
+          class="controlBtn"
+          onclick="toggleCamera()">
+
+    <span class="icon">📷</span>
     카메라
+
   </button>
 
-  <button class="control" onclick="copyInvite()">
-    <span>🔗</span>
+  <button class="controlBtn"
+          onclick="copyInvite()">
+
+    <span class="icon">🔗</span>
     초대
+
   </button>
 
-  <button class="control" onclick="promoteMyself()">
-    <span>🎙️</span>
+  <button class="controlBtn"
+          onclick="promoteMyself()">
+
+    <span class="icon">🎙️</span>
     큰 화면
+
   </button>
 
-  <button class="control end" onclick="leaveRoom()">
-    <span>☎️</span>
+  <button class="controlBtn end"
+          onclick="leaveRoom()">
+
+    <span class="icon">☎️</span>
     나가기
+
   </button>
 
 </div>
 
-<div id="giftPopup" class="giftPopup">
-  <div class="giftPopupIcon">🎁</div>
+<div id="giftPopup"
+     class="giftPopup">
+
+  <div class="giftPopupIcon">
+    🎁
+  </div>
+
   <b>선물상자</b>
-  <div id="giftCount" style="margin-top:6px;color:#ffd95a">
+
+  <div id="giftCount"
+       style="margin-top:6px;color:#ffd85b">
     10초
   </div>
-  <button id="giftReceive" onclick="receiveGift()" disabled>
+
+  <button id="giftReceive"
+          onclick="receiveGift()"
+          disabled>
     기다리는 중
   </button>
+
 </div>
 
 <script>
 const MAX_USERS = 13;
 
-const query = new URLSearchParams(location.search);
+const params =
+  new URLSearchParams(
+    location.search
+  );
 
 const ROOM =
-  (query.get("room") || "main")
-  .replace(/[^a-zA-Z0-9_-]/g,"")
+  (params.get("room") || "main")
+  .replace(
+    /[^a-zA-Z0-9_-]/g,
+    ""
+  )
   .substring(0,30);
 
-const PEER_PREFIX = "ktalk-" + ROOM + "-";
+const PREFIX =
+  "ktalk-" +
+  ROOM +
+  "-";
 
 let peer = null;
 let localStream = null;
@@ -634,54 +694,76 @@ let mySlot = null;
 
 let calls = {};
 let connections = {};
-let remoteStreams = {};
+let streams = {};
 
 let bigSlot = 1;
 
-let micEnabled = true;
-let cameraEnabled = true;
+let micOn = true;
+let cameraOn = true;
 
 let giftTimer = null;
 let giftSeconds = 0;
 let giftReceived = false;
 
 const members =
-  document.getElementById("members");
+  document.getElementById(
+    "members"
+  );
 
 const stageVideo =
-  document.getElementById("stageVideo");
+  document.getElementById(
+    "stageVideo"
+  );
 
 const stageName =
-  document.getElementById("stageName");
+  document.getElementById(
+    "stageName"
+  );
 
-const statusBox =
-  document.getElementById("statusBox");
+const statusEl =
+  document.getElementById(
+    "status"
+  );
 
 const messages =
-  document.getElementById("messages");
+  document.getElementById(
+    "messages"
+  );
 
 const startBtn =
-  document.getElementById("startBtn");
+  document.getElementById(
+    "startBtn"
+  );
 
+/* ===========================
+   참가자 13자리 생성
+=========================== */
 
-/* =========================
-   13자리 만들기
-========================= */
-
-function makeMemberSlots(){
+function buildSlots(){
 
   members.innerHTML = "";
 
-  for(let i=1;i<=MAX_USERS;i++){
+  for(
+    let i=1;
+    i<=MAX_USERS;
+    i++
+  ){
 
     const box =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    box.className = "member";
-    box.id = "member-"+i;
+    box.className =
+      "member";
+
+    box.id =
+      "member-" + i;
 
     box.innerHTML = `
-      <div id="empty-${i}" class="empty">
+
+      <div id="empty-${i}"
+           class="empty">
         대기
       </div>
 
@@ -691,84 +773,96 @@ function makeMemberSlots(){
         playsinline>
       </video>
 
-      <div class="num">${i}</div>
+      <div class="slotNum">
+        ${i}
+      </div>
 
-      <div id="memberName-${i}"
+      <div id="name-${i}"
            class="memberName">
         참가자 ${i}
       </div>
 
-      <div class="roseMini">🌹</div>
+      <div class="rose">
+        🌹
+      </div>
+
     `;
 
-    box.onclick = function(){
+    box.addEventListener(
+      "click",
+      ()=>{
 
-      /*
-       1번 참가자가 호스트
-       호스트만 다른 참가자를
-       큰 화면으로 올림
-      */
+        if(
+          mySlot === 1 &&
+          streams[i]
+        ){
 
-      if(mySlot === 1){
-
-        if(remoteStreams[i] || i === mySlot){
-
-          setBigScreen(i,true);
+          setBigScreen(
+            i,
+            true
+          );
 
         }
 
       }
+    );
 
-    };
+    members.appendChild(
+      box
+    );
 
-    members.appendChild(box);
   }
+
 }
 
-makeMemberSlots();
+buildSlots();
 
-
-/* =========================
+/* ===========================
    Peer ID
-========================= */
+=========================== */
 
-function getPeerId(slot){
+function peerId(slot){
 
-  return PEER_PREFIX + slot;
+  return PREFIX + slot;
 
 }
 
-function getSlotFromPeerId(id){
+function slotFromPeer(id){
 
-  if(!id ||
-     !id.startsWith(PEER_PREFIX)){
+  if(
+    !id ||
+    !id.startsWith(PREFIX)
+  ){
     return null;
   }
 
-  const n =
+  const slot =
     Number(
-      id.substring(
-        PEER_PREFIX.length
+      id.slice(
+        PREFIX.length
       )
     );
 
   if(
-    Number.isInteger(n) &&
-    n >= 1 &&
-    n <= MAX_USERS
+    Number.isInteger(slot) &&
+    slot >= 1 &&
+    slot <= MAX_USERS
   ){
-    return n;
+    return slot;
   }
 
   return null;
+
 }
 
-
-/* =========================
+/* ===========================
    방송 시작
-========================= */
+=========================== */
 
-startBtn.onclick = startBroadcast;
+startBtn.addEventListener(
+  "click",
+  startBroadcast
+);
 
 async function startBroadcast(){
 
@@ -778,7 +872,7 @@ async function startBroadcast(){
 
   try{
 
-    statusBox.textContent =
+    statusEl.textContent =
       "카메라와 마이크 연결 중...";
 
     localStream =
@@ -799,81 +893,95 @@ async function startBroadcast(){
 
       });
 
-    await findEmptySlot(1);
+    await claimSlot(1);
 
   }
   catch(error){
 
     console.error(error);
 
-    statusBox.textContent =
-      "카메라 또는 마이크 사용을 허용해 주세요.";
+    statusEl.textContent =
+      "카메라와 마이크 권한을 허용해 주세요.";
 
     alert(
-      "카메라와 마이크 권한을 허용해 주세요."
+      "카메라와 마이크 사용을 허용해 주세요."
     );
 
   }
+
 }
 
+/* ===========================
+   빈 자리 찾기
+=========================== */
 
-/* =========================
-   빈 자리 자동 찾기
-========================= */
-
-function findEmptySlot(slot){
+function claimSlot(slot){
 
   return new Promise(
     (resolve,reject)=>{
 
-      if(slot > MAX_USERS){
+      if(
+        slot > MAX_USERS
+      ){
 
         alert(
           "현재 방송방이 가득 찼습니다."
         );
 
-        reject();
+        reject(
+          new Error(
+            "room-full"
+          )
+        );
 
         return;
+
       }
 
       const candidate =
         new Peer(
-          getPeerId(slot),
+          peerId(slot),
           {debug:0}
         );
 
-      let settled = false;
+      let completed =
+        false;
 
       candidate.on(
         "open",
         ()=>{
 
-          if(settled){
+          if(completed){
             return;
           }
 
-          settled = true;
+          completed =
+            true;
 
-          peer = candidate;
-          mySlot = slot;
+          peer =
+            candidate;
 
-          remoteStreams[mySlot] =
+          mySlot =
+            slot;
+
+          streams[mySlot] =
             localStream;
 
-          showStreamInSlot(
+          showSlot(
             mySlot,
             localStream,
             true
           );
 
-          setupPeer();
+          setupPeerEvents();
 
-          if(mySlot === 1){
+          if(
+            mySlot === 1
+          ){
 
             document
             .getElementById(
-              "memberName-1"
+              "name-1"
             )
             .textContent =
               "👑 호스트";
@@ -886,12 +994,12 @@ function findEmptySlot(slot){
             );
 
           }
-
           else{
 
             document
             .getElementById(
-              "memberName-"+mySlot
+              "name-" +
+              mySlot
             )
             .textContent =
               "나";
@@ -901,28 +1009,27 @@ function findEmptySlot(slot){
           startBtn.style.display =
             "none";
 
-          statusBox.textContent =
+          statusEl.textContent =
             mySlot === 1
             ? "호스트로 입장했습니다."
             : mySlot +
               "번 참가자로 입장했습니다.";
 
-          addSystemMessage(
+          addSystem(
             "참가자 " +
             mySlot +
             "님이 입장했습니다."
           );
 
           setTimeout(
-            connectToRoom,
-            600
+            syncRoom,
+            500
           );
 
           resolve();
 
         }
       );
-
 
       candidate.on(
         "error",
@@ -933,11 +1040,12 @@ function findEmptySlot(slot){
             "unavailable-id"
           ){
 
-            if(settled){
+            if(completed){
               return;
             }
 
-            settled = true;
+            completed =
+              true;
 
             try{
               candidate.destroy();
@@ -946,11 +1054,13 @@ function findEmptySlot(slot){
 
             setTimeout(
               ()=>{
-                findEmptySlot(
-                  slot+1
+
+                claimSlot(
+                  slot + 1
                 )
                 .then(resolve)
                 .catch(reject);
+
               },
               100
             );
@@ -975,21 +1085,21 @@ function findEmptySlot(slot){
 
     }
   );
+
 }
 
-
-/* =========================
+/* ===========================
    Peer 이벤트
-========================= */
+=========================== */
 
-function setupPeer(){
+function setupPeerEvents(){
 
   peer.on(
     "call",
     call=>{
 
       const slot =
-        getSlotFromPeerId(
+        slotFromPeer(
           call.peer
         );
 
@@ -1009,7 +1119,6 @@ function setupPeer(){
     }
   );
 
-
   peer.on(
     "connection",
     connection=>{
@@ -1021,13 +1130,12 @@ function setupPeer(){
     }
   );
 
-
   peer.on(
     "disconnected",
     ()=>{
 
-      statusBox.textContent =
-        "연결을 다시 시도하고 있습니다.";
+      statusEl.textContent =
+        "연결 복구 중...";
 
       try{
         peer.reconnect();
@@ -1036,20 +1144,6 @@ function setupPeer(){
 
     }
   );
-
-
-  peer.on(
-    "open",
-    ()=>{
-
-      setTimeout(
-        connectToRoom,
-        500
-      );
-
-    }
-  );
-
 
   peer.on(
     "error",
@@ -1072,12 +1166,11 @@ function setupPeer(){
 
 }
 
+/* ===========================
+   참가자 연결
+=========================== */
 
-/* =========================
-   다른 참가자 찾기
-========================= */
-
-function connectToRoom(){
+function syncRoom(){
 
   if(
     !peer ||
@@ -1088,14 +1181,17 @@ function connectToRoom(){
   }
 
   /*
-   번호가 작은 쪽에서
-   큰 번호 참가자에게 연결.
-   중복 통화 방지.
+    작은 번호 참가자가
+    큰 번호 참가자에게 연결
+    중복 연결 방지
   */
 
   for(
-    let slot = mySlot + 1;
+    let slot =
+      mySlot + 1;
+
     slot <= MAX_USERS;
+
     slot++
   ){
 
@@ -1108,7 +1204,7 @@ function connectToRoom(){
 
         const connection =
           peer.connect(
-            getPeerId(slot),
+            peerId(slot),
             {
               reliable:true
             }
@@ -1123,14 +1219,15 @@ function connectToRoom(){
 
     }
 
-
-    if(!calls[slot]){
+    if(
+      !calls[slot]
+    ){
 
       try{
 
         const call =
           peer.call(
-            getPeerId(slot),
+            peerId(slot),
             localStream
           );
 
@@ -1152,10 +1249,9 @@ function connectToRoom(){
 
 }
 
-
-/* =========================
-   영상 통화 관리
-========================= */
+/* ===========================
+   영상 연결
+=========================== */
 
 function registerCall(
   slot,
@@ -1174,17 +1270,17 @@ function registerCall(
 
   }
 
-  calls[slot] = call;
-
+  calls[slot] =
+    call;
 
   call.on(
     "stream",
     stream=>{
 
-      remoteStreams[slot] =
+      streams[slot] =
         stream;
 
-      showStreamInSlot(
+      showSlot(
         slot,
         stream,
         false
@@ -1204,7 +1300,6 @@ function registerCall(
     }
   );
 
-
   call.on(
     "close",
     ()=>{
@@ -1213,7 +1308,6 @@ function registerCall(
 
     }
   );
-
 
   call.on(
     "error",
@@ -1226,17 +1320,16 @@ function registerCall(
 
 }
 
-
-/* =========================
+/* ===========================
    데이터 연결
-========================= */
+=========================== */
 
 function registerConnection(
   connection
 ){
 
   const slot =
-    getSlotFromPeerId(
+    slotFromPeer(
       connection.peer
     );
 
@@ -1247,12 +1340,11 @@ function registerConnection(
   connections[slot] =
     connection;
 
-
   connection.on(
     "open",
     ()=>{
 
-      sendToConnection(
+      sendOne(
         connection,
         {
           type:"hello",
@@ -1264,19 +1356,16 @@ function registerConnection(
     }
   );
 
-
   connection.on(
     "data",
     data=>{
 
       handleData(
-        data,
-        slot
+        data
       );
 
     }
   );
-
 
   connection.on(
     "close",
@@ -1287,13 +1376,14 @@ function registerConnection(
         connection
       ){
 
-        delete connections[slot];
+        delete connections[
+          slot
+        ];
 
       }
 
     }
   );
-
 
   connection.on(
     "error",
@@ -1302,15 +1392,11 @@ function registerConnection(
 
 }
 
+/* ===========================
+   데이터 받기
+=========================== */
 
-/* =========================
-   수신 데이터
-========================= */
-
-function handleData(
-  data,
-  sender
-){
+function handleData(data){
 
   if(
     !data ||
@@ -1319,41 +1405,32 @@ function handleData(
     return;
   }
 
+  switch(data.type){
 
-  if(data.type === "chat"){
+    case "hello":
 
-    addChatMessage(
-      data.slot,
-      data.text
-    );
+      if(data.bigSlot){
 
-  }
+        bigSlot =
+          Number(
+            data.bigSlot
+          );
 
+        setBigScreen(
+          bigSlot,
+          false
+        );
 
-  else if(
-    data.type === "big"
-  ){
+      }
 
-    bigSlot =
-      Number(data.slot);
-
-    setBigScreen(
-      bigSlot,
-      false
-    );
-
-  }
+      break;
 
 
-  else if(
-    data.type === "hello"
-  ){
-
-    if(data.bigSlot){
+    case "big":
 
       bigSlot =
         Number(
-          data.bigSlot
+          data.slot
         );
 
       setBigScreen(
@@ -1361,85 +1438,85 @@ function handleData(
         false
       );
 
-    }
-
-  }
+      break;
 
 
-  else if(
-    data.type === "rose"
-  ){
+    case "chat":
 
-    addSystemMessage(
-      "🌹 참가자 " +
-      data.slot +
-      "님이 장미 " +
-      data.count +
-      "송이를 선물했습니다."
-    );
+      addChat(
+        data.slot,
+        data.text
+      );
 
-  }
+      break;
 
 
-  else if(
-    data.type === "gift"
-  ){
+    case "rose":
 
-    addSystemMessage(
-      "🎁 참가자 " +
-      data.slot +
-      "님이 " +
-      data.name +
-      " 선물을 보냈습니다."
-    );
+      addSystem(
+        "🌹 참가자 " +
+        data.slot +
+        "님이 장미 " +
+        data.count +
+        "송이를 선물했습니다."
+      );
 
-  }
+      break;
 
 
-  else if(
-    data.type === "giftbox"
-  ){
+    case "gift":
 
-    startGiftBox(
-      Number(
-        data.seconds || 10
-      )
-    );
+      addSystem(
+        "🎁 참가자 " +
+        data.slot +
+        "님이 " +
+        data.name +
+        " 선물을 보냈습니다."
+      );
 
-  }
+      break;
 
 
-  else if(
-    data.type === "lottery"
-  ){
+    case "giftbox":
 
-    addSystemMessage(
-      data.text
-    );
+      startGiftBox(
+        Number(
+          data.seconds || 10
+        )
+      );
 
+      break;
+
+
+    case "lottery":
+
+      addSystem(
+        data.text
+      );
+
+      break;
   }
 
 }
 
+/* ===========================
+   참가자 영상 표시
+=========================== */
 
-/* =========================
-   참가자 영상
-========================= */
-
-function showStreamInSlot(
+function showSlot(
   slot,
   stream,
-  muted
+  local
 ){
 
   const video =
     document.getElementById(
-      "video-"+slot
+      "video-" + slot
     );
 
   const empty =
     document.getElementById(
-      "empty-"+slot
+      "empty-" + slot
     );
 
   if(!video){
@@ -1449,11 +1526,19 @@ function showStreamInSlot(
   video.srcObject =
     stream;
 
-  video.muted =
-    muted;
-
   video.style.display =
     "block";
+
+  /*
+    내 영상은 항상 음소거
+    큰 화면으로 올라간 사람도
+    작은 칸에서는 음소거해서
+    소리가 두 번 나오지 않게 함
+  */
+
+  video.muted =
+    local ||
+    slot === bigSlot;
 
   if(empty){
 
@@ -1464,24 +1549,121 @@ function showStreamInSlot(
 
 }
 
+/* ===========================
+   큰 화면
+=========================== */
 
-/* =========================
-   참가자 나감
-========================= */
+function setBigScreen(
+  slot,
+  broadcast
+){
+
+  const stream =
+    streams[slot];
+
+  if(!stream){
+    return;
+  }
+
+  /*
+    기존 큰 화면 참가자는
+    다시 작은 칸에서 소리 나오게
+  */
+
+  if(
+    bigSlot &&
+    bigSlot !== slot
+  ){
+
+    const oldVideo =
+      document.getElementById(
+        "video-" +
+        bigSlot
+      );
+
+    if(oldVideo){
+
+      oldVideo.muted =
+        bigSlot ===
+        mySlot;
+
+    }
+
+  }
+
+  bigSlot =
+    slot;
+
+  stageVideo.srcObject =
+    stream;
+
+  /*
+    내 영상이면 울림 방지를 위해
+    큰 화면에서도 음소거
+  */
+
+  stageVideo.muted =
+    slot === mySlot;
+
+  /*
+    현재 큰 화면 참가자의
+    작은 칸은 음소거
+  */
+
+  const smallVideo =
+    document.getElementById(
+      "video-" +
+      slot
+    );
+
+  if(smallVideo){
+
+    smallVideo.muted =
+      true;
+
+  }
+
+  stageName.textContent =
+    slot === 1
+    ? "👑 호스트"
+    : "🎤 참가자 " +
+      slot;
+
+  if(broadcast){
+
+    sendAll({
+      type:"big",
+      slot:slot
+    });
+
+    addSystem(
+      "참가자 " +
+      slot +
+      "님이 큰 화면으로 이동했습니다."
+    );
+
+  }
+
+}
+
+/* ===========================
+   자리 비우기
+=========================== */
 
 function clearSlot(slot){
 
   delete calls[slot];
-  delete remoteStreams[slot];
+
+  delete streams[slot];
 
   const video =
     document.getElementById(
-      "video-"+slot
+      "video-" + slot
     );
 
   const empty =
     document.getElementById(
-      "empty-"+slot
+      "empty-" + slot
     );
 
   if(video){
@@ -1505,11 +1687,7 @@ function clearSlot(slot){
     bigSlot === slot
   ){
 
-    bigSlot = 1;
-
-    if(
-      remoteStreams[1]
-    ){
+    if(streams[1]){
 
       setBigScreen(
         1,
@@ -1517,7 +1695,6 @@ function clearSlot(slot){
       );
 
     }
-
     else{
 
       stageVideo.srcObject =
@@ -1532,95 +1709,9 @@ function clearSlot(slot){
 
 }
 
-
-/* =========================
-   큰 방송 화면
-========================= */
-
-function setBigScreen(
-  slot,
-  send
-){
-
-  const stream =
-    remoteStreams[slot];
-
-  if(!stream){
-    return;
-  }
-
-  bigSlot =
-    slot;
-
-  stageVideo.srcObject =
-    stream;
-
-  stageVideo.muted =
-    slot === mySlot;
-
-  if(slot === 1){
-
-    stageName.textContent =
-      "👑 호스트";
-
-  }
-
-  else{
-
-    stageName.textContent =
-      "🎤 참가자 " +
-      slot;
-
-  }
-
-
-  if(send){
-
-    broadcastData({
-      type:"big",
-      slot:slot
-    });
-
-    addSystemMessage(
-      "참가자 " +
-      slot +
-      "님이 큰 화면으로 이동했습니다."
-    );
-
-  }
-
-}
-
-
-function promoteMyself(){
-
-  if(!mySlot){
-    return;
-  }
-
-  if(mySlot === 1){
-
-    setBigScreen(
-      mySlot,
-      true
-    );
-
-  }
-
-  else{
-
-    alert(
-      "큰 화면 이동은 호스트가 선택합니다."
-    );
-
-  }
-
-}
-
-
-/* =========================
+/* ===========================
    채팅
-========================= */
+=========================== */
 
 function sendChat(){
 
@@ -1645,12 +1736,12 @@ function sendChat(){
     return;
   }
 
-  addChatMessage(
+  addChat(
     mySlot,
     text
   );
 
-  broadcastData({
+  sendAll({
     type:"chat",
     slot:mySlot,
     text:text
@@ -1660,15 +1751,17 @@ function sendChat(){
 
 }
 
-
 document
-.getElementById("chatText")
+.getElementById(
+  "chatText"
+)
 .addEventListener(
   "keydown",
   event=>{
 
     if(
-      event.key === "Enter"
+      event.key ===
+      "Enter"
     ){
 
       sendChat();
@@ -1678,8 +1771,7 @@ document
   }
 );
 
-
-function addChatMessage(
+function addChat(
   slot,
   text
 ){
@@ -1707,10 +1799,7 @@ function addChatMessage(
 
 }
 
-
-function addSystemMessage(
-  text
-){
+function addSystem(text){
 
   const div =
     document.createElement(
@@ -1732,12 +1821,11 @@ function addSystemMessage(
 
 }
 
+/* ===========================
+   데이터 보내기
+=========================== */
 
-/* =========================
-   데이터 전송
-========================= */
-
-function sendToConnection(
+function sendOne(
   connection,
   data
 ){
@@ -1760,8 +1848,7 @@ function sendToConnection(
 
 }
 
-
-function broadcastData(data){
+function sendAll(data){
 
   Object.values(
     connections
@@ -1769,7 +1856,7 @@ function broadcastData(data){
   .forEach(
     connection=>{
 
-      sendToConnection(
+      sendOne(
         connection,
         data
       );
@@ -1779,10 +1866,9 @@ function broadcastData(data){
 
 }
 
-
-/* =========================
+/* ===========================
    장미
-========================= */
+=========================== */
 
 function sendRose(count){
 
@@ -1795,7 +1881,7 @@ function sendRose(count){
     return;
   }
 
-  addSystemMessage(
+  addSystem(
     "🌹 참가자 " +
     mySlot +
     "님이 장미 " +
@@ -1803,7 +1889,7 @@ function sendRose(count){
     "송이를 선물했습니다."
   );
 
-  broadcastData({
+  sendAll({
     type:"rose",
     slot:mySlot,
     count:count
@@ -1811,18 +1897,17 @@ function sendRose(count){
 
 }
 
-
-/* =========================
+/* ===========================
    일반 선물
-========================= */
+=========================== */
 
-function sendNormalGift(name){
+function sendGift(name){
 
   if(!mySlot){
     return;
   }
 
-  addSystemMessage(
+  addSystem(
     "🎁 참가자 " +
     mySlot +
     "님이 " +
@@ -1830,7 +1915,7 @@ function sendNormalGift(name){
     " 선물을 보냈습니다."
   );
 
-  broadcastData({
+  sendAll({
     type:"gift",
     slot:mySlot,
     name:name
@@ -1838,10 +1923,9 @@ function sendNormalGift(name){
 
 }
 
-
-/* =========================
+/* ===========================
    선물상자
-========================= */
+=========================== */
 
 function openGiftBox(){
 
@@ -1856,17 +1940,16 @@ function openGiftBox(){
 
   startGiftBox(10);
 
-  broadcastData({
+  sendAll({
     type:"giftbox",
     seconds:10
   });
 
-  addSystemMessage(
+  addSystem(
     "🎁 선물상자가 올라왔습니다."
   );
 
 }
-
 
 function startGiftBox(seconds){
 
@@ -1930,6 +2013,8 @@ function startGiftBox(seconds){
             giftTimer
           );
 
+          giftSeconds = 0;
+
           count.textContent =
             "지금 누르세요!";
 
@@ -1963,7 +2048,6 @@ function startGiftBox(seconds){
 
 }
 
-
 function receiveGift(){
 
   if(
@@ -1981,19 +2065,23 @@ function receiveGift(){
       Math.random()*5
     ) + 1;
 
-  document.getElementById(
+  document
+  .getElementById(
     "giftCount"
-  ).textContent =
+  )
+  .textContent =
     "🌹 장미 " +
     reward +
     "개";
 
-  document.getElementById(
+  document
+  .getElementById(
     "giftReceive"
-  ).disabled =
+  )
+  .disabled =
     true;
 
-  addSystemMessage(
+  addSystem(
     "🎉 참가자 " +
     mySlot +
     "님이 선물상자에서 장미 " +
@@ -2004,9 +2092,11 @@ function receiveGift(){
   setTimeout(
     ()=>{
 
-      document.getElementById(
+      document
+      .getElementById(
         "giftPopup"
-      ).style.display =
+      )
+      .style.display =
         "none";
 
     },
@@ -2015,10 +2105,9 @@ function receiveGift(){
 
 }
 
-
-/* =========================
+/* ===========================
    제비뽑기
-========================= */
+=========================== */
 
 function lottery(){
 
@@ -2045,9 +2134,11 @@ function lottery(){
       )
     ];
 
-  let text = "";
+  let text;
 
-  if(prize === 0){
+  if(
+    prize === 0
+  ){
 
     text =
       "🎯 참가자 " +
@@ -2055,7 +2146,6 @@ function lottery(){
       "님 제비뽑기 : 꽝";
 
   }
-
   else{
 
     text =
@@ -2067,21 +2157,18 @@ function lottery(){
 
   }
 
-  addSystemMessage(
-    text
-  );
+  addSystem(text);
 
-  broadcastData({
+  sendAll({
     type:"lottery",
     text:text
   });
 
 }
 
-
-/* =========================
+/* ===========================
    마이크
-========================= */
+=========================== */
 
 function toggleMic(){
 
@@ -2094,8 +2181,8 @@ function toggleMic(){
     return;
   }
 
-  micEnabled =
-    !micEnabled;
+  micOn =
+    !micOn;
 
   localStream
   .getAudioTracks()
@@ -2103,26 +2190,27 @@ function toggleMic(){
     track=>{
 
       track.enabled =
-        micEnabled;
+        micOn;
 
     }
   );
 
-  document.getElementById(
+  document
+  .getElementById(
     "micBtn"
-  ).innerHTML =
-    micEnabled
-    ? "<span>🎤</span>마이크"
-    : "<span>🔇</span>음소거";
+  )
+  .innerHTML =
+    micOn
+    ? '<span class="icon">🎤</span>마이크'
+    : '<span class="icon">🔇</span>음소거';
 
 }
 
-
-/* =========================
+/* ===========================
    카메라
-========================= */
+=========================== */
 
-function toggleCam(){
+function toggleCamera(){
 
   if(!localStream){
 
@@ -2133,8 +2221,8 @@ function toggleCam(){
     return;
   }
 
-  cameraEnabled =
-    !cameraEnabled;
+  cameraOn =
+    !cameraOn;
 
   localStream
   .getVideoTracks()
@@ -2142,24 +2230,53 @@ function toggleCam(){
     track=>{
 
       track.enabled =
-        cameraEnabled;
+        cameraOn;
 
     }
   );
 
-  document.getElementById(
+  document
+  .getElementById(
     "camBtn"
-  ).innerHTML =
-    cameraEnabled
-    ? "<span>📷</span>카메라"
-    : "<span>🚫</span>카메라 끔";
+  )
+  .innerHTML =
+    cameraOn
+    ? '<span class="icon">📷</span>카메라'
+    : '<span class="icon">🚫</span>카메라 끔';
 
 }
 
+/* ===========================
+   내 화면 크게
+=========================== */
 
-/* =========================
-   초대주소
-========================= */
+function promoteMyself(){
+
+  if(!mySlot){
+    return;
+  }
+
+  if(
+    mySlot !== 1
+  ){
+
+    alert(
+      "큰 화면 이동은 호스트가 선택합니다."
+    );
+
+    return;
+  }
+
+  setBigScreen(
+    mySlot,
+    true
+  );
+
+}
+
+/* ===========================
+   초대 주소
+=========================== */
 
 async function copyInvite(){
 
@@ -2172,17 +2289,16 @@ async function copyInvite(){
   try{
 
     await navigator
-    .clipboard
-    .writeText(
-      url
-    );
+      .clipboard
+      .writeText(
+        url
+      );
 
     alert(
-      "방송방 주소가 복사되었습니다."
+      "초대 주소가 복사되었습니다."
     );
 
   }
-
   catch(e){
 
     prompt(
@@ -2194,10 +2310,9 @@ async function copyInvite(){
 
 }
 
-
-/* =========================
+/* ===========================
    나가기
-========================= */
+=========================== */
 
 function leaveRoom(){
 
@@ -2235,7 +2350,9 @@ function leaveRoom(){
     .getTracks()
     .forEach(
       track=>{
+
         track.stop();
+
       }
     );
 
@@ -2254,12 +2371,11 @@ function leaveRoom(){
 
 }
 
+/* ===========================
+   연결 끊김 자동 복구
+=========================== */
 
-/* =========================
-   끊어진 참가자 자동정리
-========================= */
-
-const disconnectedSince = {};
+const lostSince = {};
 
 setInterval(
   ()=>{
@@ -2303,27 +2419,29 @@ setInterval(
           "connected"
         ){
 
-          delete disconnectedSince[
+          delete lostSince[
             slot
           ];
 
           return;
-
         }
 
         if(
-          state === "failed" ||
-          state === "closed" ||
-          state === "disconnected"
+          state ===
+          "failed" ||
+          state ===
+          "closed" ||
+          state ===
+          "disconnected"
         ){
 
           if(
-            !disconnectedSince[
+            !lostSince[
               slot
             ]
           ){
 
-            disconnectedSince[
+            lostSince[
               slot
             ] =
               Date.now();
@@ -2332,7 +2450,7 @@ setInterval(
 
           if(
             Date.now() -
-            disconnectedSince[
+            lostSince[
               slot
             ] >
             5000
@@ -2343,13 +2461,17 @@ setInterval(
             }
             catch(e){}
 
-            delete calls[slot];
-
-            delete disconnectedSince[
+            delete calls[
               slot
             ];
 
-            clearSlot(slot);
+            delete lostSince[
+              slot
+            ];
+
+            clearSlot(
+              slot
+            );
 
           }
 
@@ -2358,14 +2480,13 @@ setInterval(
       }
     );
 
-    connectToRoom();
+    syncRoom();
 
   },
   2500
 );
 
-
-/* 화면 다시 켰을 때 재연결 */
+/* 앱 다시 열었을 때 */
 document.addEventListener(
   "visibilitychange",
   ()=>{
@@ -2375,7 +2496,7 @@ document.addEventListener(
     ){
 
       setTimeout(
-        connectToRoom,
+        syncRoom,
         500
       );
 
@@ -2384,7 +2505,7 @@ document.addEventListener(
   }
 );
 
-
+/* 페이지 종료 */
 window.addEventListener(
   "beforeunload",
   ()=>{
@@ -2403,4 +2524,4 @@ window.addEventListener(
 </script>
 
 </body>
-  </html>
+</html>
