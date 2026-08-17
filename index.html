@@ -2,1182 +2,1694 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>K-Talk</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>K-Talk 13명 최종방</title>
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
-  background:#030305;color:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
-}
-button,input{font-family:inherit}
-button{cursor:pointer}
 
-.app{
-  width:100vw;height:100dvh;padding:5px;
-  display:grid;
-  grid-template-rows:46px 28px minmax(0,1fr) 52px;
-  gap:4px;overflow:hidden;
+body{
+  margin:0;
+  background:#090711;
+  color:#fff;
+  font-family:Arial,sans-serif;
 }
 
-/* 상단 */
-.header{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
+.wrap{
+  max-width:520px;
+  margin:auto;
+  padding:14px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
   align-items:center;
-}
-.live{font-size:9px;font-weight:900}
-.liveBadge{
-  display:inline-block;background:#ed1748;border-radius:6px;
-  padding:5px 7px;margin-right:4px;
-}
-.logo{
-  text-align:center;color:#ffd431;
-  font-size:20px;font-weight:900;
-}
-.logo small{
-  display:block;color:#fff;font-size:7px;margin-top:3px;
-}
-.viewer{text-align:right;font-size:9px}
-
-/* 광고판 */
-.notice{
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid #47224e;border-radius:6px;
-  font-size:7px;font-weight:900;white-space:nowrap;
-}
-.yellow{color:#ffd531}
-.pink{color:#ff47ad}
-
-/* 가운데 */
-.stage{
-  min-width:0;min-height:0;
-  display:grid;
-  grid-template-columns:46% 54%;
-  grid-template-rows:58% 42%;
-  gap:4px;overflow:hidden;
+  gap:10px;
 }
 
-/* 호스트 */
-.host{
-  grid-column:1;grid-row:1;
+.brand{
+  font-size:24px;
+  font-weight:900;
+  color:#ffd76a;
+}
+
+.sub{
+  font-size:12px;
+  color:#aaa;
+  margin-top:4px;
+}
+
+.on{
+  background:#ff2e6d;
+  padding:7px 10px;
+  border-radius:10px;
+  font-weight:800;
+}
+
+/* 호스트 화면 */
+.main{
+  margin-top:12px;
   position:relative;
-  min-width:0;min-height:0;
+  background:#15151c;
+  border-radius:16px;
   overflow:hidden;
-  border:1px solid #4b2752;
-  border-radius:6px;
-  background:#07070a;
+  height:280px;
+  max-height:280px;
 }
-.host video{
-  width:100%;height:100%;
+
+.main video,
+.slot video{
+  width:100%;
+  height:100%;
   object-fit:cover;
-  object-position:center 30%;
-  background:#09090b;
-}
-.hostLive{
-  position:absolute;top:6px;left:6px;z-index:8;
-  color:#ff3151;font-size:8px;font-weight:900;
-}
-.attendance{
-  position:absolute;top:6px;left:50%;
-  transform:translateX(-50%);
-  z-index:9;
-  border:1px solid #ff28cb;border-radius:18px;
-  background:rgba(63,0,69,.88);
-  color:#ffd532;
-  padding:4px 8px;
-  font-size:7px;font-weight:900;
-  white-space:nowrap;
-}
-.hostName{
-  position:absolute;left:6px;bottom:6px;z-index:9;
-  background:rgba(0,0,0,.82);
-  color:#ffd42e;
-  border-radius:5px;
-  padding:4px 6px;
-  font-size:7px;font-weight:900;
 }
 
-/* 파장 */
-.wave{
+.main video{
+  display:block;
+  max-height:280px;
+}
+
+.placeholder{
   position:absolute;
-  left:50%;
-  bottom:13px;
-  transform:translateX(-50%);
-  z-index:7;
-
-  width:44%;
-  height:38px;
-
+  inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:3px;
-
-  pointer-events:none;
+  color:#aaa;
+  text-align:center;
+  padding:20px;
 }
 
-.wave span{
-  display:block;
-  width:4px;
-  min-height:5px;
-  border-radius:8px;
-
+/* =========================
+   수정 1 : 호스트 파장
+   처음부터 끝까지 길게 표시
+   ========================= */
+.wave-wrap{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  width:100%;
+  height:48px;
+  z-index:10;
+  pointer-events:none;
   background:linear-gradient(
     to top,
-    #24f5ff,
-    #8458ff,
-    #ff39b7,
-    #ffd52e
+    rgba(0,0,0,.65),
+    rgba(0,0,0,.18),
+    transparent
   );
-
-  box-shadow:0 0 7px rgba(145,67,255,.85);
-
-  animation:waveMove .75s ease-in-out infinite alternate;
 }
 
-.wave span:nth-child(1){height:10px;animation-delay:.05s}
-.wave span:nth-child(2){height:20px;animation-delay:.18s}
-.wave span:nth-child(3){height:32px;animation-delay:.28s}
-.wave span:nth-child(4){height:18px;animation-delay:.08s}
-.wave span:nth-child(5){height:35px;animation-delay:.35s}
-.wave span:nth-child(6){height:25px;animation-delay:.15s}
-.wave span:nth-child(7){height:14px;animation-delay:.3s}
-.wave span:nth-child(8){height:29px;animation-delay:.12s}
-.wave span:nth-child(9){height:19px;animation-delay:.4s}
-.wave span:nth-child(10){height:33px;animation-delay:.22s}
-.wave span:nth-child(11){height:16px;animation-delay:.1s}
-
-@keyframes waveMove{
-  from{
-    transform:scaleY(.35);
-    opacity:.75;
-  }
-  to{
-    transform:scaleY(1);
-    opacity:1;
-  }
+#waveCanvas{
+  display:block;
+  width:100%;
+  height:48px;
 }
 
-/* 카메라 / 마이크 */
-.mediaControls{
-  position:absolute;right:6px;bottom:6px;
-  z-index:10;
-  display:flex;gap:4px;
-}
-.mediaBtn{
-  width:31px;height:29px;
-  border:1px solid #777;border-radius:7px;
-  background:rgba(0,0,0,.8);
-  color:#fff;font-size:15px;
-}
-.mediaBtn.off{
-  background:#68131c;
-  border-color:#ff4055;
+.host-label{
+  position:absolute;
+  left:8px;
+  bottom:49px;
+  z-index:11;
+  background:rgba(0,0,0,.62);
+  color:#ffd76a;
+  padding:4px 8px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:900;
 }
 
-/* 게스트 */
-.guests{
-  grid-column:2;grid-row:1;
-  min-width:0;min-height:0;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  grid-template-rows:repeat(5,minmax(0,1fr));
-  gap:3px;overflow:hidden;
-}
-.slot{
-  position:relative;
-  min-width:0;min-height:0;
-  overflow:hidden;
-  border:1px solid #312e37;
-  border-radius:5px;
-  background:#0b0b0e;
-}
-.slot video{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  object-position:center 30%;
-  background:#0a0a0d;
-}
-.slotNo{
-  position:absolute;left:3px;top:3px;z-index:6;
-  width:17px;height:17px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:4px;
-  background:#777;
-  font-size:8px;font-weight:900;
-}
-.slot:nth-child(1) .slotNo{background:#f5c515;color:#111}
-.slot:nth-child(2) .slotNo{background:#e91e67}
-.slot:nth-child(3) .slotNo{background:#ef790c}
-.slot:nth-child(4) .slotNo{background:#1ca8df}
-.slot:nth-child(5) .slotNo{background:#6327e9}
-.slot:nth-child(6) .slotNo{background:#1fc052}
-
-.slotName{
-  position:absolute;left:4px;bottom:3px;z-index:6;
-  font-size:6px;font-weight:900;
-  line-height:1.15;
-  text-shadow:0 1px 3px #000;
-}
-.slotName small{
-  display:block;color:#ff527b;font-size:5.5px;
-}
-.muteIcon{
-  position:absolute;right:3px;top:3px;z-index:7;
-  font-size:8px;
-}
-.guestRose{
-  position:absolute;right:4px;bottom:3px;z-index:7;
-  font-size:9px;
-}
-.empty{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  color:#393940;font-size:6px;
-}
-.slot:nth-child(13){
-  grid-column:1;
-  grid-row:5;
+.controls{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
 }
 
-/* 채팅 */
-.chat{
-  grid-column:1;grid-row:2;
-  min-width:0;min-height:0;
-  overflow:hidden;
-  display:grid;
-  grid-template-rows:25px minmax(0,1fr) 34px;
-  border:1px solid #47234e;
-  border-radius:6px;
-  background:#07070a;
-}
-.chatTabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  border-bottom:1px solid #39203e;
-}
-.chatTabs div{
-  display:flex;align-items:center;justify-content:center;
-  font-size:7px;font-weight:900;
-}
-.chatTabs div:first-child{color:#f1a9ff}
-.messages{
-  min-height:0;
-  overflow-y:auto;
-  padding:5px;
-  font-size:6.5px;
-  line-height:1.45;
-  scrollbar-width:none;
-}
-.messages::-webkit-scrollbar{display:none}
-.messages div{margin-bottom:2px}
-.messages b{color:#3ddcff}
-.messages .green{color:#32dc71}
-
-.chatInput{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 40px 30px;
-  gap:3px;padding:3px;
-}
-.chatInput input{
-  min-width:0;
-  border:1px solid #312536;
-  border-radius:5px;
-  background:#171419;
+button{
+  flex:1;
+  border:0;
+  border-radius:12px;
+  padding:12px;
+  font-weight:900;
   color:#fff;
-  padding:4px;
-  font-size:6px;
+  font-size:15px;
 }
-.send{
-  border:0;border-radius:5px;
-  background:#8228d2;color:#fff;
-  font-size:6px;font-weight:900;
-}
-.chatGift{
-  border:1px solid #762731;
-  border-radius:5px;
-  background:#16090c;
+
+.start{background:#8d46ff}
+.stop{background:#333}
+
+.status{
+  margin-top:10px;
+  padding:10px;
+  background:#1c1524;
+  border-radius:10px;
+  color:#ffd76a;
   font-size:13px;
 }
 
-/* 오른쪽 아래 */
-.rightBottom{
-  grid-column:2;grid-row:2;
-  min-width:0;min-height:0;
+.grid{
   display:grid;
-  grid-template-rows:58% 42%;
-  gap:4px;
-  overflow:hidden;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-top:10px;
 }
 
-/* 선물 */
-.giftsPanel{
-  min-width:0;min-height:0;
-  overflow:hidden;
-  border:1px solid #47234e;
-  border-radius:6px;
-  background:#08080b;
-  padding:4px;
-}
-.giftTitle{
-  height:12px;
-  font-size:6.5px;
-  line-height:10px;
-}
-
-/* 위 선물 5개 나란히 */
-.giftTop{
-  height:50px;
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:2px;
-}
-.giftBtn{
-  min-width:0;
-  border:0;
-  background:transparent;
-  color:#fff;
-  text-align:center;
-  padding:0;
-  font-size:5.5px;
-  white-space:nowrap;
-}
-.giftBtn .icon{
-  display:block;
-  font-size:18px;
-  line-height:20px;
-}
-.giftBtn .giftName{
-  display:block;
-}
-.giftBtn strong{
-  display:block;
-  color:#ffd331;
-  font-size:5.3px;
-  margin-top:1px;
-}
-
-/* 장미 + 선물상자 */
-.giftBottom{
-  height:68px;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 29%;
-  gap:3px;
-}
-.rosePanel{
-  min-width:0;
-  overflow:hidden;
-  border:1px solid #57265b;
-  border-radius:5px;
-  padding:3px;
-}
-.roseTitle{
-  color:#ffd331;
-  font-size:6px;
-  font-weight:900;
-  height:11px;
-  line-height:9px;
-}
-.roseRow{
-  height:49px;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:1px;
-}
-.roseBtn{
-  min-width:0;
-  overflow:hidden;
-  border:0;
-  background:transparent;
-  color:#fff;
-  text-align:center;
-  font-size:5.2px;
-  white-space:nowrap;
-  padding:0;
-}
-.rosePicture{
-  display:block;
-  font-size:17px;
-  line-height:18px;
-  height:19px;
-}
-.roseBtn strong{
-  display:block;
-  color:#ffd331;
-  font-size:5.3px;
-  margin-top:1px;
-}
-
-/* 선물상자 */
-.giftBox{
-  min-width:0;
-  height:68px;
-  border:1px solid #a13bef;
-  border-radius:6px;
-  background:radial-gradient(circle,#47165a,#16091b);
-  color:#fff;
+.slot{
+  height:80px;
+  background:#211829;
+  border:1px solid #4a3457;
+  border-radius:11px;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
+  overflow:hidden;
+  position:relative;
+  font-size:11px;
   text-align:center;
-  padding:2px;
-}
-.giftBoxIcon{
-  font-size:27px;
-  line-height:28px;
-}
-.giftBoxTitle{
-  font-size:6.5px;
-  font-weight:900;
-}
-.giftBoxDesc{
-  font-size:4.8px;
-  line-height:1.15;
-  margin-top:2px;
 }
 
-/* 제비뽑기 */
-.lottery{
-  min-width:0;min-height:0;
-  overflow:hidden;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 58px;
-  gap:3px;
-  border:1px solid #9332b6;
+.slot.me{
+  border:2px solid #ffd700;
+}
+
+.label{
+  position:absolute;
+  left:4px;
+  bottom:4px;
+  background:#000a;
+  padding:2px 5px;
   border-radius:6px;
-  background:linear-gradient(90deg,#240c2f,#100712);
-  padding:3px;
+  font-size:10px;
 }
-.lotteryTitle{
-  color:#f2abff;
-  font-size:7px;
+
+.badge{
+  display:inline-block;
+  background:#ffd700;
+  color:#111;
   font-weight:900;
-  text-align:center;
+  padding:5px 9px;
+  border-radius:8px;
+  margin-bottom:7px;
 }
-.lotterySub{
-  font-size:5px;
-  text-align:center;
-  margin:1px 0 2px;
+
+/* =========================
+   수정 2 : 장미 조금 아래
+   ========================= */
+.rose-gifts{
+  margin-top:18px;
+  padding-top:5px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
 }
-.drawTimes{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:2px;
-}
-.drawItem{
-  min-width:0;
-  border:1px solid #3b2643;
-  border-radius:4px;
-  background:#130d17;
-  padding:2px 1px;
-  text-align:center;
-}
-.drawItem b{
-  display:block;
-  color:#ffd454;
-  font-size:5.5px;
-}
-.drawItem small{
-  display:block;
-  font-size:5px;
-  margin:1px 0;
-}
-.drawItem button{
+
+.rose-title{
   width:100%;
-  border:0;
-  border-radius:3px;
-  background:#742080;
-  color:#fff;
-  font-size:5px;
-  padding:2px 0;
-}
-.lotteryMachine{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:34px;
+  font-size:13px;
+  font-weight:900;
+  color:#ffb6cf;
+  margin-bottom:3px;
 }
 
-/* 하단 */
-.bottom{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  align-items:center;
-  border-top:1px solid #211c25;
-  background:#07070a;
-}
-.nav{
-  border:0;
-  background:transparent;
+.rose-btn{
+  flex:1 1 58px;
+  min-width:58px;
+  background:#241832;
+  border:1px solid #563d69;
+  padding:9px 6px;
+  border-radius:10px;
+  font-size:12px;
   color:#fff;
   text-align:center;
-  font-size:7px;
 }
-.nav span{
+
+.rose-btn span{
   display:block;
-  font-size:17px;
-  margin-bottom:1px;
+  font-size:20px;
+  line-height:22px;
+  margin-bottom:2px;
 }
-.charge{
-  margin:2px 6px;
-  border-radius:24px;
-  background:#ef0054;
-  padding:4px 0;
-  font-weight:900;
+
+@media(max-width:420px){
+  .wrap{padding:10px}
+  .main{height:260px}
+  .grid{gap:5px}
+  .slot{height:72px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="wrap">
 
-  <div class="header">
-    <div class="live">
-      <span class="liveBadge">● ON AIR</span>
-      <span id="clock">00:00:00</span>
-    </div>
+  <div class="badge">최종 · 최대 13명</div>
 
-    <div class="logo">
-      👑 K-Talk
-      <small>화상 방송 · 최대 13명</small>
+  <div class="top">
+    <div>
+      <div class="brand">👑 K-Talk</div>
+      <div class="sub">13명 화상채팅 · 접속 순서 무관</div>
     </div>
-
-    <div class="viewer">
-      👤 <span id="viewerCount">1</span>　🔔 ⋮
-    </div>
+    <div class="on">ON AIR</div>
   </div>
 
-  <div class="notice">
-    <span class="yellow">⭐ 출석체크 눌러주세요 ⭐</span>
-    　신청곡 5,000원　
-    <span class="pink">★ 광고 문의 환영합니다 ★</span>
-  </div>
+  <div class="main">
 
-  <div class="stage">
-
-    <!-- 호스트 -->
-    <div class="host">
-
-      <video id="hostVideo" autoplay playsinline></video>
-
-      <div class="hostLive">● ON AIR</div>
-
-      <button class="attendance" onclick="attendanceCheck()">
-        💗 출석체크
-      </button>
-
-      <!-- 처음부터 보이는 파장 -->
-      <div class="wave">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      <div class="hostName" id="hostName">
-        👑 호스트
-      </div>
-
-      <div class="mediaControls">
-        <button id="cameraBtn" class="mediaBtn" onclick="toggleCamera()">📷</button>
-        <button id="micBtn" class="mediaBtn" onclick="toggleMic()">🎤</button>
-      </div>
-
+    <div id="ph" class="placeholder">
+      아래 ‘방송 시작’을 누르세요
     </div>
 
-    <!-- 게스트 13자리 -->
-    <div id="guestGrid" class="guests"></div>
+    <video
+      id="localVideo"
+      autoplay
+      playsinline
+      muted>
+    </video>
 
-    <!-- 채팅 -->
-    <div class="chat">
+    <div class="host-label">👑 호스트</div>
 
-      <div class="chatTabs">
-        <div>채팅</div>
-        <div>참가자 (13)</div>
-      </div>
-
-      <div id="messages" class="messages">
-        <div><b>채팅방 관리자</b> 좋은 방송 감사합니다! 💜</div>
-        <div class="green">민수 즐겁게 듣고 있어요! ❤️</div>
-        <div><b>이태훈</b> 신곡 너무 좋아요 👍</div>
-        <div><b>시청★</b> 신청곡 이벤트도 최고!</div>
-        <div><b>감성남자님</b> 선물! 🎁</div>
-        <div class="green">해피걸 노래 최고예요! 👏</div>
-      </div>
-
-      <div class="chatInput">
-        <input id="chatText" placeholder="메시지를 입력하세요...">
-        <button class="send" onclick="sendChat()">전송</button>
-        <button class="chatGift" onclick="openGiftBox()">🎁</button>
-      </div>
-
-    </div>
-
-    <!-- 오른쪽 -->
-    <div class="rightBottom">
-
-      <!-- 선물 -->
-      <div class="giftsPanel">
-
-        <div class="giftTitle">
-          선물 / 후원
-        </div>
-
-        <!-- 선물 5개 한 줄 -->
-        <div class="giftTop">
-
-          <button class="giftBtn" onclick="sendGift('장미',100)">
-            <span class="icon">🌹</span>
-            <span class="giftName">장미</span>
-            <strong>🪙 100</strong>
-          </button>
-
-          <button class="giftBtn" onclick="sendGift('하트',300)">
-            <span class="icon">❤️</span>
-            <span class="giftName">하트</span>
-            <strong>🪙 300</strong>
-          </button>
-
-          <button class="giftBtn" onclick="sendGift('별',500)">
-            <span class="icon">⭐</span>
-            <span class="giftName">별</span>
-            <strong>🪙 500</strong>
-          </button>
-
-          <button class="giftBtn" onclick="sendGift('풍선',1000)">
-            <span class="icon">🎈</span>
-            <span class="giftName">풍선</span>
-            <strong>🪙 1,000</strong>
-          </button>
-
-          <button class="giftBtn" onclick="sendGift('슈퍼하트',10000)">
-            <span class="icon">❤️‍🔥</span>
-            <span class="giftName">슈퍼하트</span>
-            <strong>🪙 10,000</strong>
-          </button>
-
-        </div>
-
-        <!-- 장미 + 선물상자 -->
-        <div class="giftBottom">
-
-          <div class="rosePanel">
-
-            <div class="roseTitle">
-              🌹 장미 선물
-            </div>
-
-            <div class="roseRow">
-
-              <button class="roseBtn" onclick="sendRose(1)">
-                <span class="rosePicture">🌹</span>
-                장미 1송이
-                <strong>🪙 10</strong>
-              </button>
-
-              <button class="roseBtn" onclick="sendRose(5)">
-                <span class="rosePicture">🌹</span>
-                장미 5송이
-                <strong>🪙 50</strong>
-              </button>
-
-              <button class="roseBtn" onclick="sendRose(10)">
-                <span class="rosePicture">🌹</span>
-                장미 10송이
-                <strong>🪙 100</strong>
-              </button>
-
-            </div>
-
-          </div>
-
-          <button class="giftBox" onclick="openGiftBox()">
-            <span class="giftBoxIcon">🎁</span>
-            <span class="giftBoxTitle">선물 상자</span>
-            <span class="giftBoxDesc">
-              다른 선물을<br>
-              선택할 수 있어요!
-            </span>
-          </button>
-
-        </div>
-
-      </div>
-
-      <!-- 제비뽑기 -->
-      <div class="lottery">
-
-        <div>
-
-          <div class="lotteryTitle">
-            제비뽑기 이벤트
-          </div>
-
-          <div class="lotterySub">
-            하루 3번의 행운!
-          </div>
-
-          <div class="drawTimes">
-
-            <div class="drawItem">
-              <b>☀️ 아침</b>
-              <small>09:00</small>
-              <button onclick="drawLottery('아침')">뽑기</button>
-            </div>
-
-            <div class="drawItem">
-              <b>☀️ 점심</b>
-              <small>13:00</small>
-              <button onclick="drawLottery('점심')">뽑기</button>
-            </div>
-
-            <div class="drawItem">
-              <b>🌙 저녁</b>
-              <small>20:00</small>
-              <button onclick="drawLottery('저녁')">뽑기</button>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="lotteryMachine">🎰</div>
-
-      </div>
-
+    <!-- 호스트 전체 폭 파장 -->
+    <div class="wave-wrap">
+      <canvas id="waveCanvas"></canvas>
     </div>
 
   </div>
 
-  <!-- 하단 -->
-  <div class="bottom">
-    <button class="nav"><span>🏠</span>홈</button>
-    <button class="nav"><span>👤</span>마이페이지</button>
-    <button class="nav charge"><span>🪙</span>충전하기</button>
-    <button class="nav"><span>🔔</span>알림</button>
-    <button class="nav"><span>⚙️</span>설정</button>
+  <div class="controls">
+    <button
+      class="start"
+      onclick="startRoom()">
+      📹 방송 시작
+    </button>
+
+    <button
+      class="stop"
+      onclick="stopRoom()">
+      방송 종료
+    </button>
+  </div>
+
+  <div id="status" class="status">
+    대기 중
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+  <!-- 장미만 조금 아래로 내림 -->
+  <div class="rose-gifts">
+    <div class="rose-title">🌹 장미 선물</div>
+
+    <button class="rose-btn">
+      <span>🌹</span>
+      1
+    </button>
+
+    <button class="rose-btn">
+      <span>🌹</span>
+      10
+    </button>
+
+    <button class="rose-btn">
+      <span>💐</span>
+      20
+    </button>
+
+    <button class="rose-btn">
+      <span>💐</span>
+      30
+    </button>
+
+    <button class="rose-btn">
+      <span>🌹</span>
+      50
+    </button>
   </div>
 
 </div>
 
-<script type="module">
 
-import {joinRoom,selfId} from 'https://esm.run/trystero'
+<script>
+const MAX_USERS = 13;
 
-let room=null
-let localStream=null
-let cameraOn=true
-let micOn=true
+const BASE =
+  'ktalk-final13-v20260816-slot-';
 
-let profileAction=null
-let chatAction=null
-let giftAction=null
+let localStream = null;
+let peer = null;
+let mySlot = 0;
+let syncTimer = null;
 
-const peers=new Set()
-const names={}
-const peerStreams={}
+const calls = new Map();
+const pending = new Map();
+const lastSeen = new Map();
+const retryAfter = new Map();
 
-peers.add(selfId)
-names[selfId]='나'
-
-/* 게스트 13자리 */
-const guestGrid=document.getElementById('guestGrid')
-
-for(let i=1;i<=13;i++){
-
-  const slot=document.createElement('div')
-  slot.className='slot'
-
-  slot.innerHTML=`
-    <video id="video${i}" autoplay playsinline></video>
-
-    <div class="empty" id="empty${i}">
-      빈자리
-    </div>
-
-    <div class="slotNo">
-      ${i}
-    </div>
-
-    <div class="muteIcon">
-      🔇
-    </div>
-
-    <div class="slotName" id="name${i}">
-      게스트${i}
-      <small>♡ 0</small>
-    </div>
-
-    <div class="guestRose">
-      🌹
-    </div>
-  `
-
-  guestGrid.appendChild(slot)
+function $(id){
+  return document.getElementById(id);
 }
 
-function getIds(){
-  return [...peers].sort()
+function setStatus(t){
+  $('status').textContent = t;
 }
 
-function getHostId(){
-  const ids=getIds()
-  return ids[0]||selfId
+function slotName(slot){
+  return slot === 1
+    ? '진행자'
+    : '참가자 ' + slot;
 }
 
-function render(){
 
-  const ids=getIds()
-  const hostId=getHostId()
+/* =========================
+   참가자 칸 만들기
+   ========================= */
+function buildGrid(){
 
-  document.getElementById('viewerCount').textContent=ids.length
+  const grid = $('grid');
 
-  const hostVideo=document.getElementById('hostVideo')
+  grid.innerHTML = '';
 
-  document.getElementById('hostName').textContent=
-    '👑 '+(names[hostId]||'호스트')
+  for(let i=1;i<=MAX_USERS;i++){
 
-  if(peerStreams[hostId]){
-    hostVideo.srcObject=peerStreams[hostId]
-    hostVideo.muted=hostId===selfId
+    const d =
+      document.createElement('div');
+
+    d.className = 'slot';
+    d.id = 'slot-' + i;
+    d.textContent = slotName(i);
+
+    grid.appendChild(d);
+  }
+}
+
+buildGrid();
+
+
+function getSlotFromPeerId(id){
+
+  const m =
+    String(id || '')
+    .match(/slot-(\d+)$/);
+
+  return m
+    ? Number(m[1])
+    : 0;
+}
+
+
+function resetSlot(slot){
+
+  const box =
+    $('slot-' + slot);
+
+  if(!box) return;
+
+  box.className =
+    'slot' +
+    (slot === mySlot ? ' me' : '');
+
+  box.innerHTML =
+    slot === mySlot
+    ? slotName(slot) + '<br>· 나 ·'
+    : slotName(slot);
+}
+
+
+function renderRemote(slot, stream){
+
+  if(!slot || slot === mySlot)
+    return;
+
+  const box =
+    $('slot-' + slot);
+
+  if(!box) return;
+
+  box.innerHTML = '';
+
+  const v =
+    document.createElement('video');
+
+  v.autoplay = true;
+  v.playsInline = true;
+  v.srcObject = stream;
+
+  const lab =
+    document.createElement('div');
+
+  lab.className = 'label';
+  lab.textContent =
+    slotName(slot);
+
+  box.appendChild(v);
+  box.appendChild(lab);
+
+  lastSeen.set(
+    slot,
+    Date.now()
+  );
+}
+
+
+function closeSlot(
+  slot,
+  reset = true
+){
+
+  const call =
+    calls.get(slot);
+
+  if(call){
+    try{
+      call.close();
+    }catch(e){}
   }
 
-  const guestIds=ids.filter(id=>id!==hostId)
+  calls.delete(slot);
+  pending.delete(slot);
+  lastSeen.delete(slot);
 
-  for(let i=1;i<=13;i++){
+  if(reset)
+    resetSlot(slot);
+}
 
-    const peerId=guestIds[i-1]
 
-    const video=document.getElementById('video'+i)
-    const empty=document.getElementById('empty'+i)
-    const name=document.getElementById('name'+i)
+function attachCall(slot, call){
 
-    if(peerId){
+  if(
+    !slot ||
+    slot === mySlot ||
+    !call
+  ) return;
 
-      empty.style.display='none'
+  const old =
+    calls.get(slot);
 
-      name.innerHTML=
-        (names[peerId]||'게스트'+i)+
-        '<small>♡ 0</small>'
+  if(old && old !== call){
 
-      if(peerStreams[peerId]){
-        video.srcObject=peerStreams[peerId]
-        video.muted=peerId===selfId
+    try{
+      old.close();
+    }catch(e){}
+  }
+
+  calls.set(slot, call);
+
+  pending.delete(slot);
+
+  lastSeen.set(
+    slot,
+    Date.now()
+  );
+
+
+  call.on(
+    'stream',
+    remoteStream => {
+
+      calls.set(slot, call);
+
+      pending.delete(slot);
+
+      lastSeen.set(
+        slot,
+        Date.now()
+      );
+
+      renderRemote(
+        slot,
+        remoteStream
+      );
+
+      setStatus(
+        '✅ 연결됨 · 내 번호 ' +
+        mySlot +
+        ' · 최대 13명'
+      );
+    }
+  );
+
+
+  call.on(
+    'close',
+    () => {
+
+      if(
+        calls.get(slot) === call
+      ){
+
+        calls.delete(slot);
+
+        pending.delete(slot);
+
+        lastSeen.delete(slot);
+
+        resetSlot(slot);
+
+        retryAfter.set(
+          slot,
+          Date.now() + 1200
+        );
+      }
+    }
+  );
+
+
+  call.on(
+    'error',
+    () => {
+
+      if(
+        calls.get(slot) === call
+      ){
+
+        calls.delete(slot);
+
+        pending.delete(slot);
+
+        lastSeen.delete(slot);
+
+        resetSlot(slot);
+
+        retryAfter.set(
+          slot,
+          Date.now() + 1200
+        );
+      }
+    }
+  );
+}
+
+
+/* =========================
+   자리 잡기
+   ========================= */
+function claimSlot(slot){
+
+  return new Promise(
+    resolve => {
+
+      const p =
+        new Peer(
+          BASE + slot,
+          {
+            debug:0,
+
+            config:{
+              iceServers:[
+                {
+                  urls:
+                  'stun:stun.l.google.com:19302'
+                },
+                {
+                  urls:
+                  'stun:stun1.l.google.com:19302'
+                }
+              ]
+            }
+          }
+        );
+
+      let finished = false;
+
+      const done =
+        value => {
+
+          if(finished)
+            return;
+
+          finished = true;
+
+          resolve(value);
+        };
+
+
+      p.on(
+        'open',
+        () => done(p)
+      );
+
+
+      p.on(
+        'error',
+        () => {
+
+          try{
+            p.destroy();
+          }catch(e){}
+
+          done(null);
+        }
+      );
+
+
+      setTimeout(
+        () => {
+
+          if(!finished){
+
+            try{
+              p.destroy();
+            }catch(e){}
+
+            done(null);
+          }
+
+        },
+        2200
+      );
+    }
+  );
+}
+
+
+function shouldDial(slot){
+
+  if(
+    !peer ||
+    !localStream ||
+    !mySlot
+  )
+    return false;
+
+  if(
+    slot <= 0 ||
+    slot >= mySlot
+  )
+    return false;
+
+  if(
+    calls.has(slot) ||
+    pending.has(slot)
+  )
+    return false;
+
+  if(
+    (retryAfter.get(slot) || 0)
+    > Date.now()
+  )
+    return false;
+
+  return true;
+}
+
+
+function dial(slot){
+
+  if(!shouldDial(slot))
+    return;
+
+  pending.set(
+    slot,
+    Date.now()
+  );
+
+  let call = null;
+
+  try{
+
+    call =
+      peer.call(
+        BASE + slot,
+        localStream,
+        {
+          metadata:{
+            slot:mySlot
+          }
+        }
+      );
+
+  }catch(e){
+
+    pending.delete(slot);
+
+    retryAfter.set(
+      slot,
+      Date.now() + 1500
+    );
+
+    return;
+  }
+
+
+  if(!call){
+
+    pending.delete(slot);
+
+    retryAfter.set(
+      slot,
+      Date.now() + 1500
+    );
+
+    return;
+  }
+
+
+  let gotStream = false;
+
+
+  call.on(
+    'stream',
+    remoteStream => {
+
+      gotStream = true;
+
+      attachCall(
+        slot,
+        call
+      );
+
+      renderRemote(
+        slot,
+        remoteStream
+      );
+    }
+  );
+
+
+  call.on(
+    'close',
+    () => {
+
+      if(
+        calls.get(slot) === call
+      )
+        calls.delete(slot);
+
+      pending.delete(slot);
+
+      lastSeen.delete(slot);
+
+      resetSlot(slot);
+
+      retryAfter.set(
+        slot,
+        Date.now() + 1200
+      );
+    }
+  );
+
+
+  call.on(
+    'error',
+    () => {
+
+      if(
+        calls.get(slot) === call
+      )
+        calls.delete(slot);
+
+      pending.delete(slot);
+
+      lastSeen.delete(slot);
+
+      resetSlot(slot);
+
+      retryAfter.set(
+        slot,
+        Date.now() + 1200
+      );
+    }
+  );
+
+
+  setTimeout(
+    () => {
+
+      if(!gotStream){
+
+        try{
+          call.close();
+        }catch(e){}
+
+        if(
+          calls.get(slot) === call
+        )
+          calls.delete(slot);
+
+        pending.delete(slot);
+
+        retryAfter.set(
+          slot,
+          Date.now() + 1500
+        );
+
+        resetSlot(slot);
       }
 
-    }else{
+    },
+    7000
+  );
+}
 
-      empty.style.display='flex'
-      video.srcObject=null
 
-      name.innerHTML=
-        '게스트'+i+
-        '<small>♡ 0</small>'
+/* =========================
+   자동 연결 복구
+   ========================= */
+function syncPeers(){
+
+  if(
+    !peer ||
+    !localStream ||
+    !mySlot
+  )
+    return;
+
+
+  for(
+    let slot=1;
+    slot<mySlot;
+    slot++
+  ){
+
+    if(
+      shouldDial(slot)
+    )
+      dial(slot);
+  }
+
+
+  for(
+    const [slot,call]
+    of calls.entries()
+  ){
+
+    const pc =
+      call &&
+      call.peerConnection;
+
+    const state =
+      pc
+      ? pc.connectionState
+      : '';
+
+
+    if(
+      state === 'connected'
+    ){
+
+      lastSeen.set(
+        slot,
+        Date.now()
+      );
+
+      continue;
+    }
+
+
+    if(
+      state === 'failed' ||
+      state === 'closed'
+    ){
+
+      closeSlot(slot);
+
+      retryAfter.set(
+        slot,
+        Date.now() + 1200
+      );
+
+      continue;
+    }
+
+
+    if(
+      state === 'disconnected'
+    ){
+
+      const since =
+        lastSeen.get(slot)
+        || Date.now();
+
+      if(
+        Date.now() - since
+        > 4500
+      ){
+
+        closeSlot(slot);
+
+        retryAfter.set(
+          slot,
+          Date.now() + 1200
+        );
+      }
+    }
+  }
+
+
+  for(
+    const [slot,started]
+    of pending.entries()
+  ){
+
+    if(
+      Date.now() - started
+      > 9000
+    ){
+
+      pending.delete(slot);
+
+      retryAfter.set(
+        slot,
+        Date.now() + 1200
+      );
     }
   }
 }
 
-/* 방송 연결 */
-async function startRoom(){
+
+/* =====================================================
+   호스트 음성 파장
+   방송 시작부터 끝까지 보이고
+   인사 / 대화 / 노래 모두 마이크 음성에 반응
+   ===================================================== */
+
+let audioContext = null;
+let analyser = null;
+let audioSource = null;
+let waveAnimation = null;
+
+
+function setupWave(stream){
+
+  stopWave();
+
+  const canvas =
+    $('waveCanvas');
+
+  const ctx =
+    canvas.getContext('2d');
+
+
+  function resizeCanvas(){
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+    canvas.width =
+      Math.max(
+        1,
+        Math.floor(
+          rect.width *
+          window.devicePixelRatio
+        )
+      );
+
+    canvas.height =
+      Math.max(
+        1,
+        Math.floor(
+          rect.height *
+          window.devicePixelRatio
+        )
+      );
+  }
+
+  resizeCanvas();
+
 
   try{
 
-    localStream=
-    await navigator.mediaDevices.getUserMedia({
+    audioContext =
+      new(
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
 
-      video:{
-        facingMode:'user'
-      },
+    analyser =
+      audioContext.createAnalyser();
 
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true,
-        autoGainControl:true
-      }
+    analyser.fftSize = 256;
 
-    })
+    analyser.smoothingTimeConstant =
+      0.75;
+
+    audioSource =
+      audioContext
+      .createMediaStreamSource(
+        stream
+      );
+
+    audioSource.connect(
+      analyser
+    );
+
+    if(
+      audioContext.state ===
+      'suspended'
+    ){
+      audioContext.resume();
+    }
 
   }catch(e){
 
-    alert('카메라와 마이크 사용을 허용해 주세요.')
-    return
+    console.log(
+      '파장 오디오 연결 오류',
+      e
+    );
   }
 
-  peerStreams[selfId]=localStream
 
-  room=joinRoom(
-    {appId:'ktalk-final-photo-11119'},
-    'ktalk-public-main'
+  const bars = 64;
+
+  const data =
+    new Uint8Array(
+      analyser
+      ? analyser.frequencyBinCount
+      : bars
+    );
+
+
+  function draw(){
+
+    const w =
+      canvas.width;
+
+    const h =
+      canvas.height;
+
+    ctx.clearRect(
+      0,
+      0,
+      w,
+      h
+    );
+
+
+    if(analyser){
+
+      analyser
+      .getByteFrequencyData(data);
+
+    }else{
+
+      data.fill(8);
+    }
+
+
+    const gap =
+      2 *
+      window.devicePixelRatio;
+
+    const barWidth =
+      Math.max(
+        2 *
+        window.devicePixelRatio,
+        (w / bars) - gap
+      );
+
+
+    for(
+      let i=0;
+      i<bars;
+      i++
+    ){
+
+      const index =
+        Math.floor(
+          i *
+          data.length /
+          bars
+        );
+
+      const value =
+        data[index] || 0;
+
+      /* 말 안 할 때도 아주 작은 파장 유지 */
+      const minimum =
+        4 *
+        window.devicePixelRatio;
+
+      const barHeight =
+        Math.max(
+          minimum,
+          (value / 255) *
+          h *
+          0.92
+        );
+
+
+      const x =
+        i *
+        (w / bars);
+
+      const y =
+        h - barHeight;
+
+
+      const gradient =
+        ctx.createLinearGradient(
+          0,
+          h,
+          0,
+          0
+        );
+
+      gradient.addColorStop(
+        0,
+        '#00d9ff'
+      );
+
+      gradient.addColorStop(
+        .32,
+        '#37ff8b'
+      );
+
+      gradient.addColorStop(
+        .60,
+        '#ffe34f'
+      );
+
+      gradient.addColorStop(
+        .80,
+        '#ff9b3d'
+      );
+
+      gradient.addColorStop(
+        1,
+        '#ff387d'
+      );
+
+
+      ctx.fillStyle =
+        gradient;
+
+      ctx.fillRect(
+        x,
+        y,
+        barWidth,
+        barHeight
+      );
+    }
+
+
+    waveAnimation =
+      requestAnimationFrame(
+        draw
+      );
+  }
+
+
+  draw();
+}
+
+
+function drawIdleWave(){
+
+  const canvas =
+    $('waveCanvas');
+
+  if(!canvas) return;
+
+  const ctx =
+    canvas.getContext('2d');
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+  canvas.width =
+    Math.max(
+      1,
+      Math.floor(
+        rect.width *
+        window.devicePixelRatio
+      )
+    );
+
+  canvas.height =
+    Math.max(
+      1,
+      Math.floor(
+        rect.height *
+        window.devicePixelRatio
+      )
+    );
+
+
+  const w =
+    canvas.width;
+
+  const h =
+    canvas.height;
+
+  ctx.clearRect(
+    0,
+    0,
+    w,
+    h
+  );
+
+
+  const bars = 64;
+
+  const gap =
+    2 *
+    window.devicePixelRatio;
+
+  const barWidth =
+    Math.max(
+      2 *
+      window.devicePixelRatio,
+      (w / bars) - gap
+    );
+
+
+  for(
+    let i=0;
+    i<bars;
+    i++
+  ){
+
+    const barHeight =
+      (4 +
+      Math.sin(i * .7) * 2 +
+      2) *
+      window.devicePixelRatio;
+
+    const x =
+      i *
+      (w / bars);
+
+    const y =
+      h - barHeight;
+
+
+    const gradient =
+      ctx.createLinearGradient(
+        0,
+        h,
+        0,
+        0
+      );
+
+    gradient.addColorStop(
+      0,
+      '#00d9ff'
+    );
+
+    gradient.addColorStop(
+      .35,
+      '#45ff8f'
+    );
+
+    gradient.addColorStop(
+      .68,
+      '#ffe64d'
+    );
+
+    gradient.addColorStop(
+      1,
+      '#ff397c'
+    );
+
+    ctx.fillStyle =
+      gradient;
+
+    ctx.fillRect(
+      x,
+      y,
+      barWidth,
+      barHeight
+    );
+  }
+}
+
+
+function stopWave(){
+
+  if(waveAnimation){
+
+    cancelAnimationFrame(
+      waveAnimation
+    );
+
+    waveAnimation = null;
+  }
+
+
+  if(audioSource){
+
+    try{
+      audioSource.disconnect();
+    }catch(e){}
+
+    audioSource = null;
+  }
+
+
+  analyser = null;
+
+
+  if(audioContext){
+
+    try{
+      audioContext.close();
+    }catch(e){}
+
+    audioContext = null;
+  }
+
+
+  drawIdleWave();
+}
+
+
+/* =========================
+   방송 시작
+   ========================= */
+async function startRoom(){
+
+  if(
+    localStream ||
+    peer
   )
+    return;
 
-  profileAction=room.makeAction('profile')
-  chatAction=room.makeAction('chat')
-  giftAction=room.makeAction('gift')
 
-  room.addStream(localStream)
+  try{
 
-  room.onPeerJoin=peerId=>{
+    localStream =
+      await navigator
+      .mediaDevices
+      .getUserMedia({
 
-    peers.add(peerId)
+        video:{
+          facingMode:'user',
+          width:{
+            ideal:640
+          },
+          height:{
+            ideal:360
+          },
+          frameRate:{
+            ideal:15,
+            max:20
+          }
+        },
 
-    room.addStream(
-      localStream,
-      {target:peerId}
-    )
+        audio:{
+          echoCancellation:true,
+          noiseSuppression:true,
+          autoGainControl:true
+        }
+      });
 
-    profileAction.send(
-      {name:names[selfId]},
-      {target:peerId}
-    )
 
-    render()
+    $('localVideo').srcObject =
+      localStream;
+
+    $('ph').style.display =
+      'none';
+
+
+    /* 마이크 들어오면 파장 바로 시작 */
+    setupWave(
+      localStream
+    );
+
+
+  }catch(e){
+
+    localStream = null;
+
+    alert(
+      '카메라와 마이크를 허용해 주세요.'
+    );
+
+    return;
   }
 
-  room.onPeerLeave=peerId=>{
 
-    peers.delete(peerId)
+  setStatus(
+    '13명 방 연결 중...'
+  );
 
-    delete names[peerId]
-    delete peerStreams[peerId]
 
-    render()
+  for(
+    let i=1;
+    i<=MAX_USERS;
+    i++
+  ){
+
+    const p =
+      await claimSlot(i);
+
+    if(p){
+
+      peer = p;
+
+      mySlot = i;
+
+      break;
+    }
   }
 
-  room.onPeerStream=(stream,peerId)=>{
 
-    peers.add(peerId)
+  if(!peer){
 
-    peerStreams[peerId]=stream
+    localStream
+    .getTracks()
+    .forEach(
+      t => t.stop()
+    );
 
-    render()
+    localStream = null;
+
+    $('localVideo').srcObject =
+      null;
+
+    $('ph').style.display =
+      'flex';
+
+    stopWave();
+
+    setStatus(
+      '⛔ 이 방은 최대 13명입니다.'
+    );
+
+    alert(
+      '현재 13명이 접속 중입니다.'
+    );
+
+    return;
   }
 
-  profileAction.onMessage=(data,{peerId})=>{
 
-    peers.add(peerId)
-
-    names[peerId]=data?.name||'참가자'
-
-    render()
-  }
-
-  chatAction.onMessage=(data,{peerId})=>{
-
-    addMessage(
-      data?.name||names[peerId]||'참가자',
-      data?.text||''
-    )
-  }
-
-  giftAction.onMessage=(data,{peerId})=>{
-
-    addMessage(
-      data?.name||names[peerId]||'참가자',
-      data?.text||''
-    )
-  }
-
-  profileAction.send({
-    name:names[selfId]
-  })
-
-  render()
-}
-
-/* 카메라 */
-window.toggleCamera=function(){
-
-  if(!localStream)return
-
-  const track=localStream.getVideoTracks()[0]
-  if(!track)return
-
-  cameraOn=!cameraOn
-  track.enabled=cameraOn
-
-  const btn=document.getElementById('cameraBtn')
-
-  btn.textContent=cameraOn?'📷':'🔒'
-  btn.classList.toggle('off',!cameraOn)
-}
-
-/* 마이크 */
-window.toggleMic=function(){
-
-  if(!localStream)return
-
-  const track=localStream.getAudioTracks()[0]
-  if(!track)return
-
-  micOn=!micOn
-  track.enabled=micOn
-
-  const btn=document.getElementById('micBtn')
-
-  btn.textContent=micOn?'🎤':'🔇'
-  btn.classList.toggle('off',!micOn)
-}
-
-/* 출석 */
-window.attendanceCheck=function(){
-  alert('출석체크 완료! ❤️')
-}
-
-/* 문자 안전 처리 */
-function safe(text){
-
-  return String(text)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-}
-
-/* 채팅 표시 */
-function addMessage(name,text){
-
-  const line=document.createElement('div')
-
-  line.innerHTML=
-    '<b>'+safe(name)+'</b> '+safe(text)
-
-  const messages=document.getElementById('messages')
-
-  messages.appendChild(line)
-
-  messages.scrollTop=messages.scrollHeight
-}
-
-/* 채팅 전송 */
-window.sendChat=function(){
-
-  if(!chatAction)return
-
-  const input=document.getElementById('chatText')
-  const text=input.value.trim()
-
-  if(!text)return
-
-  addMessage(names[selfId],text)
-
-  chatAction.send({
-    name:names[selfId],
-    text:text
-  })
-
-  input.value=''
-}
-
-/* 선물 */
-window.sendGift=function(name,price){
-
-  const text=
-    '🎁 '+name+' 🪙 '+price
-
-  addMessage(names[selfId],text)
-
-  if(giftAction){
-
-    giftAction.send({
-      name:names[selfId],
-      text:text
-    })
-  }
-}
-
-/* 장미 */
-window.sendRose=function(count){
-
-  const price=count*10
-
-  const text=
-    '🌹 장미 '+count+'송이 🪙 '+price
-
-  addMessage(names[selfId],text)
-
-  if(giftAction){
-
-    giftAction.send({
-      name:names[selfId],
-      text:text
-    })
-  }
-}
-
-/* 선물상자 */
-window.openGiftBox=function(){
-
-  const text='🎁 선물상자를 열었습니다.'
-
-  addMessage(names[selfId],text)
-
-  if(giftAction){
-
-    giftAction.send({
-      name:names[selfId],
-      text:text
-    })
-  }
-}
-
-/* 제비뽑기 */
-window.drawLottery=function(time){
-
-  const prizes=[
-    '꽝',
-    '꽝',
-    '장미 1개',
-    '장미 2개',
-    '장미 3개',
-    '장미 4개',
-    '장미 5개'
-  ]
-
-  const result=
-    prizes[Math.floor(Math.random()*prizes.length)]
-
-  alert(
-    time+' 제비뽑기 결과 : '+result
+  for(
+    let i=1;
+    i<=MAX_USERS;
+    i++
   )
+    resetSlot(i);
+
+
+  peer.on(
+    'call',
+    call => {
+
+      const slot =
+        getSlotFromPeerId(
+          call.peer
+        );
+
+      if(
+        !slot ||
+        slot === mySlot
+      ){
+
+        try{
+          call.close();
+        }catch(e){}
+
+        return;
+      }
+
+
+      try{
+
+        call.answer(
+          localStream
+        );
+
+      }catch(e){}
+
+
+      attachCall(
+        slot,
+        call
+      );
+    }
+  );
+
+
+  peer.on(
+    'disconnected',
+    () => {
+
+      setStatus(
+        '연결 복구 중...'
+      );
+
+      try{
+        peer.reconnect();
+      }catch(e){}
+    }
+  );
+
+
+  peer.on(
+    'error',
+    err => {
+
+      if(
+        err &&
+        (
+          err.type ===
+          'peer-unavailable'
+          ||
+          err.type ===
+          'network'
+        )
+      )
+        return;
+
+      console.log(err);
+    }
+  );
+
+
+  syncPeers();
+
+  syncTimer =
+    setInterval(
+      syncPeers,
+      2000
+    );
+
+
+  setStatus(
+
+    mySlot === 1
+
+    ? '✅ 진행자 입장 완료 · 최대 13명'
+
+    : '✅ 참가자 ' +
+      mySlot +
+      ' 입장 완료 · 최대 13명'
+  );
 }
 
-/* 엔터로 채팅 */
-document
-.getElementById('chatText')
-.addEventListener('keydown',e=>{
 
-  if(e.key==='Enter'){
-    window.sendChat()
+/* =========================
+   방송 종료
+   ========================= */
+function stopRoom(){
+
+  if(syncTimer){
+
+    clearInterval(
+      syncTimer
+    );
+
+    syncTimer = null;
   }
-})
 
-/* 시계 */
-setInterval(()=>{
 
-  const now=new Date()
+  for(
+    const slot
+    of Array.from(
+      calls.keys()
+    )
+  ){
 
-  document.getElementById('clock').textContent=
-    String(now.getHours()).padStart(2,'0')+':'+
-    String(now.getMinutes()).padStart(2,'0')+':'+
-    String(now.getSeconds()).padStart(2,'0')
+    closeSlot(
+      slot,
+      false
+    );
+  }
 
-},1000)
 
-/* 시작 */
-startRoom()
+  calls.clear();
 
+  pending.clear();
+
+  lastSeen.clear();
+
+  retryAfter.clear();
+
+
+  try{
+
+    if(peer)
+      peer.destroy();
+
+  }catch(e){}
+
+
+  if(localStream){
+
+    localStream
+    .getTracks()
+    .forEach(
+      t => t.stop()
+    );
+  }
+
+
+  localStream = null;
+
+  peer = null;
+
+  mySlot = 0;
+
+
+  $('localVideo').srcObject =
+    null;
+
+  $('ph').style.display =
+    'flex';
+
+
+  stopWave();
+
+
+  for(
+    let i=1;
+    i<=MAX_USERS;
+    i++
+  )
+    resetSlot(i);
+
+
+  setStatus(
+    '대기 중'
+  );
+}
+
+
+/* 처음부터 파장 줄은 보이게 */
+window.addEventListener(
+  'load',
+  drawIdleWave
+);
+
+
+window.addEventListener(
+  'resize',
+  () => {
+
+    if(!localStream)
+      drawIdleWave();
+  }
+);
+
+
+window.addEventListener(
+  'beforeunload',
+  stopRoom
+);
 </script>
 
 </body>
