@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ko">
 <head>
@@ -25,16 +24,11 @@ button,input{
   font-family:inherit;
 }
 
-/* ===== 전체 한 화면 고정 ===== */
 .app{
   width:100vw;
   height:100dvh;
   padding:4px;
   display:grid;
-
-  /* 핵심:
-     호스트 영역을 짧게 하고
-     채팅 영역을 위로 올림 */
   grid-template-rows:
     40px
     32px
@@ -42,12 +36,11 @@ button,input{
     31dvh
     minmax(0,1fr)
     48px;
-
   gap:4px;
   overflow:hidden;
 }
 
-/* ===== 상단 ===== */
+/* 상단 */
 .header{
   display:grid;
   grid-template-columns:1fr auto 1fr;
@@ -85,7 +78,7 @@ button,input{
   font-size:9px;
 }
 
-/* ===== 1번 일반방 / 2번 비밀방 ===== */
+/* 큰 입장 버튼 */
 .roomBar{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -113,7 +106,7 @@ button,input{
   outline:2px solid #fff;
 }
 
-/* ===== 안내 ===== */
+/* 안내 */
 .notice{
   border:1px solid #5f266d;
   border-radius:7px;
@@ -125,17 +118,15 @@ button,input{
   white-space:nowrap;
 }
 
-/* ===== 메인 방송 ===== */
+/* 방송 영역 */
 .main{
   min-height:0;
   display:grid;
-
-  /* 호스트 조금 넓게 */
   grid-template-columns:46% 54%;
   gap:4px;
 }
 
-/* ===== 호스트 ===== */
+/* 호스트 - 그대로 */
 .host{
   position:relative;
   min-height:0;
@@ -150,8 +141,6 @@ button,input{
   width:100%;
   height:100%;
   object-fit:cover;
-
-  /* 얼굴/상체 중심 */
   object-position:center 25%;
 }
 
@@ -164,7 +153,6 @@ button,input{
   font-weight:900;
 }
 
-/* 날개 하트 출석체크 */
 .attendance{
   position:absolute;
   top:5px;
@@ -191,28 +179,40 @@ button,input{
   font-weight:900;
 }
 
-/* ===== 게스트 12명 ===== */
+/* =========================
+   게스트 12명
+   여기만 크게 수정
+========================= */
+
 .guestGrid{
   min-height:0;
-
-  /* 12명 = 3열 × 4줄 */
+  width:100%;
+  height:100%;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  grid-template-rows:repeat(4,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(4,minmax(0,1fr));
 
-  gap:3px;
+  /* 기존보다 간격 최대한 줄임 */
+  gap:1px;
 }
 
 .slot{
   position:relative;
+  min-width:0;
   min-height:0;
+  width:100%;
+  height:100%;
   overflow:hidden;
   background:#111015;
   border:1px solid #39313f;
-  border-radius:5px;
+
+  /* 테두리 공간도 조금 줄임 */
+  border-radius:4px;
 }
 
 .slot video{
+  position:absolute;
+  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
@@ -222,8 +222,9 @@ button,input{
   position:absolute;
   top:2px;
   left:2px;
-  width:17px;
-  height:17px;
+  z-index:4;
+  width:18px;
+  height:18px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -263,6 +264,7 @@ button,input{
   left:2px;
   right:2px;
   bottom:1px;
+  z-index:4;
   padding:9px 2px 2px;
   font-size:7px;
   font-weight:900;
@@ -275,13 +277,15 @@ button,input{
 .slotRose{
   position:absolute;
   right:2px;
-  bottom:1px;
+  bottom:2px;
+  z-index:5;
   font-size:10px;
 }
 
 .empty{
   position:absolute;
   inset:0;
+  z-index:2;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -289,7 +293,7 @@ button,input{
   font-size:7px;
 }
 
-/* ===== 채팅 + 선물 ===== */
+/* 채팅 + 선물 - 그대로 */
 .lower{
   min-height:0;
   display:grid;
@@ -315,7 +319,6 @@ button,input{
   font-weight:900;
 }
 
-/* 채팅 */
 .messages{
   height:calc(100% - 55px);
   padding:5px;
@@ -356,7 +359,7 @@ button,input{
   padding:0 8px;
 }
 
-/* ===== 선물 ===== */
+/* 선물 */
 .rightPanel{
   min-height:0;
   display:grid;
@@ -453,7 +456,7 @@ button,input{
   font-size:22px;
 }
 
-/* ===== 제비뽑기 ===== */
+/* 제비뽑기 - 그대로 유지 */
 .lottery{
   display:flex;
   align-items:center;
@@ -483,7 +486,7 @@ button,input{
   font-size:22px;
 }
 
-/* ===== 하단 메뉴 ===== */
+/* 하단 메뉴 */
 .bottomNav{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -517,7 +520,6 @@ button,input{
 
 <div class="app">
 
-  <!-- 상단 -->
   <div class="header">
 
     <div class="live">
@@ -536,7 +538,6 @@ button,input{
 
   </div>
 
-  <!-- 큰 방 버튼 -->
   <div class="roomBar">
 
     <button
@@ -555,15 +556,12 @@ button,input{
 
   </div>
 
-  <!-- 안내 -->
   <div class="notice">
-    ʚ 💗 출석체크 💗 ɞ　·　신청곡 5,000원　·　🌹 장미 1개 50원
+    ʚ 💗 출석체크 💗 ɞ · 신청곡 5,000원 · 🌹 장미 1개 50원
   </div>
 
-  <!-- 방송 화면 -->
   <div class="main">
 
-    <!-- 호스트 -->
     <div class="host">
 
       <video
@@ -588,7 +586,6 @@ button,input{
 
     </div>
 
-    <!-- 게스트 12명 -->
     <div
       class="guestGrid"
       id="guestGrid">
@@ -596,7 +593,6 @@ button,input{
 
   </div>
 
-  <!-- 채팅 / 선물 -->
   <div class="lower">
 
     <div class="panel">
@@ -758,7 +754,6 @@ button,input{
 
   </div>
 
-  <!-- 아래 메뉴 -->
   <div class="bottomNav">
 
     <div class="nav">
@@ -810,10 +805,7 @@ const peerStreams={}
 const guestGrid=
 document.getElementById('guestGrid')
 
-/* =========================
-   게스트 12개 자리
-========================= */
-
+/* 게스트 12자리 */
 for(let i=1;i<=12;i++){
 
   const slot=
@@ -852,10 +844,7 @@ for(let i=1;i<=12;i++){
   guestGrid.appendChild(slot)
 }
 
-/* =========================
-   큰 버튼으로 방 입장
-========================= */
-
+/* 큰 버튼으로 입장 */
 window.enterRoom=
 async function(type){
 
@@ -937,16 +926,13 @@ async function(type){
 
   peerStreams[selfId]=stream
 
-  /* 상대 정보 받기 */
   profile.onMessage=
   (data,{peerId})=>{
 
     peers[peerId]=data
-
     render()
   }
 
-  /* 채팅 받기 */
   chat.onMessage=
   data=>{
 
@@ -956,7 +942,6 @@ async function(type){
     )
   }
 
-  /* 선물 받기 */
   gift.onMessage=
   data=>{
 
@@ -966,7 +951,6 @@ async function(type){
     )
   }
 
-  /* 새 사람 입장 */
   room.onPeerJoin=
   peerId=>{
 
@@ -988,7 +972,6 @@ async function(type){
     )
   }
 
-  /* 사람 나감 */
   room.onPeerLeave=
   peerId=>{
 
@@ -998,16 +981,13 @@ async function(type){
     render()
   }
 
-  /* 영상 받기 */
   room.onPeerStream=
   (incoming,peerId)=>{
 
     peerStreams[peerId]=incoming
-
     render()
   }
 
-  /* 내 영상 보내기 */
   room.addStream(stream)
 
   profile.send({
@@ -1017,8 +997,7 @@ async function(type){
 
   render()
 
-  /* 방에 호스트가 없으면
-     첫 번째 입장자가 자동 호스트 */
+  /* 첫 입장자는 자동 호스트 */
   setTimeout(()=>{
 
     const otherHost=
@@ -1050,10 +1029,7 @@ async function(type){
   },1000)
 }
 
-/* =========================
-   화면 표시
-========================= */
-
+/* 화면 표시 */
 function render(){
 
   const ids=
@@ -1111,7 +1087,6 @@ function render(){
     id=>id!==hostId
   )
 
-  /* 12명만 표시 */
   for(let i=1;i<=12;i++){
 
     const peerId=
@@ -1153,19 +1128,13 @@ function render(){
     }else{
 
       video.srcObject=null
-
       empty.style.display='flex'
-
-      name.textContent=
-      '빈자리'
+      name.textContent='빈자리'
     }
   }
 }
 
-/* =========================
-   글자 안전 처리
-========================= */
-
+/* 안전 문자 */
 function safe(text){
 
   return String(text)
@@ -1174,10 +1143,7 @@ function safe(text){
   .replaceAll('>','&gt;')
 }
 
-/* =========================
-   채팅
-========================= */
-
+/* 채팅 */
 function addMessage(
   name,
   text
@@ -1225,10 +1191,7 @@ function(){
   input.value=''
 }
 
-/* =========================
-   선물
-========================= */
-
+/* 선물 */
 window.sendGift=
 function(name,price){
 
@@ -1248,10 +1211,7 @@ function(name,price){
   })
 }
 
-/* =========================
-   장미
-========================= */
-
+/* 장미 */
 window.sendRose=
 function(count){
 
@@ -1271,10 +1231,7 @@ function(count){
   })
 }
 
-/* =========================
-   선물상자
-========================= */
-
+/* 선물상자 */
 window.openGiftBox=
 function(){
 
@@ -1294,10 +1251,7 @@ function(){
   })
 }
 
-/* =========================
-   제비뽑기
-========================= */
-
+/* 제비뽑기 */
 window.drawLottery=
 function(){
 
@@ -1325,7 +1279,7 @@ function(){
   )
 }
 
-/* 엔터키 채팅 */
+/* 엔터 채팅 */
 document
 .getElementById('chatText')
 .addEventListener(
@@ -1333,16 +1287,12 @@ document
   event=>{
 
     if(event.key==='Enter'){
-
       window.sendChat()
     }
   }
 )
 
-/* =========================
-   시계
-========================= */
-
+/* 시계 */
 setInterval(()=>{
 
   const now=
@@ -1373,4 +1323,4 @@ setInterval(()=>{
 </script>
 
 </body>
-  </html>
+</html>
