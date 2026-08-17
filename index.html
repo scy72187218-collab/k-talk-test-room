@@ -1,2230 +1,298 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<!-- 선물 / 후원 -->
+<div class="giftsPanel">
 
-<title>K-Talk</title>
+  <div class="giftsLeft">
 
-<style>
-*{
-  box-sizing:border-box;
-}
+    <div class="sectionMiniTitle">선물 / 후원</div>
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#050507;
-  color:#fff;
-  font-family:Arial,"Noto Sans KR",sans-serif;
-}
+    <div class="giftTopRow">
 
-button,input{
-  font-family:inherit;
-}
+      <button class="giftBtn" onclick="sendGift('장미',100)">
+        <span class="icon">🌹</span>
+        장미
+        <strong>🪙 100</strong>
+      </button>
 
-/* =====================================================
-   중요
-   화면 전체를 708 x 1000 고정판으로 만든 뒤
-   휴대폰 화면에 맞춰 통째로 축소
-===================================================== */
+      <button class="giftBtn" onclick="sendGift('하트',300)">
+        <span class="icon">❤️</span>
+        하트
+        <strong>🪙 300</strong>
+      </button>
 
-.viewport{
-  width:100vw;
-  height:100dvh;
-  overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  background:#050507;
-}
+      <button class="giftBtn" onclick="sendGift('별',500)">
+        <span class="icon">⭐</span>
+        별
+        <strong>🪙 500</strong>
+      </button>
 
-.design{
-  width:708px;
-  height:1000px;
+      <button class="giftBtn" onclick="sendGift('풍선',1000)">
+        <span class="icon">🎈</span>
+        풍선
+        <strong>🪙 1,000</strong>
+      </button>
 
-  flex:none;
-  transform-origin:top center;
+      <button class="giftBtn" onclick="sendGift('슈퍼하트',10000)">
+        <span class="icon">❤️‍🔥</span>
+        슈퍼하트
+        <strong>🪙 10,000</strong>
+      </button>
 
-  padding:8px 10px 10px;
+    </div>
 
-  display:grid;
-  grid-template-rows:
-    52px
-    36px
-    1fr
-    62px;
+    <div class="roseRowContainer">
 
-  gap:6px;
+      <div class="sectionMiniTitle roseTitle">
+        🌹 장미 선물
+      </div>
 
-  background:#050507;
-}
+      <div class="roseBtnGrid">
 
-/* =====================================================
-   위 K-Talk
-===================================================== */
+        <button class="roseBtn" onclick="sendRose(1)">
+          <span class="rosePicture">🌹</span>
+          <span>장미 1송이</span>
+          <strong>🪙 10</strong>
+        </button>
 
-.header{
-  display:grid;
-  grid-template-columns:185px 1fr 185px;
-  align-items:center;
-}
+        <button class="roseBtn" onclick="sendRose(5)">
+          <span class="rosePicture">🌹</span>
+          <span>장미 5송이</span>
+          <strong>🪙 50</strong>
+        </button>
 
-.onair{
-  display:flex;
-  align-items:center;
-  gap:8px;
+        <button class="roseBtn" onclick="sendRose(10)">
+          <span class="rosePicture">🌹</span>
+          <span>장미 10송이</span>
+          <strong>🪙 100</strong>
+        </button>
 
-  font-size:15px;
-  font-weight:900;
-}
+      </div>
 
-.onair b{
-  display:inline-block;
+    </div>
 
-  background:#e91445;
+  </div>
 
-  border-radius:6px;
+  <button class="giftBoxCard" onclick="openGiftBox()">
+    <span class="boxIcon">🎁</span>
+    <span class="boxTitle">선물 상자</span>
+    <span class="boxDesc">다른 선물을<br>선택할 수 있어요!</span>
+  </button>
 
-  padding:8px 10px;
+</div>
 
-  font-size:14px;
-}
+<!-- 제비뽑기 -->
+<div class="lottery">
 
-.logo{
-  text-align:center;
+  <div class="lotteryLeft">
 
-  color:#ffd22d;
+    <div class="lotteryTitle">
+      제비뽑기 이벤트
+    </div>
 
-  font-size:27px;
-  font-weight:900;
+    <div class="lotterySub">
+      하루 3번의 행운! 선물을 뽑아보세요!
+    </div>
 
-  line-height:1;
-}
+    <div class="drawTimes">
 
-.logo small{
-  display:block;
+      <div class="drawItem">
+        <b>☀️ 아침</b>
+        <small>09:00</small>
+        <button onclick="drawLottery()">뽑기 1/3</button>
+      </div>
 
-  margin-top:5px;
+      <div class="drawItem">
+        <b>☀️ 점심</b>
+        <small>13:00</small>
+        <button onclick="drawLottery()">뽑기 1/3</button>
+      </div>
 
-  color:#fff;
+      <div class="drawItem">
+        <b>🌙 저녁</b>
+        <small>20:00</small>
+        <button onclick="drawLottery()">뽑기 1/3</button>
+      </div>
 
-  font-size:12px;
-}
+    </div>
 
-.viewer{
-  text-align:right;
+  </div>
 
-  font-size:14px;
-}
+  <div class="lotteryMachine">🎰</div>
 
-/* =====================================================
-   광고판
-===================================================== */
-
-.notice{
-  border:1px solid #4b2152;
-
-  border-radius:5px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  white-space:nowrap;
-
-  font-size:13px;
-  font-weight:900;
-}
-
-.yellow{
-  color:#ffd437;
-}
-
-.pink{
-  color:#ff42b0;
-}
-
-/* =====================================================
-   가운데 전체
-===================================================== */
-
-.stage{
+</div>
+.giftsPanel{
   min-width:0;
   min-height:0;
-
   display:grid;
-
-  /* 사진 기준 */
-  grid-template-columns:46% 54%;
-  grid-template-rows:59% 41%;
-
-  gap:6px;
-
-  overflow:hidden;
-}
-
-.panel{
-  min-width:0;
-  min-height:0;
-
-  overflow:hidden;
-
-  border:1px solid #47224d;
-
-  border-radius:5px;
-
-  background:#07070a;
-}
-
-/* =====================================================
-   호스트
-===================================================== */
-
-.host{
-  position:relative;
-}
-
-.host video{
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-
-  /* 얼굴이 너무 아래로 안 내려가게 */
-  object-position:center 30%;
-
-  background:#08080b;
-}
-
-.hostLive{
-  position:absolute;
-
-  top:8px;
-  left:8px;
-
-  z-index:5;
-
-  color:#ff2b47;
-
-  font-size:12px;
-  font-weight:900;
-}
-
-.attendance{
-  position:absolute;
-
-  top:8px;
-  left:50%;
-
-  transform:translateX(-50%);
-
-  z-index:6;
-
-  white-space:nowrap;
-
-  padding:6px 16px;
-
-  border:1px solid #ff2bd5;
-
-  border-radius:20px;
-
-  background:rgba(61,12,72,.92);
-
-  color:#ffd42c;
-
-  box-shadow:0 0 10px #ff00cc;
-
-  font-size:13px;
-  font-weight:900;
-}
-
-.hostName{
-  position:absolute;
-
-  left:8px;
-  bottom:8px;
-
-  z-index:6;
-
-  padding:6px 10px;
-
-  border-radius:5px;
-
-  background:rgba(0,0,0,.78);
-
-  color:#ffd32b;
-
-  font-size:12px;
-  font-weight:900;
-}
-
-/* =====================================================
-   게스트 13명
-===================================================== */
-
-.guests{
-  min-width:0;
-  min-height:0;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,minmax(0,1fr));
-
-  grid-template-rows:
-    repeat(5,minmax(0,1fr));
-
+  grid-template-columns:minmax(0,1fr) 72px;
   gap:4px;
-}
-
-.slot{
-  position:relative;
-
-  min-width:0;
-  min-height:0;
-
-  overflow:hidden;
-
-  border:1px solid #343039;
-
-  border-radius:4px;
-
-  background:#0c0c0f;
-}
-
-.slot video{
-  position:absolute;
-
-  inset:0;
-
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-  object-position:center 28%;
-
-  background:#101012;
-}
-
-.slotNo{
-  position:absolute;
-
-  top:4px;
-  left:4px;
-
-  z-index:5;
-
-  width:22px;
-  height:22px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:4px;
-
-  background:#777;
-
-  font-size:11px;
-  font-weight:900;
-}
-
-.slot:nth-child(1) .slotNo{
-  background:#f2c516;
-  color:#111;
-}
-
-.slot:nth-child(2) .slotNo{
-  background:#e91f67;
-}
-
-.slot:nth-child(3) .slotNo{
-  background:#ef7a0f;
-}
-
-.slot:nth-child(4) .slotNo{
-  background:#1ea7da;
-}
-
-.slot:nth-child(5) .slotNo{
-  background:#5d28e8;
-}
-
-.slot:nth-child(6) .slotNo{
-  background:#16bd51;
-}
-
-.slotName{
-  position:absolute;
-
-  left:5px;
-  bottom:4px;
-
-  z-index:5;
-
-  font-size:10px;
-  font-weight:900;
-
-  line-height:1.15;
-
-  text-shadow:
-    0 1px 2px #000,
-    0 0 3px #000;
-}
-
-.mute{
-  position:absolute;
-
-  right:4px;
-  top:4px;
-
-  z-index:6;
-
-  font-size:11px;
-}
-
-.guestRose{
-  position:absolute;
-
-  right:5px;
-  bottom:5px;
-
-  z-index:6;
-
-  font-size:13px;
-}
-
-.empty{
-  position:absolute;
-
-  inset:0;
-
-  display:grid;
-  place-items:center;
-
-  color:#3b3b3f;
-
-  font-size:10px;
-}
-
-/* 13번은 왼쪽 아래 */
-.slot:nth-child(13){
-  grid-column:1;
-}
-
-/* =====================================================
-   채팅
-===================================================== */
-
-.chat{
-  display:grid;
-
-  grid-template-rows:
-    34px
-    1fr
-    42px;
-}
-
-.chatTabs{
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  border-bottom:1px solid #3a203f;
-}
-
-.chatTabs div{
-  display:grid;
-  place-items:center;
-
-  font-size:12px;
-  font-weight:900;
-}
-
-.chatTabs div:first-child{
-  color:#f1a8ff;
-
-  text-shadow:
-    0 0 7px #dc3cff;
-}
-
-.messages{
-  padding:8px 10px;
-
-  overflow:hidden;
-
-  font-size:10.5px;
-
-  line-height:1.48;
-}
-
-.messages b{
-  color:#37d9ff;
-}
-
-.messages .green{
-  color:#39db69;
-}
-
-.messages .pink{
-  color:#ff62ad;
-}
-
-.chatInput{
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    47px
-    38px;
-
-  gap:4px;
-
   padding:4px;
+  overflow:hidden;
 }
 
-.chatInput input{
+.giftsLeft{
   min-width:0;
-
-  background:#161419;
-
-  border:1px solid #332638;
-
-  border-radius:5px;
-
-  color:#fff;
-
-  padding:6px 7px;
-
-  font-size:9px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
 }
 
-.send{
-  border:0;
-
-  border-radius:5px;
-
-  background:#7d28d3;
-
-  color:#fff;
-
-  font-size:10px;
-  font-weight:900;
-}
-
-.miniGift{
-  border:1px solid #742633;
-
-  border-radius:5px;
-
-  background:#15090c;
-
-  font-size:18px;
-}
-
-/* =====================================================
-   오른쪽 아래
-===================================================== */
-
-.rightBottom{
-  min-width:0;
-  min-height:0;
-
+.giftTopRow{
   display:grid;
-
-  grid-template-rows:
-    58%
-    42%;
-
-  gap:6px;
-}
-
-/* =====================================================
-   선물
-===================================================== */
-
-.gifts{
-  padding:7px 8px;
-
-  display:grid;
-
-  grid-template-rows:
-    auto
-    1fr;
-
-  gap:5px;
-}
-
-.giftTitle{
-  font-size:12px;
-}
-
-.giftGrid{
-  min-height:0;
-
-  display:grid;
-
-  /*
-    왼쪽 선물들
-    오른쪽 선물상자
-  */
-  grid-template-columns:
-    1fr
-    112px;
-
-  gap:6px;
-}
-
-.giftMain{
-  min-width:0;
-
-  display:grid;
-
-  grid-template-rows:
-    1fr
-    1fr;
-
-  gap:5px;
-}
-
-/* 위 장미 / 하트 / 별 / 풍선 / 슈퍼하트 */
-
-.giftTop{
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:2px;
 }
 
-.gift{
+.giftBtn{
   min-width:0;
-
   border:0;
-
   background:transparent;
-
   color:#fff;
-
+  font-size:6.5px;
   text-align:center;
-
-  font-size:9px;
-
   padding:1px;
 }
 
-.gift .ico{
+.giftBtn .icon{
   display:block;
-
-  font-size:28px;
-
-  line-height:30px;
+  font-size:17px;
 }
 
-.gift strong{
+.giftBtn strong{
   display:block;
-
-  color:#ffd12c;
-
-  font-size:9px;
+  color:#ffd331;
+  font-size:6px;
 }
 
-/* =====================================================
-   장미 1 / 5 / 10
-===================================================== */
-
-.roseArea{
-  border:1px solid #48214c;
-
-  border-radius:4px;
-
-  padding:5px 4px;
+.roseRowContainer{
+  border-top:1px solid #332038;
+  padding-top:3px;
 }
 
 .roseTitle{
-  color:#ffd32f;
-
-  font-size:11px;
-  font-weight:900;
-
-  margin-bottom:3px;
+  color:#ffd331;
 }
 
-.roseRow{
+.roseBtnGrid{
   display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:3px;
 }
 
 .roseBtn{
-  border:0;
-
-  background:transparent;
-
+  min-width:0;
+  border:1px solid #4a1d50;
+  border-radius:4px;
+  background:#130b16;
   color:#fff;
-
+  padding:3px 1px;
+  font-size:6.5px;
   text-align:center;
-
-  font-size:9px;
-
-  padding:1px;
+  white-space:nowrap;
 }
 
-.roseBtn .rosePicture{
+.rosePicture{
   display:block;
-
-  font-size:25px;
-
-  line-height:27px;
+  font-size:18px;
+  line-height:20px;
 }
 
 .roseBtn strong{
   display:block;
-
-  color:#ffd22e;
-
-  font-size:9px;
+  color:#ffd331;
+  font-size:6px;
+  margin-top:1px;
 }
 
-/* =====================================================
-   선물 상자
-===================================================== */
-
-.giftBox{
-  border:1px solid #a43cf4;
-
+.giftBoxCard{
+  border:1px solid #9c36e8;
   border-radius:5px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #391447,
-      #16091b
-    );
-
-  display:grid;
-  place-items:center;
-
+  background:linear-gradient(145deg,#391447,#15081a);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
+  padding:3px;
+}
 
-  color:#fff;
+.boxIcon{
+  font-size:25px;
+}
 
-  font-size:10px;
+.boxTitle{
+  font-size:7px;
   font-weight:900;
-
-  padding:5px;
 }
 
-.giftBox span{
-  display:block;
-
-  font-size:42px;
-}
-
-.giftBox small{
-  display:block;
-
-  margin-top:4px;
-
-  color:#fff;
-
-  font-size:9px;
-
+.boxDesc{
+  font-size:5.5px;
   line-height:1.2;
+  margin-top:2px;
 }
-
-/* =====================================================
-   제비뽑기
-===================================================== */
 
 .lottery{
+  min-width:0;
   min-height:0;
-
   display:grid;
-
-  grid-template-columns:
-    1fr
-    100px;
-
+  grid-template-columns:minmax(0,1fr) 55px;
   gap:4px;
-
-  padding:6px 7px;
-
-  border:1px solid #9c36c4;
-
+  padding:4px;
+  border:1px solid #8f2fae;
   border-radius:5px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #240c2f,
-      #100711
-    );
+  background:linear-gradient(90deg,#220a2c,#0e0611);
 }
 
 .lotteryTitle{
-  text-align:center;
-
-  color:#f3afff;
-
-  font-size:14px;
+  color:#f1adff;
+  font-size:8px;
   font-weight:900;
 }
 
 .lotterySub{
-  text-align:center;
-
-  font-size:9px;
-
-  margin:2px 0 5px;
+  font-size:5.5px;
+  margin:2px 0 3px;
 }
 
-.times{
+.drawTimes{
   display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:4px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:2px;
 }
 
-.time{
-  border:1px solid #3c2743;
-
-  border-radius:5px;
-
-  background:#130d17;
-
-  text-align:center;
-
-  padding:4px 2px;
-}
-
-.time b{
-  display:block;
-
-  color:#ffd35d;
-
-  font-size:10px;
-}
-
-.time small{
-  display:block;
-
-  font-size:9px;
-
-  margin:2px 0;
-}
-
-.time button{
-  width:100%;
-
-  border:0;
-
+.drawItem{
+  border:1px solid #3a2441;
   border-radius:3px;
-
-  background:#71227f;
-
-  color:#fff;
-
-  font-size:9px;
-
-  padding:3px;
-}
-
-.machine{
-  display:grid;
-  place-items:center;
-
-  font-size:60px;
-}
-
-/* =====================================================
-   맨 아래
-===================================================== */
-
-.bottom{
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  align-items:center;
-
-  border-top:1px solid #211c25;
-
-  background:#07070a;
-}
-
-.nav{
+  background:#120c16;
   text-align:center;
-
-  font-size:10px;
+  padding:2px 1px;
 }
 
-.nav span{
+.drawItem b{
   display:block;
-
-  font-size:27px;
-
-  margin-bottom:2px;
+  color:#ffd354;
+  font-size:6px;
 }
 
-.charge{
-  margin:2px 10px;
-
-  padding:5px;
-
-  border-radius:32px;
-
-  background:#ef0054;
-
-  font-weight:900;
+.drawItem small{
+  display:block;
+  font-size:5.5px;
+  margin:1px 0;
 }
 
-</style>
-</head>
-
-<body>
-
-<div class="viewport">
-
-<div class="design" id="design">
-
-  <!-- =========================
-       상단
-  ========================== -->
-
-  <div class="header">
-
-    <div class="onair">
-
-      <b>● ON AIR</b>
-
-      <span id="clock">
-        00:00:00
-      </span>
-
-    </div>
-
-    <div class="logo">
-
-      👑 K-Talk
-
-      <small>
-        화상 방송 · 최대 13명
-      </small>
-
-    </div>
-
-    <div class="viewer">
-
-      👤
-      <span id="viewerCount">
-        0
-      </span>
-
-      　🔔 ⋮
-
-    </div>
-
-  </div>
-
-  <!-- =========================
-       광고판
-  ========================== -->
-
-  <div class="notice">
-
-    <span class="yellow">
-      ⭐ 출석체크 눌러주세요 ⭐
-    </span>
-
-    　신청곡 5,000원　
-
-    <span class="pink">
-      ★ 광고 문의 환영합니다 ★
-    </span>
-
-  </div>
-
-  <!-- =========================
-       가운데
-  ========================== -->
-
-  <div class="stage">
-
-    <!-- 호스트 -->
-
-    <div class="host panel">
-
-      <video
-        id="hostVideo"
-        autoplay
-        playsinline>
-      </video>
-
-      <div class="hostLive">
-        ● ON AIR
-      </div>
-
-      <div class="attendance">
-        💗 출석체크
-      </div>
-
-      <div
-        class="hostName"
-        id="hostName">
-        👑 호스트 대기
-      </div>
-
-    </div>
-
-    <!-- 게스트 -->
-
-    <div
-      class="guests"
-      id="guestGrid">
-    </div>
-
-    <!-- 채팅 -->
-
-    <div class="chat panel">
-
-      <div class="chatTabs">
-
-        <div>
-          채팅
-        </div>
-
-        <div>
-          참가자 (13)
-        </div>
-
-      </div>
-
-      <div
-        class="messages"
-        id="messages">
-
-        <div>
-          <b>채팅방 관리자</b>
-          좋은 방송 감사합니다! 💜
-        </div>
-
-        <div class="green">
-          민수는 1위~ 즐겁게 듣고 있어요! ❤️
-        </div>
-
-        <div>
-          <b>이태훈</b>
-          신곡 너무 좋아요 👍
-        </div>
-
-        <div>
-          <b>시청★</b>
-          신청곡 이벤트도 최고!
-        </div>
-
-        <div>
-          <b>감성남자님</b>
-          100개 선물! 🎁
-        </div>
-
-        <div class="green">
-          해피걸 우와~ 노래 최고예요! 👏
-        </div>
-
-        <div>
-          <b>강민수</b>
-          추천곡~ 늘 믿겠어요!
-        </div>
-
-        <div class="green">
-          루이 즐거운 방송 감사합니다! 😍
-        </div>
-
-        <div>
-          <b>도레미~비디</b>
-          역시 신곡 센스 짱! 🎵
-        </div>
-
-        <div class="pink">
-          지수 매일 듣고 있어요~💕
-        </div>
-
-      </div>
-
-      <div class="chatInput">
-
-        <input
-          id="chatText"
-          placeholder="메시지를 입력하세요...">
-
-        <button
-          class="send"
-          onclick="sendChat()">
-          전송
-        </button>
-
-        <button
-          class="miniGift"
-          onclick="openGiftBox()">
-          🎁
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- 오른쪽 아래 -->
-
-    <div class="rightBottom">
-
-      <!-- =====================
-           선물
-      ====================== -->
-
-      <div class="gifts panel">
-
-        <div class="giftTitle">
-          선물 / 후원
-        </div>
-
-        <div class="giftGrid">
-
-          <div class="giftMain">
-
-            <!-- 일반 선물 -->
-
-            <div class="giftTop">
-
-              <button
-                class="gift"
-                onclick="sendGift('장미',100)">
-
-                <span class="ico">
-                  🌹
-                </span>
-
-                장미
-
-                <strong>
-                  🪙100
-                </strong>
-
-              </button>
-
-              <button
-                class="gift"
-                onclick="sendGift('하트',300)">
-
-                <span class="ico">
-                  ❤️
-                </span>
-
-                하트
-
-                <strong>
-                  🪙300
-                </strong>
-
-              </button>
-
-              <button
-                class="gift"
-                onclick="sendGift('별',500)">
-
-                <span class="ico">
-                  ⭐
-                </span>
-
-                별
-
-                <strong>
-                  🪙500
-                </strong>
-
-              </button>
-
-              <button
-                class="gift"
-                onclick="sendGift('풍선',1000)">
-
-                <span class="ico">
-                  🎈
-                </span>
-
-                풍선
-
-                <strong>
-                  🪙1,000
-                </strong>
-
-              </button>
-
-              <button
-                class="gift"
-                onclick="sendGift('슈퍼하트',10000)">
-
-                <span class="ico">
-                  ❤️‍🔥
-                </span>
-
-                슈퍼 하트
-
-                <strong>
-                  🪙10,000
-                </strong>
-
-              </button>
-
-            </div>
-
-            <!-- 장미 -->
-
-            <div class="roseArea">
-
-              <div class="roseTitle">
-                장미 선물
-              </div>
-
-              <div class="roseRow">
-
-                <button
-                  class="roseBtn"
-                  onclick="sendRose(1)">
-
-                  <span class="rosePicture">
-                    🌹
-                  </span>
-
-                  장미 1송이
-
-                  <strong>
-                    🪙10
-                  </strong>
-
-                </button>
-
-                <button
-                  class="roseBtn"
-                  onclick="sendRose(5)">
-
-                  <span class="rosePicture">
-                    🌹🌹
-                  </span>
-
-                  장미 5송이
-
-                  <strong>
-                    🪙50
-                  </strong>
-
-                </button>
-
-                <button
-                  class="roseBtn"
-                  onclick="sendRose(10)">
-
-                  <span class="rosePicture">
-                    🌹🌹🌹
-                  </span>
-
-                  장미 10송이
-
-                  <strong>
-                    🪙100
-                  </strong>
-
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- 선물상자 -->
-
-          <button
-            class="giftBox"
-            onclick="openGiftBox()">
-
-            <div>
-
-              <span>
-                🎁
-              </span>
-
-              선물 상자
-
-              <small>
-                다른 선물을<br>
-                선택할 수 있어요!
-              </small>
-
-            </div>
-
-          </button>
-
-        </div>
-
-      </div>
-
-      <!-- =====================
-           제비뽑기
-      ====================== -->
-
-      <div class="lottery">
-
-        <div>
-
-          <div class="lotteryTitle">
-            제비뽑기 이벤트
-          </div>
-
-          <div class="lotterySub">
-            하루 3번의 행운! 선물을 뽑아보세요!
-          </div>
-
-          <div class="times">
-
-            <div class="time">
-
-              <b>
-                ☀️ 아침
-              </b>
-
-              <small>
-                09:00
-              </small>
-
-              <button
-                onclick="drawLottery()">
-                뽑기 1/3
-              </button>
-
-            </div>
-
-            <div class="time">
-
-              <b>
-                ☀️ 점심
-              </b>
-
-              <small>
-                13:00
-              </small>
-
-              <button
-                onclick="drawLottery()">
-                뽑기 1/3
-              </button>
-
-            </div>
-
-            <div class="time">
-
-              <b>
-                🌙 저녁
-              </b>
-
-              <small>
-                20:00
-              </small>
-
-              <button
-                onclick="drawLottery()">
-                뽑기 1/3
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="machine">
-          🎰
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- =========================
-       하단
-  ========================== -->
-
-  <div class="bottom">
-
-    <div class="nav">
-      <span>🏠</span>
-      홈
-    </div>
-
-    <div class="nav">
-      <span>👤</span>
-      마이페이지
-    </div>
-
-    <div class="nav charge">
-      <span>🪙</span>
-      충전하기
-    </div>
-
-    <div class="nav">
-      <span>🔔</span>
-      알림
-    </div>
-
-    <div class="nav">
-      <span>⚙️</span>
-      설정
-    </div>
-
-  </div>
-
-</div>
-
-</div>
-
-<script type="module">
-
-import {
-  joinRoom,
-  selfId
-}
-from 'https://esm.run/trystero'
-
-
-/* =====================================================
-   기본 변수
-===================================================== */
-
-let room = null
-let stream = null
-
-let myRole = 'guest'
-let myName = '참가자'
-
-const peers = {}
-const peerStreams = {}
-
-const guestGrid =
-document.getElementById('guestGrid')
-
-
-/* =====================================================
-   게스트 13자리
-===================================================== */
-
-for(let i=1;i<=13;i++){
-
-  const slot =
-  document.createElement('div')
-
-  slot.className = 'slot'
-
-  slot.innerHTML = `
-
-    <video
-      id="video${i}"
-      autoplay
-      playsinline>
-    </video>
-
-    <div
-      class="empty"
-      id="empty${i}">
-      빈자리
-    </div>
-
-    <div class="slotNo">
-      ${i}
-    </div>
-
-    <div class="mute">
-      🔇
-    </div>
-
-    <div
-      class="slotName"
-      id="name${i}">
-      게스트${i}<br>♡0
-    </div>
-
-    <div class="guestRose">
-      🌹
-    </div>
-
-  `
-
-  guestGrid.appendChild(slot)
+.drawItem button{
+  width:100%;
+  border:0;
+  border-radius:3px;
+  background:#742080;
+  color:#fff;
+  font-size:5.5px;
+  padding:2px 0;
 }
 
-
-/* =====================================================
-   화면 전체 비율 고정
-   이 부분 때문에 하나 바꿔도 다른 곳이 안 밀림
-===================================================== */
-
-function fitScreen(){
-
-  const design =
-  document.getElementById('design')
-
-  const widthScale =
-  window.innerWidth / 708
-
-  const heightScale =
-  window.innerHeight / 1000
-
-  /*
-    가로 / 세로 중 작은 쪽에 맞춤
-    그래서 아래가 잘리지 않음
-  */
-
-  const scale =
-  Math.min(
-    widthScale,
-    heightScale
-  )
-
-  design.style.transform =
-  `scale(${scale})`
+.lotteryMachine{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
 }
-
-window.addEventListener(
-  'resize',
-  fitScreen
-)
-
-window.addEventListener(
-  'orientationchange',
-  fitScreen
-)
-
-fitScreen()
-
-
-/* =====================================================
-   방 시작
-===================================================== */
-
-async function startRoom(){
-
-  if(room) return
-
-  try{
-
-    stream =
-    await navigator.mediaDevices
-    .getUserMedia({
-
-      video:{
-        facingMode:'user'
-      },
-
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true,
-        autoGainControl:true
-      }
-
-    })
-
-  }catch(error){
-
-    alert(
-      '카메라와 마이크 사용을 허용해 주세요.'
-    )
-
-    return
-  }
-
-
-  /*
-    기존 방 주소 유지
-  */
-
-  room =
-  joinRoom(
-
-    {
-      appId:
-      'ktalk-final-photo-11119'
-    },
-
-    'ktalk-public-main'
-
-  )
-
-
-  const profile =
-  room.makeAction('profile')
-
-  const chat =
-  room.makeAction('chat')
-
-  const gift =
-  room.makeAction('gift')
-
-
-  window.chatAction = chat
-  window.giftAction = gift
-
-
-  peers[selfId] = {
-
-    name:myName,
-    role:myRole
-
-  }
-
-
-  peerStreams[selfId] =
-  stream
-
-
-  /* 참가자 정보 */
-
-  profile.onMessage =
-  (data,{peerId})=>{
-
-    peers[peerId] = data
-
-    render()
-  }
-
-
-  /* 채팅 */
-
-  chat.onMessage =
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
-  }
-
-
-  /* 선물 */
-
-  gift.onMessage =
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
-  }
-
-
-  /* 사람이 들어옴 */
-
-  room.onPeerJoin =
-  peerId=>{
-
-    profile.send(
-
-      {
-        name:myName,
-        role:myRole
-      },
-
-      {
-        target:peerId
-      }
-
-    )
-
-
-    room.addStream(
-
-      stream,
-
-      {
-        target:peerId
-      }
-
-    )
-  }
-
-
-  /* 사람이 나감 */
-
-  room.onPeerLeave =
-  peerId=>{
-
-    delete peers[peerId]
-    delete peerStreams[peerId]
-
-    render()
-  }
-
-
-  /* 영상 들어옴 */
-
-  room.onPeerStream =
-  (incoming,peerId)=>{
-
-    peerStreams[peerId] =
-    incoming
-
-    render()
-  }
-
-
-  room.addStream(stream)
-
-
-  profile.send({
-
-    name:myName,
-    role:myRole
-
-  })
-
-
-  render()
-
-
-  /*
-    첫 입장자 호스트
-  */
-
-  setTimeout(()=>{
-
-    const hostExists =
-    Object.keys(peers)
-    .some(
-
-      id=>
-
-      id!==selfId
-      &&
-      peers[id]?.role==='host'
-
-    )
-
-
-    if(!hostExists){
-
-      myRole = 'host'
-      myName = '호스트'
-
-
-      peers[selfId] = {
-
-        name:'호스트',
-        role:'host'
-
-      }
-
-
-      profile.send({
-
-        name:'호스트',
-        role:'host'
-
-      })
-
-
-      render()
-    }
-
-  },1000)
-}
-
-
-/* =====================================================
-   화면 표시
-===================================================== */
-
-function render(){
-
-  const ids =
-  Object.keys(peers)
-
-
-  document
-  .getElementById('viewerCount')
-  .textContent =
-  ids.length
-
-
-  const hostId =
-  ids.find(
-
-    id=>
-
-    peers[id]?.role==='host'
-
-  )
-
-
-  const hostVideo =
-  document.getElementById(
-    'hostVideo'
-  )
-
-
-  if(
-    hostId
-    &&
-    peerStreams[hostId]
-  ){
-
-    hostVideo.srcObject =
-    peerStreams[hostId]
-
-
-    hostVideo.muted =
-    hostId===selfId
-
-
-    document
-    .getElementById('hostName')
-    .textContent =
-
-    '👑 ' +
-
-    (
-      peers[hostId]?.name
-      ||
-      '호스트'
-    )
-
-  }else{
-
-    hostVideo.srcObject = null
-
-
-    document
-    .getElementById('hostName')
-    .textContent =
-    '👑 호스트 대기'
-  }
-
-
-  const guests =
-  ids.filter(
-
-    id=>
-
-    id!==hostId
-
-  )
-
-
-  for(let i=1;i<=13;i++){
-
-    const peerId =
-    guests[i-1]
-
-
-    const video =
-    document.getElementById(
-      'video'+i
-    )
-
-
-    const empty =
-    document.getElementById(
-      'empty'+i
-    )
-
-
-    const name =
-    document.getElementById(
-      'name'+i
-    )
-
-
-    if(peerId){
-
-      empty.style.display =
-      'none'
-
-
-      name.innerHTML =
-
-      (
-        peers[peerId]?.name
-        ||
-        '게스트'+i
-      )
-
-      +
-
-      '<br>♡0'
-
-
-      if(
-        peerStreams[peerId]
-      ){
-
-        video.srcObject =
-        peerStreams[peerId]
-
-
-        video.muted =
-        peerId===selfId
-      }
-
-    }else{
-
-      video.srcObject = null
-
-
-      empty.style.display =
-      'grid'
-
-
-      name.innerHTML =
-      '게스트'+i+
-      '<br>♡0'
-    }
-  }
-}
-
-
-/* =====================================================
-   안전 문자
-===================================================== */
-
-function safe(text){
-
-  return String(text)
-
-  .replaceAll(
-    '&',
-    '&amp;'
-  )
-
-  .replaceAll(
-    '<',
-    '&lt;'
-  )
-
-  .replaceAll(
-    '>',
-    '&gt;'
-  )
-}
-
-
-/* =====================================================
-   채팅
-===================================================== */
-
-function addMessage(
-  name,
-  text
-){
-
-  const line =
-  document.createElement('div')
-
-
-  line.innerHTML =
-
-  '<b>' +
-  safe(name) +
-  '</b> ' +
-  safe(text)
-
-
-  document
-  .getElementById('messages')
-  .appendChild(line)
-}
-
-
-window.sendChat =
-function(){
-
-  if(
-    !window.chatAction
-  ){
-    return
-  }
-
-
-  const input =
-  document.getElementById(
-    'chatText'
-  )
-
-
-  const text =
-  input.value.trim()
-
-
-  if(!text){
-    return
-  }
-
-
-  addMessage(
-    myName,
-    text
-  )
-
-
-  window.chatAction.send({
-
-    name:myName,
-    text:text
-
-  })
-
-
-  input.value = ''
-}
-
-
-/* =====================================================
-   일반 선물
-===================================================== */
-
-window.sendGift =
-function(
-  name,
-  price
-){
-
-  const text =
-
-  `🎁 ${name} 🪙 ${price}`
-
-
-  addMessage(
-    myName,
-    text
-  )
-
-
-  if(
-    window.giftAction
-  ){
-
-    window.giftAction.send({
-
-      name:myName,
-      text:text
-
-    })
-  }
-}
-
-
-/* =====================================================
-   장미
-===================================================== */
-
-window.sendRose =
-function(count){
-
-  /*
-    사진 기준
-    장미 1송이 = 10
-  */
-
-  const price =
-  count * 10
-
-
-  const text =
-
-  `🌹 장미 ${count}송이 🪙 ${price}`
-
-
-  addMessage(
-    myName,
-    text
-  )
-
-
-  if(
-    window.giftAction
-  ){
-
-    window.giftAction.send({
-
-      name:myName,
-      text:text
-
-    })
-  }
-}
-
-
-/* =====================================================
-   선물 상자
-===================================================== */
-
-window.openGiftBox =
-function(){
-
-  const text =
-
-  '🎁 선물상자를 열었습니다.'
-
-
-  addMessage(
-    myName,
-    text
-  )
-
-
-  if(
-    window.giftAction
-  ){
-
-    window.giftAction.send({
-
-      name:myName,
-      text:text
-
-    })
-  }
-}
-
-
-/* =====================================================
-   제비뽑기
-===================================================== */
-
-window.drawLottery =
-function(){
-
-  const prizes = [
-
-    '꽝',
-    '꽝',
-
-    '장미 1개',
-    '장미 2개',
-    '장미 3개',
-    '장미 4개',
-    '장미 5개'
-
-  ]
-
-
-  const result =
-
-  prizes[
-    Math.floor(
-      Math.random()
-      *
-      prizes.length
-    )
-  ]
-
-
-  alert(
-
-    '제비뽑기 결과 : ' +
-    result
-
-  )
-}
-
-
-/* =====================================================
-   엔터키 채팅
-===================================================== */
-
-document
-.getElementById('chatText')
-.addEventListener(
-
-  'keydown',
-
-  event=>{
-
-    if(
-      event.key==='Enter'
-    ){
-
-      window.sendChat()
-    }
-  }
-
-)
-
-
-/* =====================================================
-   시계
-===================================================== */
-
-setInterval(()=>{
-
-  const now =
-  new Date()
-
-
-  document
-  .getElementById('clock')
-  .textContent =
-
-  String(
-    now.getHours()
-  ).padStart(
-    2,
-    '0'
-  )
-
-  +
-
-  ':'
-
-  +
-
-  String(
-    now.getMinutes()
-  ).padStart(
-    2,
-    '0'
-  )
-
-  +
-
-  ':'
-
-  +
-
-  String(
-    now.getSeconds()
-  ).padStart(
-    2,
-    '0'
-  )
-
-},1000)
-
-
-/* =====================================================
-   시작
-===================================================== */
-
-startRoom()
-
-</script>
-
-</body>
-</html>
