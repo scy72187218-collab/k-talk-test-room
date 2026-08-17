@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ko">
 <head>
@@ -14,7 +13,7 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#040407;
+  background:#030306;
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
@@ -110,11 +109,11 @@ button,input{font-family:inherit}
 /* 본문 */
 .content{
   min-height:0;
+  min-width:0;
   width:100%;
-  max-width:100%;
   overflow:hidden;
   display:grid;
-  grid-template-columns:35% 65%;
+  grid-template-columns:33% 67%;
   gap:3px;
 }
 
@@ -123,7 +122,7 @@ button,input{font-family:inherit}
   min-height:0;
   min-width:0;
   display:grid;
-  grid-template-rows:48% 52%;
+  grid-template-rows:43% 57%;
   gap:4px;
 }
 
@@ -262,11 +261,11 @@ button,input{font-family:inherit}
   width:100%;
   overflow:hidden;
   display:grid;
-  grid-template-rows:58% 42%;
+  grid-template-rows:53% 47%;
   gap:4px;
 }
 
-/* 게스트 13명 */
+/* 게스트 */
 .guests{
   min-height:0;
   min-width:0;
@@ -294,7 +293,7 @@ button,input{font-family:inherit}
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 28%;
+  object-position:center 30%;
 }
 
 .slotNo{
@@ -360,13 +359,15 @@ button,input{font-family:inherit}
 /* 선물 + 제비 */
 .giftsArea{
   min-height:0;
+  min-width:0;
   display:grid;
-  grid-template-rows:1fr 58px;
+  grid-template-rows:minmax(0,1fr) 72px;
   gap:4px;
 }
 
 .gifts{
   min-height:0;
+  min-width:0;
   overflow:hidden;
   border:1px solid #38233f;
   border-radius:6px;
@@ -381,11 +382,13 @@ button,input{font-family:inherit}
 
 .giftTop{
   display:grid;
-  grid-template-columns:repeat(5,1fr) 1.15fr;
+  grid-template-columns:repeat(5,minmax(0,1fr)) 1.2fr;
   gap:2px;
+  min-width:0;
 }
 
 .gift{
+  min-width:0;
   border:0;
   background:transparent;
   color:#fff;
@@ -395,7 +398,7 @@ button,input{font-family:inherit}
 
 .gift span{
   display:block;
-  font-size:18px;
+  font-size:17px;
 }
 
 .gift strong{
@@ -404,18 +407,21 @@ button,input{font-family:inherit}
   font-size:6px;
 }
 
+/* 선물 상자 확실히 보이게 */
 .giftBox{
-  border:1px solid #8f34df;
+  min-width:0;
+  border:1px solid #9c38ef;
   border-radius:6px;
-  background:linear-gradient(145deg,#32133f,#130817);
+  background:linear-gradient(145deg,#3c154c,#16091c);
   color:#fff;
   font-size:6px;
   font-weight:900;
+  padding:2px;
 }
 
 .giftBox span{
   display:block;
-  font-size:23px;
+  font-size:22px;
 }
 
 .roses{
@@ -432,11 +438,12 @@ button,input{font-family:inherit}
 
 .roseRow{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:2px;
 }
 
 .roseBtn{
+  min-width:0;
   border:0;
   background:transparent;
   color:#fff;
@@ -445,7 +452,7 @@ button,input{font-family:inherit}
 
 .roseBtn span{
   display:block;
-  font-size:15px;
+  font-size:14px;
 }
 
 /* 제비뽑기 */
@@ -457,6 +464,7 @@ button,input{font-family:inherit}
   grid-template-columns:1fr auto;
   align-items:center;
   padding:5px 8px;
+  min-width:0;
 }
 
 .lottery b{
@@ -548,7 +556,6 @@ button,input{font-family:inherit}
 
       <div class="host">
         <video id="hostVideo" autoplay playsinline></video>
-
         <div class="hostLive">ON AIR</div>
         <div class="attendance">💗 출석체크 💗</div>
         <div class="hostName" id="hostName">👑 호스트 대기</div>
@@ -692,15 +699,11 @@ let myName='참가자'
 const peers={}
 const peerStreams={}
 
-const guestGrid=
-document.getElementById('guestGrid')
+const guestGrid=document.getElementById('guestGrid')
 
-/* 13명 자리 */
 for(let i=1;i<=13;i++){
 
-  const slot=
-  document.createElement('div')
-
+  const slot=document.createElement('div')
   slot.className='slot'
 
   slot.innerHTML=`
@@ -722,74 +725,46 @@ for(let i=1;i<=13;i++){
   guestGrid.appendChild(slot)
 }
 
-/* 방 입장 */
-window.enterRoom=
-async function(type){
+window.enterRoom=async function(type){
 
   if(room)return
 
-  document
-  .getElementById('publicBtn')
-  .classList.toggle(
-    'active',
-    type==='public'
-  )
+  document.getElementById('publicBtn')
+  .classList.toggle('active',type==='public')
 
-  document
-  .getElementById('secretBtn')
-  .classList.toggle(
-    'active',
-    type==='secret'
-  )
+  document.getElementById('secretBtn')
+  .classList.toggle('active',type==='secret')
 
   const roomName=
-  type==='secret'
-  ?'ktalk-secret-7777'
-  :'ktalk-public-main'
+    type==='secret'
+    ?'ktalk-secret-7777'
+    :'ktalk-public-main'
 
   try{
 
-    stream=
-    await navigator.mediaDevices
-    .getUserMedia({
-
-      video:{
-        facingMode:'user'
-      },
-
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:'user'},
       audio:{
         echoCancellation:true,
         noiseSuppression:true,
         autoGainControl:true
       }
-
     })
 
   }catch(error){
 
-    alert(
-      '카메라와 마이크 사용을 허용해 주세요.'
-    )
-
+    alert('카메라와 마이크 사용을 허용해 주세요.')
     return
   }
 
-  room=
-  joinRoom(
-    {
-      appId:'ktalk-final-fit-2026'
-    },
+  room=joinRoom(
+    {appId:'ktalk-final-safe-width-2026'},
     roomName
   )
 
-  const profile=
-  room.makeAction('profile')
-
-  const chat=
-  room.makeAction('chat')
-
-  const gift=
-  room.makeAction('gift')
+  const profile=room.makeAction('profile')
+  const chat=room.makeAction('chat')
+  const gift=room.makeAction('gift')
 
   window.chatAction=chat
   window.giftAction=gift
@@ -801,64 +776,42 @@ async function(type){
 
   peerStreams[selfId]=stream
 
-  profile.onMessage=
-  (data,{peerId})=>{
-
+  profile.onMessage=(data,{peerId})=>{
     peers[peerId]=data
     render()
   }
 
-  chat.onMessage=
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
+  chat.onMessage=data=>{
+    addMessage(data.name,data.text)
   }
 
-  gift.onMessage=
-  data=>{
-
-    addMessage(
-      data.name,
-      data.text
-    )
+  gift.onMessage=data=>{
+    addMessage(data.name,data.text)
   }
 
-  room.onPeerJoin=
-  peerId=>{
+  room.onPeerJoin=peerId=>{
 
     profile.send(
       {
         name:myName,
         role:myRole
       },
-      {
-        target:peerId
-      }
+      {target:peerId}
     )
 
     room.addStream(
       stream,
-      {
-        target:peerId
-      }
+      {target:peerId}
     )
   }
 
-  room.onPeerLeave=
-  peerId=>{
-
+  room.onPeerLeave=peerId=>{
     delete peers[peerId]
     delete peerStreams[peerId]
-
     render()
   }
 
-  room.onPeerStream=
-  (incoming,peerId)=>{
-
+  room.onPeerStream=(incoming,peerId)=>{
     peerStreams[peerId]=incoming
     render()
   }
@@ -875,12 +828,12 @@ async function(type){
   setTimeout(()=>{
 
     const otherHost=
-    Object.keys(peers)
-    .some(
-      id=>
-      id!==selfId &&
-      peers[id]?.role==='host'
-    )
+      Object.keys(peers)
+      .some(
+        id=>
+        id!==selfId &&
+        peers[id]?.role==='host'
+      )
 
     if(!otherHost){
 
@@ -903,102 +856,79 @@ async function(type){
   },1000)
 }
 
-/* 화면 표시 */
 function render(){
 
-  const ids=
-  Object.keys(peers)
+  const ids=Object.keys(peers)
 
-  document
-  .getElementById('viewerCount')
-  .textContent=
-  ids.length
+  document.getElementById('viewerCount')
+  .textContent=ids.length
 
   const hostId=
-  ids.find(
-    id=>
-    peers[id]?.role==='host'
-  )
+    ids.find(
+      id=>peers[id]?.role==='host'
+    )
 
   const hostVideo=
-  document.getElementById('hostVideo')
+    document.getElementById('hostVideo')
 
-  if(
-    hostId &&
-    peerStreams[hostId]
-  ){
+  if(hostId && peerStreams[hostId]){
 
-    hostVideo.srcObject=
-    peerStreams[hostId]
+    hostVideo.srcObject=peerStreams[hostId]
+    hostVideo.muted=hostId===selfId
 
-    hostVideo.muted=
-    hostId===selfId
-
-    document
-    .getElementById('hostName')
+    document.getElementById('hostName')
     .textContent=
-    '👑 '+
-    (
-      peers[hostId]?.name
-      ||
-      '호스트'
-    )
+      '👑 '+
+      (
+        peers[hostId]?.name
+        ||
+        '호스트'
+      )
 
   }else{
 
     hostVideo.srcObject=null
 
-    document
-    .getElementById('hostName')
-    .textContent=
-    '👑 호스트 대기'
+    document.getElementById('hostName')
+    .textContent='👑 호스트 대기'
   }
 
   const guests=
-  ids.filter(
-    id=>id!==hostId
-  )
+    ids.filter(id=>id!==hostId)
 
   for(let i=1;i<=13;i++){
 
-    const peerId=
-    guests[i-1]
+    const peerId=guests[i-1]
 
     const video=
-    document.getElementById(
-      'video'+i
-    )
+      document.getElementById('video'+i)
 
     const empty=
-    document.getElementById(
-      'empty'+i
-    )
+      document.getElementById('empty'+i)
 
     const name=
-    document.getElementById(
-      'name'+i
-    )
+      document.getElementById('name'+i)
 
     if(peerId){
 
       empty.style.display='none'
 
       name.innerHTML=
-      (
-        peers[peerId]?.name
-        ||
-        '게스트'+i
-      )
-      +
-      '<br>♡ 0'
+        (
+          peers[peerId]?.name
+          ||
+          '게스트'+i
+        )
+        +
+        '<br>♡ 0'
 
       if(peerStreams[peerId]){
 
         video.srcObject=
-        peerStreams[peerId]
+          peerStreams[peerId]
 
         video.muted=
-        peerId===selfId
+          peerId===selfId
       }
 
     }else{
@@ -1007,8 +937,8 @@ function render(){
       empty.style.display='flex'
 
       name.innerHTML=
-      '게스트'+i+
-      '<br>♡ 0'
+        '게스트'+i+
+        '<br>♡ 0'
     }
   }
 }
@@ -1023,37 +953,30 @@ function safe(text){
 
 function addMessage(name,text){
 
-  const line=
-  document.createElement('div')
+  const line=document.createElement('div')
 
   line.innerHTML=
-  '<b>'+
-  safe(name)+
-  '</b> '+
-  safe(text)
+    '<b>'+
+    safe(name)+
+    '</b> '+
+    safe(text)
 
-  document
-  .getElementById('messages')
+  document.getElementById('messages')
   .appendChild(line)
 }
 
-window.sendChat=
-function(){
+window.sendChat=function(){
 
   if(!window.chatAction)return
 
   const input=
-  document.getElementById('chatText')
+    document.getElementById('chatText')
 
-  const text=
-  input.value.trim()
+  const text=input.value.trim()
 
   if(!text)return
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   window.chatAction.send({
     name:myName,
@@ -1063,18 +986,14 @@ function(){
   input.value=''
 }
 
-window.sendGift=
-function(name,price){
+window.sendGift=function(name,price){
 
   if(!window.giftAction)return
 
   const text=
-  `🎁 ${name} ${price}원 선물`
+    `🎁 ${name} ${price}원 선물`
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   window.giftAction.send({
     name:myName,
@@ -1082,18 +1001,14 @@ function(name,price){
   })
 }
 
-window.sendRose=
-function(count){
+window.sendRose=function(count){
 
   if(!window.giftAction)return
 
   const text=
-  `🌹 장미 ${count}개 선물`
+    `🌹 장미 ${count}개 선물`
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   window.giftAction.send({
     name:myName,
@@ -1101,16 +1016,11 @@ function(count){
   })
 }
 
-window.openGiftBox=
-function(){
+window.openGiftBox=function(){
 
-  const text=
-  '🎁 선물상자를 열었습니다.'
+  const text='🎁 선물상자를 열었습니다.'
 
-  addMessage(
-    myName,
-    text
-  )
+  addMessage(myName,text)
 
   if(window.giftAction){
 
@@ -1121,8 +1031,7 @@ function(){
   }
 }
 
-window.drawLottery=
-function(){
+window.drawLottery=function(){
 
   const prizes=[
     '꽝',
@@ -1135,56 +1044,38 @@ function(){
   ]
 
   const result=
-  prizes[
-    Math.floor(
-      Math.random()*
-      prizes.length
-    )
-  ]
+    prizes[
+      Math.floor(
+        Math.random()*prizes.length
+      )
+    ]
 
-  alert(
-    '제비뽑기 결과 : '+
-    result
-  )
+  alert('제비뽑기 결과 : '+result)
 }
 
-document
-.getElementById('chatText')
-.addEventListener(
-  'keydown',
-  event=>{
+document.getElementById('chatText')
+.addEventListener('keydown',event=>{
 
-    if(event.key==='Enter'){
-      window.sendChat()
-    }
+  if(event.key==='Enter'){
+    window.sendChat()
   }
-)
+})
 
 setInterval(()=>{
 
-  const now=
-  new Date()
+  const now=new Date()
 
-  document
-  .getElementById('clock')
+  document.getElementById('clock')
   .textContent=
-
-  String(now.getHours())
-  .padStart(2,'0')
-  +
-  ':'
-  +
-  String(now.getMinutes())
-  .padStart(2,'0')
-  +
-  ':'
-  +
-  String(now.getSeconds())
-  .padStart(2,'0')
+    String(now.getHours()).padStart(2,'0')
+    +':'
+    +String(now.getMinutes()).padStart(2,'0')
+    +':'
+    +String(now.getSeconds()).padStart(2,'0')
 
 },1000)
 
 </script>
 
 </body>
-      </html>
+</html>
