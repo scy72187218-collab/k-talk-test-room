@@ -7,604 +7,296 @@
 
 <style>
 *{box-sizing:border-box}
-
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#030305;
-  color:#fff;
+  margin:0;width:100%;height:100%;overflow:hidden;
+  background:#030305;color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",Arial,sans-serif;
 }
-
 button,input{font-family:inherit}
 button{cursor:pointer}
 
 .app{
-  width:100vw;
-  height:100dvh;
-  padding:5px;
+  width:100vw;height:100dvh;padding:5px;
   display:grid;
-  grid-template-rows:48px 30px minmax(0,1fr) 54px;
-  gap:4px;
-  overflow:hidden;
+  grid-template-rows:46px 28px minmax(0,1fr) 52px;
+  gap:4px;overflow:hidden;
 }
 
 /* 상단 */
 .header{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
 }
-
-.live{
-  font-size:9px;
-  font-weight:900;
-}
-
+.live{font-size:9px;font-weight:900}
 .liveBadge{
-  display:inline-block;
-  background:#ed1748;
-  border-radius:6px;
-  padding:5px 7px;
-  margin-right:4px;
+  display:inline-block;background:#ed1748;border-radius:6px;
+  padding:5px 7px;margin-right:4px;
 }
+.logo{text-align:center;color:#ffd431;font-size:20px;font-weight:900}
+.logo small{display:block;color:#fff;font-size:7px;margin-top:3px}
+.viewer{text-align:right;font-size:9px}
 
-.logo{
-  text-align:center;
-  color:#ffd431;
-  font-size:21px;
-  font-weight:900;
-  line-height:1;
-}
-
-.logo small{
-  display:block;
-  color:#fff;
-  font-size:8px;
-  margin-top:4px;
-}
-
-.viewer{
-  text-align:right;
-  font-size:9px;
-}
-
-/* 공지 */
+/* 광고 */
 .notice{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid #47224e;
-  border-radius:6px;
-  font-size:8px;
-  font-weight:900;
-  white-space:nowrap;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid #47224e;border-radius:6px;
+  font-size:7px;font-weight:900;white-space:nowrap;
 }
-
 .yellow{color:#ffd531}
 .pink{color:#ff47ad}
 
-/* 가운데 */
+/* 전체 가운데 */
 .stage{
-  min-width:0;
-  min-height:0;
+  min-width:0;min-height:0;
   display:grid;
   grid-template-columns:46% 54%;
   grid-template-rows:58% 42%;
-  gap:4px;
-  overflow:hidden;
+  gap:4px;overflow:hidden;
 }
 
 /* 호스트 */
 .host{
-  grid-column:1;
-  grid-row:1;
-  position:relative;
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-  border:1px solid #4b2752;
-  border-radius:6px;
-  background:#07070a;
+  grid-column:1;grid-row:1;
+  position:relative;min-width:0;min-height:0;
+  overflow:hidden;border:1px solid #4b2752;
+  border-radius:6px;background:#07070a;
 }
-
 .host video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 30%;
-  background:#09090b;
+  width:100%;height:100%;object-fit:cover;
+  object-position:center 30%;background:#09090b;
 }
-
 .hostLive{
-  position:absolute;
-  top:6px;
-  left:6px;
-  z-index:6;
-  color:#ff3151;
-  font-size:8px;
-  font-weight:900;
+  position:absolute;top:6px;left:6px;z-index:6;
+  color:#ff3151;font-size:8px;font-weight:900;
 }
-
 .attendance{
-  position:absolute;
-  top:6px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:7;
-  border:1px solid #ff28cb;
-  border-radius:18px;
-  background:rgba(63,0,69,.88);
-  color:#ffd532;
-  padding:4px 9px;
-  font-size:8px;
-  font-weight:900;
-  white-space:nowrap;
+  position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  z-index:7;border:1px solid #ff28cb;border-radius:18px;
+  background:rgba(63,0,69,.88);color:#ffd532;
+  padding:4px 8px;font-size:7px;font-weight:900;white-space:nowrap;
 }
-
 .hostName{
-  position:absolute;
-  left:7px;
-  bottom:7px;
-  z-index:7;
-  background:rgba(0,0,0,.82);
-  color:#ffd42e;
-  border-radius:5px;
-  padding:4px 7px;
-  font-size:8px;
-  font-weight:900;
+  position:absolute;left:6px;bottom:6px;z-index:7;
+  background:rgba(0,0,0,.82);color:#ffd42e;
+  border-radius:5px;padding:4px 6px;font-size:7px;font-weight:900;
 }
-
 .mediaControls{
-  position:absolute;
-  right:6px;
-  bottom:6px;
-  z-index:10;
-  display:flex;
-  gap:4px;
+  position:absolute;right:6px;bottom:6px;z-index:10;
+  display:flex;gap:4px;
 }
-
 .mediaBtn{
-  width:32px;
-  height:30px;
-  border:1px solid #777;
-  border-radius:7px;
-  background:rgba(0,0,0,.8);
-  color:#fff;
-  font-size:16px;
+  width:31px;height:29px;border:1px solid #777;border-radius:7px;
+  background:rgba(0,0,0,.8);color:#fff;font-size:15px;
 }
-
-.mediaBtn.off{
-  background:#68131c;
-  border-color:#ff4055;
-}
+.mediaBtn.off{background:#68131c;border-color:#ff4055}
 
 /* 게스트 */
 .guests{
-  grid-column:2;
-  grid-row:1;
-  min-width:0;
-  min-height:0;
+  grid-column:2;grid-row:1;
+  min-width:0;min-height:0;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   grid-template-rows:repeat(5,minmax(0,1fr));
-  gap:3px;
-  overflow:hidden;
+  gap:3px;overflow:hidden;
 }
-
 .slot{
-  position:relative;
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-  border:1px solid #312e37;
-  border-radius:5px;
-  background:#0b0b0e;
+  position:relative;min-width:0;min-height:0;
+  overflow:hidden;border:1px solid #312e37;
+  border-radius:5px;background:#0b0b0e;
 }
-
 .slot video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center 30%;
-  background:#0a0a0d;
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 30%;background:#0a0a0d;
 }
-
 .slotNo{
-  position:absolute;
-  left:3px;
-  top:3px;
-  z-index:6;
-  width:17px;
-  height:17px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:4px;
-  background:#777;
-  font-size:8px;
-  font-weight:900;
+  position:absolute;left:3px;top:3px;z-index:6;
+  width:17px;height:17px;display:flex;
+  align-items:center;justify-content:center;border-radius:4px;
+  background:#777;font-size:8px;font-weight:900;
 }
-
 .slot:nth-child(1) .slotNo{background:#f5c515;color:#111}
 .slot:nth-child(2) .slotNo{background:#e91e67}
 .slot:nth-child(3) .slotNo{background:#ef790c}
 .slot:nth-child(4) .slotNo{background:#1ca8df}
 .slot:nth-child(5) .slotNo{background:#6327e9}
 .slot:nth-child(6) .slotNo{background:#1fc052}
-
 .slotName{
-  position:absolute;
-  left:4px;
-  bottom:3px;
-  z-index:6;
-  font-size:6.5px;
-  font-weight:900;
-  line-height:1.2;
+  position:absolute;left:4px;bottom:3px;z-index:6;
+  font-size:6px;font-weight:900;line-height:1.15;
   text-shadow:0 1px 3px #000;
 }
-
-.slotName small{
-  display:block;
-  color:#ff527b;
-  font-size:6px;
-}
-
-.muteIcon{
-  position:absolute;
-  right:3px;
-  top:3px;
-  z-index:7;
-  font-size:8px;
-}
-
-.guestRose{
-  position:absolute;
-  right:4px;
-  bottom:3px;
-  z-index:7;
-  font-size:10px;
-}
-
+.slotName small{display:block;color:#ff527b;font-size:5.5px}
+.muteIcon{position:absolute;right:3px;top:3px;z-index:7;font-size:8px}
+.guestRose{position:absolute;right:4px;bottom:3px;z-index:7;font-size:9px}
 .empty{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#393940;
-  font-size:6px;
+  position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;color:#393940;font-size:6px;
 }
-
-.slot:nth-child(13){
-  grid-column:1;
-  grid-row:5;
-}
+.slot:nth-child(13){grid-column:1;grid-row:5}
 
 /* 채팅 */
 .chat{
-  grid-column:1;
-  grid-row:2;
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-  display:grid;
-  grid-template-rows:27px minmax(0,1fr) 36px;
-  border:1px solid #47234e;
-  border-radius:6px;
-  background:#07070a;
+  grid-column:1;grid-row:2;
+  min-width:0;min-height:0;overflow:hidden;
+  display:grid;grid-template-rows:25px minmax(0,1fr) 34px;
+  border:1px solid #47234e;border-radius:6px;background:#07070a;
 }
-
 .chatTabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  display:grid;grid-template-columns:1fr 1fr;
   border-bottom:1px solid #39203e;
 }
-
 .chatTabs div{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:8px;
-  font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  font-size:7px;font-weight:900;
 }
-
-.chatTabs div:first-child{
-  color:#f1a9ff;
-  text-shadow:0 0 6px #d83cff;
-}
-
+.chatTabs div:first-child{color:#f1a9ff}
 .messages{
-  min-height:0;
-  overflow-y:auto;
-  padding:6px;
-  font-size:7px;
-  line-height:1.48;
-  scrollbar-width:none;
+  min-height:0;overflow-y:auto;padding:5px;
+  font-size:6.5px;line-height:1.45;scrollbar-width:none;
 }
-
 .messages::-webkit-scrollbar{display:none}
 .messages div{margin-bottom:2px}
 .messages b{color:#3ddcff}
 .messages .green{color:#32dc71}
-.messages .pink{color:#ff5baa}
-
 .chatInput{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 42px 32px;
-  gap:3px;
-  padding:3px;
+  display:grid;grid-template-columns:minmax(0,1fr) 40px 30px;
+  gap:3px;padding:3px;
 }
-
 .chatInput input{
-  min-width:0;
-  border:1px solid #312536;
-  border-radius:5px;
-  background:#171419;
-  color:#fff;
-  padding:4px;
-  font-size:6.5px;
+  min-width:0;border:1px solid #312536;border-radius:5px;
+  background:#171419;color:#fff;padding:4px;font-size:6px;
 }
-
 .send{
-  border:0;
-  border-radius:5px;
-  background:#8228d2;
-  color:#fff;
-  font-size:7px;
-  font-weight:900;
+  border:0;border-radius:5px;background:#8228d2;
+  color:#fff;font-size:6px;font-weight:900;
 }
-
 .chatGift{
-  border:1px solid #762731;
-  border-radius:5px;
-  background:#16090c;
-  font-size:14px;
+  border:1px solid #762731;border-radius:5px;
+  background:#16090c;font-size:13px;
 }
 
 /* 오른쪽 아래 */
 .rightBottom{
-  grid-column:2;
-  grid-row:2;
-  min-width:0;
-  min-height:0;
+  grid-column:2;grid-row:2;
+  min-width:0;min-height:0;
   display:grid;
-  grid-template-rows:60% 40%;
-  gap:4px;
-  overflow:hidden;
+  grid-template-rows:58% 42%;
+  gap:4px;overflow:hidden;
 }
 
 /* 선물 */
 .giftsPanel{
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-  border:1px solid #47234e;
-  border-radius:6px;
-  background:#08080b;
-  padding:5px;
+  min-width:0;min-height:0;overflow:hidden;
+  border:1px solid #47234e;border-radius:6px;
+  background:#08080b;padding:4px;
 }
-
 .giftTitle{
-  font-size:8px;
-  margin-bottom:4px;
+  height:12px;font-size:6.5px;line-height:10px;
 }
-
 .giftTop{
+  height:50px;
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:3px;
-  margin-bottom:5px;
+  gap:2px;
 }
-
 .giftBtn{
-  min-width:0;
-  border:0;
-  background:transparent;
-  color:#fff;
-  text-align:center;
-  padding:0;
-  font-size:6px;
-  white-space:nowrap;
+  min-width:0;border:0;background:transparent;color:#fff;
+  text-align:center;padding:0;font-size:5.5px;white-space:nowrap;
 }
-
 .giftBtn .icon{
-  display:block;
-  font-size:22px;
-  line-height:24px;
+  display:block;font-size:18px;line-height:20px;
 }
-
-.giftBtn span{
-  display:block;
-}
-
+.giftBtn .giftName{display:block}
 .giftBtn strong{
-  display:block;
-  color:#ffd331;
-  font-size:6px;
-  margin-top:1px;
+  display:block;color:#ffd331;font-size:5.3px;margin-top:1px;
 }
 
+/* 아래 장미와 상자 */
 .giftBottom{
+  height:68px;
   display:grid;
-  grid-template-columns:minmax(0,1fr) 31%;
-  gap:4px;
+  grid-template-columns:minmax(0,1fr) 29%;
+  gap:3px;
 }
-
 .rosePanel{
-  border:1px solid #57265b;
-  border-radius:5px;
-  padding:4px;
+  min-width:0;overflow:hidden;
+  border:1px solid #57265b;border-radius:5px;padding:3px;
 }
-
 .roseTitle{
-  color:#ffd331;
-  font-size:7px;
-  font-weight:900;
-  margin-bottom:3px;
+  color:#ffd331;font-size:6px;font-weight:900;
+  height:11px;line-height:9px;
 }
-
 .roseRow{
+  height:49px;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:3px;
+  gap:1px;
 }
-
 .roseBtn{
-  min-width:0;
-  border:0;
-  background:transparent;
-  color:#fff;
-  text-align:center;
-  font-size:6px;
-  white-space:nowrap;
-  padding:0;
+  min-width:0;overflow:hidden;
+  border:0;background:transparent;color:#fff;
+  text-align:center;font-size:5.2px;white-space:nowrap;padding:0;
 }
-
 .rosePicture{
-  display:block;
-  font-size:21px;
-  line-height:23px;
+  display:block;font-size:17px;line-height:18px;height:19px;
 }
-
 .roseBtn strong{
-  display:block;
-  color:#ffd331;
-  font-size:6px;
+  display:block;color:#ffd331;font-size:5.3px;margin-top:1px;
 }
-
 .giftBox{
-  border:1px solid #a13bef;
-  border-radius:6px;
+  min-width:0;height:68px;
+  border:1px solid #a13bef;border-radius:6px;
   background:radial-gradient(circle,#47165a,#16091b);
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:3px;
+  color:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:2px;
 }
-
-.giftBoxIcon{
-  font-size:34px;
-}
-
-.giftBoxTitle{
-  font-size:8px;
-  font-weight:900;
-}
-
-.giftBoxDesc{
-  font-size:5.5px;
-  line-height:1.2;
-  margin-top:2px;
-}
+.giftBoxIcon{font-size:27px;line-height:28px}
+.giftBoxTitle{font-size:6.5px;font-weight:900}
+.giftBoxDesc{font-size:4.8px;line-height:1.15;margin-top:2px}
 
 /* 제비뽑기 */
 .lottery{
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 66px;
-  gap:3px;
-  border:1px solid #9332b6;
-  border-radius:6px;
+  min-width:0;min-height:0;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) 58px;
+  gap:3px;border:1px solid #9332b6;border-radius:6px;
   background:linear-gradient(90deg,#240c2f,#100712);
-  padding:4px;
+  padding:3px;
 }
-
 .lotteryTitle{
-  color:#f2abff;
-  font-size:8px;
-  font-weight:900;
-  text-align:center;
+  color:#f2abff;font-size:7px;font-weight:900;text-align:center;
 }
-
 .lotterySub{
-  font-size:5.5px;
-  text-align:center;
-  margin:2px 0 3px;
+  font-size:5px;text-align:center;margin:1px 0 2px;
 }
-
 .drawTimes{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:2px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
 }
-
 .drawItem{
-  min-width:0;
-  border:1px solid #3b2643;
-  border-radius:4px;
-  background:#130d17;
-  padding:2px 1px;
-  text-align:center;
+  min-width:0;border:1px solid #3b2643;border-radius:4px;
+  background:#130d17;padding:2px 1px;text-align:center;
 }
-
-.drawItem b{
-  display:block;
-  color:#ffd454;
-  font-size:6px;
-}
-
-.drawItem small{
-  display:block;
-  font-size:5.5px;
-  margin:1px 0;
-}
-
+.drawItem b{display:block;color:#ffd454;font-size:5.5px}
+.drawItem small{display:block;font-size:5px;margin:1px 0}
 .drawItem button{
-  width:100%;
-  border:0;
-  border-radius:3px;
-  background:#742080;
-  color:#fff;
-  font-size:5.5px;
-  padding:2px 0;
+  width:100%;border:0;border-radius:3px;
+  background:#742080;color:#fff;font-size:5px;padding:2px 0;
 }
-
 .lotteryMachine{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
+  display:flex;align-items:center;justify-content:center;font-size:34px;
 }
 
 /* 하단 */
 .bottom{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  align-items:center;
-  border-top:1px solid #211c25;
-  background:#07070a;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  align-items:center;border-top:1px solid #211c25;background:#07070a;
 }
-
 .nav{
-  border:0;
-  background:transparent;
-  color:#fff;
-  text-align:center;
-  font-size:7px;
+  border:0;background:transparent;color:#fff;
+  text-align:center;font-size:7px;
 }
-
-.nav span{
-  display:block;
-  font-size:18px;
-  margin-bottom:1px;
-}
-
+.nav span{display:block;font-size:17px;margin-bottom:1px}
 .charge{
-  margin:2px 6px;
-  border-radius:24px;
-  background:#ef0054;
-  padding:4px 0;
-  font-weight:900;
+  margin:2px 6px;border-radius:24px;
+  background:#ef0054;padding:4px 0;font-weight:900;
 }
 </style>
 </head>
@@ -639,16 +331,13 @@ button{cursor:pointer}
 
     <div class="host">
       <video id="hostVideo" autoplay playsinline></video>
-
       <div class="hostLive">● ON AIR</div>
 
       <button class="attendance" onclick="attendanceCheck()">
         💗 출석체크
       </button>
 
-      <div class="hostName" id="hostName">
-        👑 호스트
-      </div>
+      <div class="hostName" id="hostName">👑 호스트</div>
 
       <div class="mediaControls">
         <button id="cameraBtn" class="mediaBtn" onclick="toggleCamera()">📷</button>
@@ -659,6 +348,7 @@ button{cursor:pointer}
     <div id="guestGrid" class="guests"></div>
 
     <div class="chat">
+
       <div class="chatTabs">
         <div>채팅</div>
         <div>참가자 (13)</div>
@@ -666,13 +356,11 @@ button{cursor:pointer}
 
       <div id="messages" class="messages">
         <div><b>채팅방 관리자</b> 좋은 방송 감사합니다! 💜</div>
-        <div class="green">민수는 1위~ 즐겁게 듣고 있어요! ❤️</div>
+        <div class="green">민수 즐겁게 듣고 있어요! ❤️</div>
         <div><b>이태훈</b> 신곡 너무 좋아요 👍</div>
         <div><b>시청★</b> 신청곡 이벤트도 최고!</div>
-        <div><b>감성남자님</b> 100개 선물! 🎁</div>
-        <div class="green">해피걸 우와~ 노래 최고예요! 👏</div>
-        <div><b>강민수</b> 추천곡~ 늘 믿겠어요!</div>
-        <div class="green">루이 즐거운 방송 감사합니다 💚</div>
+        <div><b>감성남자님</b> 선물! 🎁</div>
+        <div class="green">해피걸 노래 최고예요! 👏</div>
       </div>
 
       <div class="chatInput">
@@ -680,89 +368,87 @@ button{cursor:pointer}
         <button class="send" onclick="sendChat()">전송</button>
         <button class="chatGift" onclick="openGiftBox()">🎁</button>
       </div>
+
     </div>
 
     <div class="rightBottom">
 
+      <!-- 선물 / 후원 -->
       <div class="giftsPanel">
 
-        <div class="giftTitle">
-          선물 / 후원
-        </div>
+        <div class="giftTitle">선물 / 후원</div>
 
-        <!-- 선물 5개 한 줄 -->
+        <!-- 5개 나란히 -->
         <div class="giftTop">
 
           <button class="giftBtn" onclick="sendGift('장미',100)">
             <span class="icon">🌹</span>
-            <span>장미</span>
-            <strong>🪙100</strong>
+            <span class="giftName">장미</span>
+            <strong>🪙 100</strong>
           </button>
 
           <button class="giftBtn" onclick="sendGift('하트',300)">
             <span class="icon">❤️</span>
-            <span>하트</span>
-            <strong>🪙300</strong>
+            <span class="giftName">하트</span>
+            <strong>🪙 300</strong>
           </button>
 
           <button class="giftBtn" onclick="sendGift('별',500)">
             <span class="icon">⭐</span>
-            <span>별</span>
-            <strong>🪙500</strong>
+            <span class="giftName">별</span>
+            <strong>🪙 500</strong>
           </button>
 
           <button class="giftBtn" onclick="sendGift('풍선',1000)">
             <span class="icon">🎈</span>
-            <span>풍선</span>
-            <strong>🪙1,000</strong>
+            <span class="giftName">풍선</span>
+            <strong>🪙 1,000</strong>
           </button>
 
           <button class="giftBtn" onclick="sendGift('슈퍼하트',10000)">
             <span class="icon">❤️‍🔥</span>
-            <span>슈퍼 하트</span>
-            <strong>🪙10,000</strong>
+            <span class="giftName">슈퍼하트</span>
+            <strong>🪙 10,000</strong>
           </button>
 
         </div>
 
-        <!-- 장미 + 선물상자 -->
+        <!-- 장미 1 / 5 / 10 + 선물상자 -->
         <div class="giftBottom">
 
           <div class="rosePanel">
 
-            <div class="roseTitle">
-              장미 선물
-            </div>
+            <div class="roseTitle">🌹 장미 선물</div>
 
             <div class="roseRow">
 
               <button class="roseBtn" onclick="sendRose(1)">
                 <span class="rosePicture">🌹</span>
                 장미 1송이
-                <strong>🪙10</strong>
+                <strong>🪙 10</strong>
               </button>
 
               <button class="roseBtn" onclick="sendRose(5)">
-                <span class="rosePicture">🌹🌹🌹</span>
+                <span class="rosePicture">🌹</span>
                 장미 5송이
-                <strong>🪙50</strong>
+                <strong>🪙 50</strong>
               </button>
 
               <button class="roseBtn" onclick="sendRose(10)">
-                <span class="rosePicture">🌹🌹🌹</span>
+                <span class="rosePicture">🌹</span>
                 장미 10송이
-                <strong>🪙100</strong>
+                <strong>🪙 100</strong>
               </button>
 
             </div>
+
           </div>
 
           <button class="giftBox" onclick="openGiftBox()">
             <span class="giftBoxIcon">🎁</span>
             <span class="giftBoxTitle">선물 상자</span>
             <span class="giftBoxDesc">
-              다른 선물을<br>
-              선택할 수 있어요!
+              다른 선물을<br>선택할 수 있어요!
             </span>
           </button>
 
@@ -770,43 +456,39 @@ button{cursor:pointer}
 
       </div>
 
+      <!-- 제비뽑기 -->
       <div class="lottery">
 
         <div>
-          <div class="lotteryTitle">
-            제비뽑기 이벤트
-          </div>
 
-          <div class="lotterySub">
-            하루 3번의 행운! 선물을 뽑아보세요!
-          </div>
+          <div class="lotteryTitle">제비뽑기 이벤트</div>
+          <div class="lotterySub">하루 3번의 행운!</div>
 
           <div class="drawTimes">
 
             <div class="drawItem">
               <b>☀️ 아침</b>
               <small>09:00</small>
-              <button onclick="drawLottery('아침')">뽑기 1/3</button>
+              <button onclick="drawLottery('아침')">뽑기</button>
             </div>
 
             <div class="drawItem">
               <b>☀️ 점심</b>
               <small>13:00</small>
-              <button onclick="drawLottery('점심')">뽑기 1/3</button>
+              <button onclick="drawLottery('점심')">뽑기</button>
             </div>
 
             <div class="drawItem">
               <b>🌙 저녁</b>
               <small>20:00</small>
-              <button onclick="drawLottery('저녁')">뽑기 1/3</button>
+              <button onclick="drawLottery('저녁')">뽑기</button>
             </div>
 
           </div>
+
         </div>
 
-        <div class="lotteryMachine">
-          🎰
-        </div>
+        <div class="lotteryMachine">🎰</div>
 
       </div>
 
@@ -825,58 +507,39 @@ button{cursor:pointer}
 </div>
 
 <script type="module">
-
 import {joinRoom,selfId} from 'https://esm.run/trystero'
 
-let room = null
-let localStream = null
-let cameraOn = true
-let micOn = true
+let room=null
+let localStream=null
+let cameraOn=true
+let micOn=true
+let profileAction=null
+let chatAction=null
+let giftAction=null
 
-let profileAction = null
-let chatAction = null
-let giftAction = null
-
-const peers = new Set()
-const names = {}
-const peerStreams = {}
+const peers=new Set()
+const names={}
+const peerStreams={}
 
 peers.add(selfId)
-names[selfId] = '나'
+names[selfId]='나'
 
-const guestGrid = document.getElementById('guestGrid')
+const guestGrid=document.getElementById('guestGrid')
 
 for(let i=1;i<=13;i++){
+  const slot=document.createElement('div')
+  slot.className='slot'
 
-  const slot = document.createElement('div')
-
-  slot.className = 'slot'
-
-  slot.innerHTML = `
+  slot.innerHTML=`
     <video id="video${i}" autoplay playsinline></video>
-
-    <div class="empty" id="empty${i}">
-      빈자리
-    </div>
-
-    <div class="slotNo">
-      ${i}
-    </div>
-
-    <div class="muteIcon">
-      🔇
-    </div>
-
+    <div class="empty" id="empty${i}">빈자리</div>
+    <div class="slotNo">${i}</div>
+    <div class="muteIcon">🔇</div>
     <div class="slotName" id="name${i}">
-      게스트${i}
-      <small>♡ 0</small>
+      게스트${i}<small>♡ 0</small>
     </div>
-
-    <div class="guestRose">
-      🌹
-    </div>
+    <div class="guestRose">🌹</div>
   `
-
   guestGrid.appendChild(slot)
 }
 
@@ -885,68 +548,53 @@ function getIds(){
 }
 
 function getHostId(){
-  const ids = getIds()
-  return ids[0] || selfId
+  const ids=getIds()
+  return ids[0]||selfId
 }
 
 function render(){
+  const ids=getIds()
+  const hostId=getHostId()
 
-  const ids = getIds()
-  const hostId = getHostId()
+  document.getElementById('viewerCount').textContent=ids.length
 
-  document.getElementById('viewerCount').textContent = ids.length
+  const hostVideo=document.getElementById('hostVideo')
 
-  const hostVideo = document.getElementById('hostVideo')
-
-  document.getElementById('hostName').textContent =
-    '👑 ' + (names[hostId] || '호스트')
+  document.getElementById('hostName').textContent=
+    '👑 '+(names[hostId]||'호스트')
 
   if(peerStreams[hostId]){
-    hostVideo.srcObject = peerStreams[hostId]
-    hostVideo.muted = hostId === selfId
+    hostVideo.srcObject=peerStreams[hostId]
+    hostVideo.muted=hostId===selfId
   }
 
-  const guestIds = ids.filter(id => id !== hostId)
+  const guestIds=ids.filter(id=>id!==hostId)
 
   for(let i=1;i<=13;i++){
-
-    const peerId = guestIds[i-1]
-
-    const video = document.getElementById('video'+i)
-    const empty = document.getElementById('empty'+i)
-    const name = document.getElementById('name'+i)
+    const peerId=guestIds[i-1]
+    const video=document.getElementById('video'+i)
+    const empty=document.getElementById('empty'+i)
+    const name=document.getElementById('name'+i)
 
     if(peerId){
-
-      empty.style.display = 'none'
-
-      name.innerHTML =
-        (names[peerId] || '게스트'+i) +
-        '<small>♡ 0</small>'
+      empty.style.display='none'
+      name.innerHTML=(names[peerId]||'게스트'+i)+'<small>♡ 0</small>'
 
       if(peerStreams[peerId]){
-        video.srcObject = peerStreams[peerId]
-        video.muted = peerId === selfId
+        video.srcObject=peerStreams[peerId]
+        video.muted=peerId===selfId
       }
-
     }else{
-
-      empty.style.display = 'flex'
-      video.srcObject = null
-
-      name.innerHTML =
-        '게스트'+i+
-        '<small>♡ 0</small>'
+      empty.style.display='flex'
+      video.srcObject=null
+      name.innerHTML='게스트'+i+'<small>♡ 0</small>'
     }
   }
 }
 
 async function startRoom(){
-
   try{
-
-    localStream =
-    await navigator.mediaDevices.getUserMedia({
+    localStream=await navigator.mediaDevices.getUserMedia({
       video:{facingMode:'user'},
       audio:{
         echoCancellation:true,
@@ -954,34 +602,28 @@ async function startRoom(){
         autoGainControl:true
       }
     })
-
-  }catch(error){
-
+  }catch(e){
     alert('카메라와 마이크 사용을 허용해 주세요.')
     return
   }
 
-  peerStreams[selfId] = localStream
+  peerStreams[selfId]=localStream
 
-  room = joinRoom(
+  room=joinRoom(
     {appId:'ktalk-final-photo-11119'},
     'ktalk-public-main'
   )
 
-  profileAction = room.makeAction('profile')
-  chatAction = room.makeAction('chat')
-  giftAction = room.makeAction('gift')
+  profileAction=room.makeAction('profile')
+  chatAction=room.makeAction('chat')
+  giftAction=room.makeAction('gift')
 
   room.addStream(localStream)
 
-  room.onPeerJoin = peerId => {
-
+  room.onPeerJoin=peerId=>{
     peers.add(peerId)
 
-    room.addStream(
-      localStream,
-      {target:peerId}
-    )
+    room.addStream(localStream,{target:peerId})
 
     profileAction.send(
       {name:names[selfId]},
@@ -991,114 +633,74 @@ async function startRoom(){
     render()
   }
 
-  room.onPeerLeave = peerId => {
-
+  room.onPeerLeave=peerId=>{
     peers.delete(peerId)
-
     delete names[peerId]
     delete peerStreams[peerId]
-
     render()
   }
 
-  room.onPeerStream = (incomingStream,peerId) => {
-
+  room.onPeerStream=(stream,peerId)=>{
     peers.add(peerId)
-
-    peerStreams[peerId] = incomingStream
-
+    peerStreams[peerId]=stream
     render()
   }
 
-  profileAction.onMessage = (data,{peerId}) => {
-
+  profileAction.onMessage=(data,{peerId})=>{
     peers.add(peerId)
-
-    names[peerId] =
-      data?.name || '참가자'
-
+    names[peerId]=data?.name||'참가자'
     render()
   }
 
-  chatAction.onMessage = (data,{peerId}) => {
-
+  chatAction.onMessage=(data,{peerId})=>{
     addMessage(
-      data?.name ||
-      names[peerId] ||
-      '참가자',
-
-      data?.text || ''
+      data?.name||names[peerId]||'참가자',
+      data?.text||''
     )
   }
 
-  giftAction.onMessage = (data,{peerId}) => {
-
+  giftAction.onMessage=(data,{peerId})=>{
     addMessage(
-      data?.name ||
-      names[peerId] ||
-      '참가자',
-
-      data?.text || ''
+      data?.name||names[peerId]||'참가자',
+      data?.text||''
     )
   }
 
-  profileAction.send({
-    name:names[selfId]
-  })
-
+  profileAction.send({name:names[selfId]})
   render()
 }
 
-window.toggleCamera = function(){
+window.toggleCamera=function(){
+  if(!localStream)return
+  const track=localStream.getVideoTracks()[0]
+  if(!track)return
 
-  if(!localStream) return
+  cameraOn=!cameraOn
+  track.enabled=cameraOn
 
-  const track = localStream.getVideoTracks()[0]
-
-  if(!track) return
-
-  cameraOn = !cameraOn
-  track.enabled = cameraOn
-
-  const button = document.getElementById('cameraBtn')
-
-  if(cameraOn){
-    button.textContent = '📷'
-    button.classList.remove('off')
-  }else{
-    button.textContent = '🔒'
-    button.classList.add('off')
-  }
+  const btn=document.getElementById('cameraBtn')
+  btn.textContent=cameraOn?'📷':'🔒'
+  btn.classList.toggle('off',!cameraOn)
 }
 
-window.toggleMic = function(){
+window.toggleMic=function(){
+  if(!localStream)return
+  const track=localStream.getAudioTracks()[0]
+  if(!track)return
 
-  if(!localStream) return
+  micOn=!micOn
+  track.enabled=micOn
 
-  const track = localStream.getAudioTracks()[0]
-
-  if(!track) return
-
-  micOn = !micOn
-  track.enabled = micOn
-
-  const button = document.getElementById('micBtn')
-
-  if(micOn){
-    button.textContent = '🎤'
-    button.classList.remove('off')
-  }else{
-    button.textContent = '🔇'
-    button.classList.add('off')
-  }
+  const btn=document.getElementById('micBtn')
+  btn.textContent=micOn?'🎤':'🔇'
+  btn.classList.toggle('off',!micOn)
 }
 
-window.attendanceCheck = function(){
+window.attendanceCheck=function(){
   alert('출석체크 완료! ❤️')
 }
 
 function safe(text){
-
   return String(text)
     .replaceAll('&','&amp;')
     .replaceAll('<','&lt;')
@@ -1106,91 +708,74 @@ function safe(text){
 }
 
 function addMessage(name,text){
+  const line=document.createElement('div')
+  line.innerHTML='<b>'+safe(name)+'</b> '+safe(text)
 
-  const line = document.createElement('div')
-
-  line.innerHTML =
-    '<b>'+safe(name)+'</b> '+safe(text)
-
-  const messages = document.getElementById('messages')
-
+  const messages=document.getElementById('messages')
   messages.appendChild(line)
-
-  messages.scrollTop = messages.scrollHeight
+  messages.scrollTop=messages.scrollHeight
 }
 
-window.sendChat = function(){
+window.sendChat=function(){
+  if(!chatAction)return
 
-  if(!chatAction) return
+  const input=document.getElementById('chatText')
+  const text=input.value.trim()
 
-  const input = document.getElementById('chatText')
-  const text = input.value.trim()
-
-  if(!text) return
+  if(!text)return
 
   addMessage(names[selfId],text)
 
   chatAction.send({
     name:names[selfId],
-    text:text
+    text
   })
 
-  input.value = ''
+  input.value=''
 }
 
-window.sendGift = function(name,price){
-
-  const text =
-    '🎁 '+name+' 🪙 '+price
+window.sendGift=function(name,price){
+  const text='🎁 '+name+' 🪙 '+price
 
   addMessage(names[selfId],text)
 
   if(giftAction){
-
     giftAction.send({
       name:names[selfId],
-      text:text
+      text
     })
   }
 }
 
-window.sendRose = function(count){
-
-  const price = count * 10
-
-  const text =
-    '🌹 장미 '+count+'송이 🪙 '+price
+window.sendRose=function(count){
+  const price=count*10
+  const text='🌹 장미 '+count+'송이 🪙 '+price
 
   addMessage(names[selfId],text)
 
   if(giftAction){
-
     giftAction.send({
       name:names[selfId],
-      text:text
+      text
     })
   }
 }
 
-window.openGiftBox = function(){
-
-  const text =
-    '🎁 선물상자를 열었습니다.'
+window.openGiftBox=function(){
+  const text='🎁 선물상자를 열었습니다.'
 
   addMessage(names[selfId],text)
 
   if(giftAction){
-
     giftAction.send({
       name:names[selfId],
-      text:text
+      text
     })
   }
 }
 
-window.drawLottery = function(time){
-
-  const prizes = [
+window.drawLottery=function(time){
+  const prizes=[
     '꽝',
     '꽝',
     '장미 1개',
@@ -1200,36 +785,25 @@ window.drawLottery = function(time){
     '장미 5개'
   ]
 
-  const result =
-    prizes[Math.floor(Math.random()*prizes.length)]
+  const result=prizes[Math.floor(Math.random()*prizes.length)]
 
-  alert(
-    time+' 제비뽑기 결과 : '+result
-  )
+  alert(time+' 제비뽑기 결과 : '+result)
 }
 
-document
-.getElementById('chatText')
-.addEventListener('keydown',event=>{
-
-  if(event.key==='Enter'){
-    window.sendChat()
-  }
+document.getElementById('chatText').addEventListener('keydown',e=>{
+  if(e.key==='Enter')window.sendChat()
 })
 
 setInterval(()=>{
+  const now=new Date()
 
-  const now = new Date()
-
-  document.getElementById('clock').textContent =
+  document.getElementById('clock').textContent=
     String(now.getHours()).padStart(2,'0')+':'+
     String(now.getMinutes()).padStart(2,'0')+':'+
     String(now.getSeconds()).padStart(2,'0')
-
 },1000)
 
 startRoom()
-
 </script>
 
 </body>
