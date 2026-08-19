@@ -7,6 +7,7 @@
 
 <style>
 *{box-sizing:border-box}
+
 html,body{
   margin:0;
   padding:0;
@@ -14,49 +15,57 @@ html,body{
   color:#fff;
   font-family:Arial,"Noto Sans KR",sans-serif;
 }
+
 body{
   min-height:100dvh;
 }
+
 button{
   font-family:inherit;
   cursor:pointer;
 }
+
 .app{
   width:100%;
   max-width:760px;
   margin:auto;
   min-height:100dvh;
-  padding:5px 7px 62px;
+  padding:2px 7px 72px;
   background:
     radial-gradient(circle at 75% 25%,#102238 0,#071019 30%,#020508 70%);
 }
 
 /* 상단 */
 .header{
-  height:48px;
+  height:44px;
   display:grid;
   grid-template-columns:55px 1fr 70px;
   align-items:center;
   border-bottom:1px solid #b58d35;
 }
+
 .back{
   color:#ffc84d;
   font-size:34px;
 }
+
 .logo{
   text-align:center;
   line-height:1.05;
 }
+
 .logo b{
   display:block;
   color:#ffd66c;
   font-family:Georgia,serif;
   font-size:27px;
 }
+
 .logo small{
   color:#c8a55e;
   font-size:11px;
 }
+
 .live{
   text-align:right;
   color:#ff3653;
@@ -66,8 +75,8 @@ button{
 
 /* LED 공지 */
 .notice{
-  height:38px;
-  margin:5px 0 7px;
+  height:34px;
+  margin:3px 0 5px;
   border:1.5px solid #e2b440;
   border-radius:13px;
   display:flex;
@@ -82,6 +91,7 @@ button{
   white-space:nowrap;
   background:#05070a;
 }
+
 .notice .gift{
   color:#ffbd39;
 }
@@ -95,14 +105,14 @@ button{
 
 /* 호스트 */
 .host{
-  height:404px;
+  height:350px;
   position:relative;
   border:1.5px solid #d2a43d;
   border-radius:20px;
   overflow:hidden;
-  background:
-    linear-gradient(#243645,#18222b);
+  background:linear-gradient(#243645,#18222b);
 }
+
 .host-photo{
   position:absolute;
   inset:0;
@@ -113,6 +123,7 @@ button{
   background:
     radial-gradient(circle at 50% 30%,#566977,#17232d 45%,#091015 100%);
 }
+
 .attendance{
   position:absolute;
   top:15px;
@@ -127,6 +138,7 @@ button{
   font-size:11px;
   z-index:3;
 }
+
 .crown{
   position:absolute;
   top:12px;
@@ -134,6 +146,7 @@ button{
   font-size:32px;
   z-index:3;
 }
+
 .wave{
   position:absolute;
   left:0;
@@ -141,6 +154,7 @@ button{
   bottom:14px;
   height:72px;
 }
+
 #waveCanvas{
   width:100%;
   height:100%;
@@ -148,12 +162,13 @@ button{
 
 /* 참가자 */
 .guests{
-  height:404px;
+  height:350px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   grid-template-rows:repeat(4,1fr);
   gap:5px;
 }
+
 .guest{
   position:relative;
   border:1.3px solid #9d7c39;
@@ -161,6 +176,7 @@ button{
   background:linear-gradient(145deg,#172432,#081018);
   overflow:hidden;
 }
+
 .number{
   position:absolute;
   top:5px;
@@ -175,6 +191,7 @@ button{
   text-align:center;
   font-size:14px;
 }
+
 .person{
   position:absolute;
   left:50%;
@@ -183,6 +200,7 @@ button{
   color:#d3b061;
   font-size:30px;
 }
+
 .gname{
   position:absolute;
   left:7px;
@@ -196,12 +214,12 @@ button{
   display:grid;
   grid-template-columns:46% 54%;
   gap:7px;
-  margin-top:7px;
+  margin-top:5px;
 }
 
 /* 채팅 */
 .chatbox{
-  height:298px;
+  height:250px;
   border:1.2px solid #5f476b;
   border-radius:15px;
   background:#070b11;
@@ -209,8 +227,9 @@ button{
   display:flex;
   flex-direction:column;
 }
+
 .tabs{
-  height:34px;
+  height:32px;
   border-bottom:1px solid #5c256c;
   display:flex;
   gap:28px;
@@ -219,21 +238,25 @@ button{
   font-weight:900;
   font-size:13px;
 }
+
 .tabs span:first-child{
   color:#ec7dff;
 }
+
 .messages{
   flex:1;
   padding:8px 6px 4px;
-  line-height:1.65;
+  line-height:1.55;
   font-size:12px;
   overflow:hidden;
 }
+
 .chatinput{
   display:grid;
   grid-template-columns:1fr 58px;
   gap:5px;
 }
+
 .chatinput input{
   min-width:0;
   height:34px;
@@ -243,6 +266,7 @@ button{
   color:#fff;
   padding:0 9px;
 }
+
 .chatinput button{
   border:0;
   border-radius:8px;
@@ -253,20 +277,22 @@ button{
 
 /* 선물 */
 .giftpanel{
-  height:298px;
+  height:250px;
   border:1.3px solid #8c7138;
   border-radius:16px;
   padding:8px;
   background:#080d14;
 }
+
 .paneltitle{
   color:#f395ff;
   font-weight:900;
   font-size:14px;
-  margin-bottom:7px;
+  margin-bottom:5px;
 }
+
 .giftrow{
-  height:101px;
+  height:82px;
   border:1px solid #572365;
   border-radius:12px;
   display:grid;
@@ -274,31 +300,35 @@ button{
   align-items:center;
   text-align:center;
   gap:1px;
-  padding:5px 2px;
+  padding:3px 2px;
 }
+
 .giftitem{
   font-size:10px;
   font-weight:900;
   color:#ffd75b;
 }
+
 .giftitem .ico{
   display:block;
-  font-size:28px;
+  font-size:25px;
   margin-bottom:2px;
 }
+
 .giftitem .price{
   display:block;
   color:#ffcf4d;
-  font-size:11px;
+  font-size:10px;
 }
 
 .giftbottom{
   display:grid;
   grid-template-columns:58% 42%;
   gap:5px;
-  margin-top:6px;
-  height:84px;
+  margin-top:5px;
+  height:64px;
 }
+
 .roses{
   border:1px solid #552267;
   border-radius:11px;
@@ -307,14 +337,17 @@ button{
   align-items:center;
   text-align:center;
 }
+
 .rose{
   font-size:10px;
   font-weight:900;
 }
+
 .rose span{
   display:block;
-  font-size:28px;
+  font-size:23px;
 }
+
 .giftbox{
   border:1.5px solid #d74eff;
   border-radius:11px;
@@ -323,44 +356,48 @@ button{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  font-size:11px;
+  font-size:10px;
   font-weight:900;
   text-align:center;
 }
+
 .giftbox span{
-  font-size:29px;
+  font-size:25px;
 }
 
 /* 제비뽑기 */
 .lottery{
-  margin-top:7px;
-  height:66px;
+  margin-top:5px;
+  height:55px;
   border:1.5px solid #cf42e9;
   border-radius:13px;
   background:linear-gradient(90deg,#21102e,#351043);
   display:grid;
-  grid-template-columns:78px 1fr;
+  grid-template-columns:65px 1fr;
   align-items:center;
   overflow:hidden;
 }
+
 .slot{
   text-align:center;
-  font-size:42px;
+  font-size:34px;
 }
+
 .lottery-text{
-  line-height:1.4;
-  font-size:11px;
+  line-height:1.3;
+  font-size:9px;
   color:#ffd26f;
 }
+
 .lottery-text b{
   color:#f2a1ff;
-  font-size:13px;
+  font-size:12px;
 }
 
 /* 방송 버튼 */
 .controls{
-  margin-top:7px;
-  height:64px;
+  margin-top:5px;
+  height:54px;
   border:1px solid #665b4a;
   border-radius:12px;
   display:grid;
@@ -368,20 +405,23 @@ button{
   align-items:center;
   background:#080d12;
 }
+
 .control{
   text-align:center;
-  font-size:10px;
+  font-size:9px;
   color:#ddd;
 }
+
 .control button{
-  width:42px;
-  height:42px;
+  width:35px;
+  height:35px;
   border-radius:50%;
   border:0;
   color:#fff;
-  font-size:19px;
-  margin-bottom:2px;
+  font-size:17px;
+  margin-bottom:1px;
 }
+
 .start{background:#0c569d}
 .stop{background:#be2437}
 .radio{background:#0c4c82}
@@ -394,7 +434,7 @@ button{
   bottom:0;
   width:100%;
   max-width:760px;
-  height:58px;
+  height:54px;
   padding-bottom:env(safe-area-inset-bottom);
   background:#070c11f5;
   border-top:1px solid #685b3d;
@@ -403,71 +443,132 @@ button{
   align-items:center;
   z-index:50;
 }
+
 .navitem{
   text-align:center;
   color:#e8c66e;
-  font-size:11px;
+  font-size:10px;
 }
+
 .navitem span{
   display:block;
-  font-size:23px;
+  font-size:21px;
   margin-bottom:1px;
 }
 
-/* 작은 휴대폰 */
+/* 휴대폰 */
 @media(max-width:430px){
+
   .app{
-    padding-left:4px;
-    padding-right:4px;
+    padding:0 4px 64px;
   }
-  .header{height:43px}
-  .logo b{font-size:24px}
-  .notice{height:34px;font-size:10px}
+
+  .header{
+    height:39px;
+  }
+
+  .logo b{
+    font-size:23px;
+  }
+
+  .notice{
+    height:30px;
+    font-size:9px;
+    margin:2px 0 4px;
+  }
+
   .top{
     grid-template-columns:46% 54%;
     gap:4px;
   }
-  .host,.guests{
-    height:360px;
+
+  .host,
+  .guests{
+    height:320px;
   }
-  .guests{gap:3px}
-  .guest{border-radius:9px}
+
+  .guests{
+    gap:3px;
+  }
+
+  .guest{
+    border-radius:9px;
+  }
+
   .number{
-    min-width:23px;
-    height:23px;
-    font-size:11px;
+    min-width:22px;
+    height:22px;
+    font-size:10px;
     padding:4px;
   }
-  .person{font-size:25px}
-  .gname{font-size:9px}
+
+  .person{
+    font-size:24px;
+  }
+
+  .gname{
+    font-size:9px;
+  }
+
   .middle{
     gap:4px;
-    margin-top:5px;
+    margin-top:4px;
   }
-  .chatbox,.giftpanel{
-    height:270px;
+
+  .chatbox,
+  .giftpanel{
+    height:225px;
   }
+
   .messages{
     font-size:10px;
-    line-height:1.55;
+    line-height:1.45;
   }
-  .giftitem .ico{font-size:23px}
-  .giftitem{font-size:8px}
-  .giftitem .price{font-size:9px}
-  .giftbottom{height:72px}
-  .rose span{font-size:23px}
-  .lottery{
-    height:57px;
-    grid-template-columns:65px 1fr;
+
+  .giftrow{
+    height:72px;
   }
-  .slot{font-size:35px}
-  .lottery-text{font-size:9px}
-  .controls{
+
+  .giftitem .ico{
+    font-size:21px;
+  }
+
+  .giftitem{
+    font-size:8px;
+  }
+
+  .giftitem .price{
+    font-size:9px;
+  }
+
+  .giftbottom{
     height:58px;
   }
+
+  .rose span{
+    font-size:21px;
+  }
+
+  .lottery{
+    height:48px;
+    grid-template-columns:58px 1fr;
+  }
+
+  .slot{
+    font-size:30px;
+  }
+
+  .lottery-text{
+    font-size:8px;
+  }
+
+  .controls{
+    height:50px;
+  }
+
   .control button{
-    width:37px;
-    height:37px;
+    width:33px;
+    height:33px;
   }
 }
 </style>
@@ -478,6 +579,7 @@ button{
 <div class="app">
 
   <div class="header">
+
     <div class="back">←</div>
 
     <div class="logo">
@@ -486,6 +588,7 @@ button{
     </div>
 
     <div class="live">● LIVE</div>
+
   </div>
 
   <div class="notice">
@@ -503,7 +606,8 @@ button{
 
       <div class="crown">👑</div>
 
-      <button class="attendance"
+      <button
+        class="attendance"
         onclick="alert('출석체크 완료!')">
         💗 출석체크
       </button>
@@ -537,7 +641,9 @@ button{
       </div>
 
       <div class="chatinput">
-        <input id="chatText" placeholder="메시지를 입력하세요...">
+        <input
+          id="chatText"
+          placeholder="메시지를 입력하세요...">
         <button onclick="sendChat()">전송</button>
       </div>
 
@@ -545,7 +651,9 @@ button{
 
     <div class="giftpanel">
 
-      <div class="paneltitle">선물 / 후원</div>
+      <div class="paneltitle">
+        선물 / 후원
+      </div>
 
       <div class="giftrow">
 
@@ -602,16 +710,20 @@ button{
 
         </div>
 
-        <div class="giftbox"
+        <div
+          class="giftbox"
           onclick="alert('선물상자를 열었습니다.')">
+
           <span>🎁</span>
           선물상자<br>
           다른 선물
+
         </div>
 
       </div>
 
-      <div class="lottery"
+      <div
+        class="lottery"
         onclick="lottery()">
 
         <div class="slot">🎰</div>
@@ -631,21 +743,33 @@ button{
   <div class="controls">
 
     <div class="control">
-      <button class="start"
-        onclick="alert('방송을 시작합니다.')">📹</button>
-      <br>방송 시작
+      <button
+        class="start"
+        onclick="alert('방송을 시작합니다.')">
+        📹
+      </button>
+      <br>
+      방송 시작
     </div>
 
     <div class="control">
-      <button class="stop"
-        onclick="alert('방송을 종료합니다.')">■</button>
-      <br>방송 종료
+      <button
+        class="stop"
+        onclick="alert('방송을 종료합니다.')">
+        ■
+      </button>
+      <br>
+      방송 종료
     </div>
 
     <div class="control">
-      <button class="radio"
-        onclick="alert('라디오 방송으로 전환합니다.')">🎧</button>
-      <br>라디오 전환
+      <button
+        class="radio"
+        onclick="alert('라디오 방송으로 전환합니다.')">
+        🎧
+      </button>
+      <br>
+      라디오 전환
     </div>
 
   </div>
@@ -677,6 +801,7 @@ button{
 </div>
 
 <script>
+
 const guestNames=[
   "강민수","지수","도레미",
   "사라","이태훈","별빛",
@@ -684,34 +809,60 @@ const guestNames=[
   "수현","루이","보라"
 ];
 
-const guestBox=document.getElementById("guests");
+const guestBox=
+  document.getElementById("guests");
 
 guestNames.forEach((name,i)=>{
+
   guestBox.innerHTML+=`
+
     <div class="guest">
-      <div class="number">${i+1}</div>
-      <div class="person">♙</div>
-      <div class="gname">${name}</div>
+
+      <div class="number">
+        ${i+1}
+      </div>
+
+      <div class="person">
+        ♙
+      </div>
+
+      <div class="gname">
+        ${name}
+      </div>
+
     </div>
+
   `;
+
 });
 
 function sendChat(){
-  const input=document.getElementById("chatText");
-  const text=input.value.trim();
+
+  const input=
+    document.getElementById("chatText");
+
+  const text=
+    input.value.trim();
 
   if(!text) return;
 
-  const messages=document.getElementById("messages");
+  const messages=
+    document.getElementById("messages");
 
   messages.innerHTML+=
     "<br>나: "+text;
 
   input.value="";
+
 }
 
 function giftRose(count){
-  alert("장미 "+count+"송이를 선물했습니다.");
+
+  alert(
+    "장미 "+count+
+    "송이를 선물했습니다."
+  );
+
 }
 
 let lotteryCount=3;
@@ -719,8 +870,13 @@ let lotteryCount=3;
 function lottery(){
 
   if(lotteryCount<=0){
-    alert("오늘 제비뽑기 횟수를 모두 사용했습니다.");
+
+    alert(
+      "오늘 제비뽑기 횟수를 모두 사용했습니다."
+    );
+
     return;
+
   }
 
   lotteryCount--;
@@ -735,54 +891,94 @@ function lottery(){
   ];
 
   const result=
-    items[Math.floor(Math.random()*items.length)];
+    items[
+      Math.floor(
+        Math.random()*items.length
+      )
+    ];
 
-  alert("제비뽑기 결과 : "+result);
+  alert(
+    "제비뽑기 결과 : "+result
+  );
+
 }
 
-
 /* 파장 */
-const canvas=document.getElementById("waveCanvas");
-const ctx=canvas.getContext("2d");
+
+const canvas=
+  document.getElementById("waveCanvas");
+
+const ctx=
+  canvas.getContext("2d");
 
 function resizeWave(){
-  canvas.width=canvas.clientWidth*2;
-  canvas.height=canvas.clientHeight*2;
+
+  canvas.width=
+    canvas.clientWidth*2;
+
+  canvas.height=
+    canvas.clientHeight*2;
+
 }
 
 resizeWave();
 
-window.addEventListener("resize",resizeWave);
+window.addEventListener(
+  "resize",
+  resizeWave
+);
 
 let t=0;
 
 function drawWave(){
 
-  const w=canvas.width;
-  const h=canvas.height;
+  const w=
+    canvas.width;
 
-  ctx.clearRect(0,0,w,h);
+  const h=
+    canvas.height;
+
+  ctx.clearRect(
+    0,
+    0,
+    w,
+    h
+  );
 
   const bars=42;
   const gap=3;
-  const bw=(w-gap*(bars-1))/bars;
 
-  for(let i=0;i<bars;i++){
+  const bw=
+    (w-gap*(bars-1))/bars;
+
+  for(
+    let i=0;
+    i<bars;
+    i++
+  ){
 
     const value=
-      Math.sin(t+i*.65)*.5+.5;
+      Math.sin(
+        t+i*.65
+      )*.5+.5;
 
     const height=
       20+
       value*(h*.65);
 
-    const x=i*(bw+gap);
-    const y=(h-height)/2;
+    const x=
+      i*(bw+gap);
 
-    const hue=(i*8+t*8)%360;
+    const y=
+      (h-height)/2;
+
+    const hue=
+      (i*8+t*8)%360;
 
     ctx.fillStyle=
-      "hsl("+hue+",100%,55%)";
+      "hsl("+
+      hue+
+      ",100%,55%)";
 
     ctx.beginPath();
 
@@ -795,15 +991,20 @@ function drawWave(){
     );
 
     ctx.fill();
+
   }
 
   t+=.06;
 
-  requestAnimationFrame(drawWave);
+  requestAnimationFrame(
+    drawWave
+  );
+
 }
 
 drawWave();
+
 </script>
 
 </body>
-  </html>
+</html>
