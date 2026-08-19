@@ -1,48 +1,809 @@
-<script>
-let djVoice = null;
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>K-Talk</title>
 
-function loadMaleVoice() {
-  const voices = window.speechSynthesis.getVoices();
-
-  djVoice =
-    voices.find(v =>
-      v.lang === "ko-KR" &&
-      /male|남성|injoon|hyunsu/i.test(v.name)
-    ) ||
-    voices.find(v => v.lang === "ko-KR") ||
-    voices.find(v => v.lang.startsWith("ko"));
+<style>
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:#03070b;
+  color:#fff;
+  font-family:Arial,"Noto Sans KR",sans-serif;
+}
+body{
+  min-height:100dvh;
+}
+button{
+  font-family:inherit;
+  cursor:pointer;
+}
+.app{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+  min-height:100dvh;
+  padding:5px 7px 62px;
+  background:
+    radial-gradient(circle at 75% 25%,#102238 0,#071019 30%,#020508 70%);
 }
 
-speechSynthesis.getVoices();
-speechSynthesis.onvoiceschanged = loadMaleVoice;
-loadMaleVoice();
-
-function maleDJ() {
-  window.speechSynthesis.cancel();
-
-  const msg = new SpeechSynthesisUtterance(
-    "안녕하세요. 케이톡 남자 디제이 민호입니다. 오늘도 즐거운 방송 함께하겠습니다."
-  );
-
-  loadMaleVoice();
-
-  if (djVoice) msg.voice = djVoice;
-
-  msg.lang = "ko-KR";
-  msg.volume = 1;
-  msg.rate = 0.88;
-  msg.pitch = 0.65;
-
-  window.speechSynthesis.speak(msg);
+/* 상단 */
+.header{
+  height:48px;
+  display:grid;
+  grid-template-columns:55px 1fr 70px;
+  align-items:center;
+  border-bottom:1px solid #b58d35;
+}
+.back{
+  color:#ffc84d;
+  font-size:34px;
+}
+.logo{
+  text-align:center;
+  line-height:1.05;
+}
+.logo b{
+  display:block;
+  color:#ffd66c;
+  font-family:Georgia,serif;
+  font-size:27px;
+}
+.logo small{
+  color:#c8a55e;
+  font-size:11px;
+}
+.live{
+  text-align:right;
+  color:#ff3653;
+  font-weight:900;
+  font-size:14px;
 }
 
-/* 화면의 '남자 목소리 설치 안내' 버튼을 누르면 테스트 */
-document.addEventListener("click", function(e) {
-  if (
-    e.target.innerText &&
-    e.target.innerText.includes("남자 목소리")
-  ) {
-    maleDJ();
+/* LED 공지 */
+.notice{
+  height:38px;
+  margin:5px 0 7px;
+  border:1.5px solid #e2b440;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  padding:0 10px;
+  color:#ffd86c;
+  font-weight:800;
+  font-size:11px;
+  overflow:hidden;
+  white-space:nowrap;
+  background:#05070a;
+}
+.notice .gift{
+  color:#ffbd39;
+}
+
+/* 위쪽 */
+.top{
+  display:grid;
+  grid-template-columns:46% 54%;
+  gap:7px;
+}
+
+/* 호스트 */
+.host{
+  height:404px;
+  position:relative;
+  border:1.5px solid #d2a43d;
+  border-radius:20px;
+  overflow:hidden;
+  background:
+    linear-gradient(#243645,#18222b);
+}
+.host-photo{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:78px;
+  background:
+    radial-gradient(circle at 50% 30%,#566977,#17232d 45%,#091015 100%);
+}
+.attendance{
+  position:absolute;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#6b155e;
+  color:#fff;
+  border:1px solid #d55be3;
+  border-radius:17px;
+  padding:6px 12px;
+  font-weight:900;
+  font-size:11px;
+  z-index:3;
+}
+.crown{
+  position:absolute;
+  top:12px;
+  left:13px;
+  font-size:32px;
+  z-index:3;
+}
+.wave{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:14px;
+  height:72px;
+}
+#waveCanvas{
+  width:100%;
+  height:100%;
+}
+
+/* 참가자 */
+.guests{
+  height:404px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(4,1fr);
+  gap:5px;
+}
+.guest{
+  position:relative;
+  border:1.3px solid #9d7c39;
+  border-radius:13px;
+  background:linear-gradient(145deg,#172432,#081018);
+  overflow:hidden;
+}
+.number{
+  position:absolute;
+  top:5px;
+  left:6px;
+  min-width:28px;
+  height:28px;
+  padding:4px 5px;
+  background:#eaaa23;
+  color:#111;
+  border-radius:7px;
+  font-weight:900;
+  text-align:center;
+  font-size:14px;
+}
+.person{
+  position:absolute;
+  left:50%;
+  top:42%;
+  transform:translate(-50%,-50%);
+  color:#d3b061;
+  font-size:30px;
+}
+.gname{
+  position:absolute;
+  left:7px;
+  bottom:8px;
+  color:#bbc3cc;
+  font-size:11px;
+}
+
+/* 중간 */
+.middle{
+  display:grid;
+  grid-template-columns:46% 54%;
+  gap:7px;
+  margin-top:7px;
+}
+
+/* 채팅 */
+.chatbox{
+  height:298px;
+  border:1.2px solid #5f476b;
+  border-radius:15px;
+  background:#070b11;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+}
+.tabs{
+  height:34px;
+  border-bottom:1px solid #5c256c;
+  display:flex;
+  gap:28px;
+  align-items:center;
+  padding:0 7px;
+  font-weight:900;
+  font-size:13px;
+}
+.tabs span:first-child{
+  color:#ec7dff;
+}
+.messages{
+  flex:1;
+  padding:8px 6px 4px;
+  line-height:1.65;
+  font-size:12px;
+  overflow:hidden;
+}
+.chatinput{
+  display:grid;
+  grid-template-columns:1fr 58px;
+  gap:5px;
+}
+.chatinput input{
+  min-width:0;
+  height:34px;
+  background:#101821;
+  border:1px solid #425062;
+  border-radius:8px;
+  color:#fff;
+  padding:0 9px;
+}
+.chatinput button{
+  border:0;
+  border-radius:8px;
+  background:#f5b82a;
+  color:#111;
+  font-weight:900;
+}
+
+/* 선물 */
+.giftpanel{
+  height:298px;
+  border:1.3px solid #8c7138;
+  border-radius:16px;
+  padding:8px;
+  background:#080d14;
+}
+.paneltitle{
+  color:#f395ff;
+  font-weight:900;
+  font-size:14px;
+  margin-bottom:7px;
+}
+.giftrow{
+  height:101px;
+  border:1px solid #572365;
+  border-radius:12px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  align-items:center;
+  text-align:center;
+  gap:1px;
+  padding:5px 2px;
+}
+.giftitem{
+  font-size:10px;
+  font-weight:900;
+  color:#ffd75b;
+}
+.giftitem .ico{
+  display:block;
+  font-size:28px;
+  margin-bottom:2px;
+}
+.giftitem .price{
+  display:block;
+  color:#ffcf4d;
+  font-size:11px;
+}
+
+.giftbottom{
+  display:grid;
+  grid-template-columns:58% 42%;
+  gap:5px;
+  margin-top:6px;
+  height:84px;
+}
+.roses{
+  border:1px solid #552267;
+  border-radius:11px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  align-items:center;
+  text-align:center;
+}
+.rose{
+  font-size:10px;
+  font-weight:900;
+}
+.rose span{
+  display:block;
+  font-size:28px;
+}
+.giftbox{
+  border:1.5px solid #d74eff;
+  border-radius:11px;
+  background:linear-gradient(145deg,#32114c,#160d24);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  font-size:11px;
+  font-weight:900;
+  text-align:center;
+}
+.giftbox span{
+  font-size:29px;
+}
+
+/* 제비뽑기 */
+.lottery{
+  margin-top:7px;
+  height:66px;
+  border:1.5px solid #cf42e9;
+  border-radius:13px;
+  background:linear-gradient(90deg,#21102e,#351043);
+  display:grid;
+  grid-template-columns:78px 1fr;
+  align-items:center;
+  overflow:hidden;
+}
+.slot{
+  text-align:center;
+  font-size:42px;
+}
+.lottery-text{
+  line-height:1.4;
+  font-size:11px;
+  color:#ffd26f;
+}
+.lottery-text b{
+  color:#f2a1ff;
+  font-size:13px;
+}
+
+/* 방송 버튼 */
+.controls{
+  margin-top:7px;
+  height:64px;
+  border:1px solid #665b4a;
+  border-radius:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  align-items:center;
+  background:#080d12;
+}
+.control{
+  text-align:center;
+  font-size:10px;
+  color:#ddd;
+}
+.control button{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:0;
+  color:#fff;
+  font-size:19px;
+  margin-bottom:2px;
+}
+.start{background:#0c569d}
+.stop{background:#be2437}
+.radio{background:#0c4c82}
+
+/* 하단 고정 메뉴 */
+.bottomnav{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  width:100%;
+  max-width:760px;
+  height:58px;
+  padding-bottom:env(safe-area-inset-bottom);
+  background:#070c11f5;
+  border-top:1px solid #685b3d;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  align-items:center;
+  z-index:50;
+}
+.navitem{
+  text-align:center;
+  color:#e8c66e;
+  font-size:11px;
+}
+.navitem span{
+  display:block;
+  font-size:23px;
+  margin-bottom:1px;
+}
+
+/* 작은 휴대폰 */
+@media(max-width:430px){
+  .app{
+    padding-left:4px;
+    padding-right:4px;
   }
+  .header{height:43px}
+  .logo b{font-size:24px}
+  .notice{height:34px;font-size:10px}
+  .top{
+    grid-template-columns:46% 54%;
+    gap:4px;
+  }
+  .host,.guests{
+    height:360px;
+  }
+  .guests{gap:3px}
+  .guest{border-radius:9px}
+  .number{
+    min-width:23px;
+    height:23px;
+    font-size:11px;
+    padding:4px;
+  }
+  .person{font-size:25px}
+  .gname{font-size:9px}
+  .middle{
+    gap:4px;
+    margin-top:5px;
+  }
+  .chatbox,.giftpanel{
+    height:270px;
+  }
+  .messages{
+    font-size:10px;
+    line-height:1.55;
+  }
+  .giftitem .ico{font-size:23px}
+  .giftitem{font-size:8px}
+  .giftitem .price{font-size:9px}
+  .giftbottom{height:72px}
+  .rose span{font-size:23px}
+  .lottery{
+    height:57px;
+    grid-template-columns:65px 1fr;
+  }
+  .slot{font-size:35px}
+  .lottery-text{font-size:9px}
+  .controls{
+    height:58px;
+  }
+  .control button{
+    width:37px;
+    height:37px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="back">←</div>
+
+    <div class="logo">
+      <b>K-Talk</b>
+      <small>실시간 방송</small>
+    </div>
+
+    <div class="live">● LIVE</div>
+  </div>
+
+  <div class="notice">
+    <span>📢 공지 : 출석체크 이벤트 진행 중!</span>
+    <span class="gift">🎁 보물상자 00:02</span>
+  </div>
+
+  <div class="top">
+
+    <div class="host">
+
+      <div class="host-photo">
+        🎤
+      </div>
+
+      <div class="crown">👑</div>
+
+      <button class="attendance"
+        onclick="alert('출석체크 완료!')">
+        💗 출석체크
+      </button>
+
+      <div class="wave">
+        <canvas id="waveCanvas"></canvas>
+      </div>
+
+    </div>
+
+    <div class="guests" id="guests"></div>
+
+  </div>
+
+  <div class="middle">
+
+    <div class="chatbox">
+
+      <div class="tabs">
+        <span>채팅</span>
+        <span>참가자 (12)</span>
+      </div>
+
+      <div class="messages" id="messages">
+        관리자: K-Talk 방송방에 오신 것을 환영합니다.<br>
+        민수: 즐겁게 듣고 있어요! ❤️<br>
+        이태훈: 신청곡 아주 좋아요 👍<br>
+        해피걸: 오늘 노래 최고예요! 👏<br>
+        루이: 즐거운 방송 감사합니다 😊<br>
+        지수: 매일 들으러 올게요 💕
+      </div>
+
+      <div class="chatinput">
+        <input id="chatText" placeholder="메시지를 입력하세요...">
+        <button onclick="sendChat()">전송</button>
+      </div>
+
+    </div>
+
+    <div class="giftpanel">
+
+      <div class="paneltitle">선물 / 후원</div>
+
+      <div class="giftrow">
+
+        <div class="giftitem">
+          <span class="ico">🌹</span>
+          장미
+          <span class="price">100</span>
+        </div>
+
+        <div class="giftitem">
+          <span class="ico">❤️</span>
+          하트
+          <span class="price">300</span>
+        </div>
+
+        <div class="giftitem">
+          <span class="ico">⭐</span>
+          별
+          <span class="price">500</span>
+        </div>
+
+        <div class="giftitem">
+          <span class="ico">🎈</span>
+          풍선
+          <span class="price">1,000</span>
+        </div>
+
+        <div class="giftitem">
+          <span class="ico">💖</span>
+          슈퍼하트
+          <span class="price">10,000</span>
+        </div>
+
+      </div>
+
+      <div class="giftbottom">
+
+        <div class="roses">
+
+          <div class="rose" onclick="giftRose(1)">
+            <span>🌹</span>
+            1송이
+          </div>
+
+          <div class="rose" onclick="giftRose(5)">
+            <span>🌹</span>
+            5송이
+          </div>
+
+          <div class="rose" onclick="giftRose(10)">
+            <span>🌹</span>
+            10송이
+          </div>
+
+        </div>
+
+        <div class="giftbox"
+          onclick="alert('선물상자를 열었습니다.')">
+          <span>🎁</span>
+          선물상자<br>
+          다른 선물
+        </div>
+
+      </div>
+
+      <div class="lottery"
+        onclick="lottery()">
+
+        <div class="slot">🎰</div>
+
+        <div class="lottery-text">
+          <b>제비뽑기 이벤트</b><br>
+          ☀️ 아침 09:00 · ☀️ 점심 13:00 · 🌙 저녁 20:00<br>
+          각 1회 · 오늘 남은 횟수 3회
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="controls">
+
+    <div class="control">
+      <button class="start"
+        onclick="alert('방송을 시작합니다.')">📹</button>
+      <br>방송 시작
+    </div>
+
+    <div class="control">
+      <button class="stop"
+        onclick="alert('방송을 종료합니다.')">■</button>
+      <br>방송 종료
+    </div>
+
+    <div class="control">
+      <button class="radio"
+        onclick="alert('라디오 방송으로 전환합니다.')">🎧</button>
+      <br>라디오 전환
+    </div>
+
+  </div>
+
+</div>
+
+<div class="bottomnav">
+
+  <div class="navitem">
+    <span>🏠</span>
+    홈
+  </div>
+
+  <div class="navitem">
+    <span>👤</span>
+    마이페이지
+  </div>
+
+  <div class="navitem">
+    <span>🪙</span>
+    충전하기
+  </div>
+
+  <div class="navitem">
+    <span>🚪</span>
+    나가기
+  </div>
+
+</div>
+
+<script>
+const guestNames=[
+  "강민수","지수","도레미",
+  "사라","이태훈","별빛",
+  "준호","해피걸","한석남자",
+  "수현","루이","보라"
+];
+
+const guestBox=document.getElementById("guests");
+
+guestNames.forEach((name,i)=>{
+  guestBox.innerHTML+=`
+    <div class="guest">
+      <div class="number">${i+1}</div>
+      <div class="person">♙</div>
+      <div class="gname">${name}</div>
+    </div>
+  `;
 });
+
+function sendChat(){
+  const input=document.getElementById("chatText");
+  const text=input.value.trim();
+
+  if(!text) return;
+
+  const messages=document.getElementById("messages");
+
+  messages.innerHTML+=
+    "<br>나: "+text;
+
+  input.value="";
+}
+
+function giftRose(count){
+  alert("장미 "+count+"송이를 선물했습니다.");
+}
+
+let lotteryCount=3;
+
+function lottery(){
+
+  if(lotteryCount<=0){
+    alert("오늘 제비뽑기 횟수를 모두 사용했습니다.");
+    return;
+  }
+
+  lotteryCount--;
+
+  const items=[
+    "장미 1송이",
+    "장미 2송이",
+    "장미 3송이",
+    "장미 5송이",
+    "꽝",
+    "꽝"
+  ];
+
+  const result=
+    items[Math.floor(Math.random()*items.length)];
+
+  alert("제비뽑기 결과 : "+result);
+}
+
+
+/* 파장 */
+const canvas=document.getElementById("waveCanvas");
+const ctx=canvas.getContext("2d");
+
+function resizeWave(){
+  canvas.width=canvas.clientWidth*2;
+  canvas.height=canvas.clientHeight*2;
+}
+
+resizeWave();
+
+window.addEventListener("resize",resizeWave);
+
+let t=0;
+
+function drawWave(){
+
+  const w=canvas.width;
+  const h=canvas.height;
+
+  ctx.clearRect(0,0,w,h);
+
+  const bars=42;
+  const gap=3;
+  const bw=(w-gap*(bars-1))/bars;
+
+  for(let i=0;i<bars;i++){
+
+    const value=
+      Math.sin(t+i*.65)*.5+.5;
+
+    const height=
+      20+
+      value*(h*.65);
+
+    const x=i*(bw+gap);
+    const y=(h-height)/2;
+
+    const hue=(i*8+t*8)%360;
+
+    ctx.fillStyle=
+      "hsl("+hue+",100%,55%)";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+      x,
+      y,
+      bw,
+      height,
+      bw/2
+    );
+
+    ctx.fill();
+  }
+
+  t+=.06;
+
+  requestAnimationFrame(drawWave);
+}
+
+drawWave();
 </script>
+
+</body>
+  </html>
