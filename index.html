@@ -1,8 +1,48 @@
-/* 휴대폰 아래쪽 메뉴에 내용이 가리지 않도록 여백만 추가 */
-body{
-  padding-bottom:220px !important;
+<script>
+let djVoice = null;
+
+function loadMaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+
+  djVoice =
+    voices.find(v =>
+      v.lang === "ko-KR" &&
+      /male|남성|injoon|hyunsu/i.test(v.name)
+    ) ||
+    voices.find(v => v.lang === "ko-KR") ||
+    voices.find(v => v.lang.startsWith("ko"));
 }
 
-.wrap{
-  padding-bottom:120px !important;
+speechSynthesis.getVoices();
+speechSynthesis.onvoiceschanged = loadMaleVoice;
+loadMaleVoice();
+
+function maleDJ() {
+  window.speechSynthesis.cancel();
+
+  const msg = new SpeechSynthesisUtterance(
+    "안녕하세요. 케이톡 남자 디제이 민호입니다. 오늘도 즐거운 방송 함께하겠습니다."
+  );
+
+  loadMaleVoice();
+
+  if (djVoice) msg.voice = djVoice;
+
+  msg.lang = "ko-KR";
+  msg.volume = 1;
+  msg.rate = 0.88;
+  msg.pitch = 0.65;
+
+  window.speechSynthesis.speak(msg);
 }
+
+/* 화면의 '남자 목소리 설치 안내' 버튼을 누르면 테스트 */
+document.addEventListener("click", function(e) {
+  if (
+    e.target.innerText &&
+    e.target.innerText.includes("남자 목소리")
+  ) {
+    maleDJ();
+  }
+});
+</script>
