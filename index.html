@@ -1,417 +1,1651 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>K-Talk 라이브 플랫폼</title>
-  <!-- Tailwind CSS & FontAwesome CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body { background-color: #050505; color: white; font-family: 'Noto Sans KR', sans-serif; }
-    .live-pulse { animation: pulse-red 2s infinite; }
-    @keyframes pulse-red {
-      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-    }
-    .scrollbar-hide::-webkit-scrollbar { display: none; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>K-Talk 13명 최종방</title>
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#090711;
+  color:#fff;
+  font-family:Arial,sans-serif
+}
+.wrap{
+  max-width:520px;
+  margin:auto;
+  padding:14px
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px
+}
+.brand{
+  font-size:24px;
+  font-weight:900;
+  color:#ffd76a
+}
+.sub{
+  font-size:12px;
+  color:#aaa;
+  margin-top:4px
+}
+.on{
+  background:#ff2e6d;
+  padding:7px 10px;
+  border-radius:10px;
+  font-weight:800
+}
+.main{
+  margin-top:12px;
+  position:relative;
+  background:#15151c;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:16/10
+}
+.main video,
+.slot video{
+  width:100%;
+  height:100%;
+  object-fit:cover
+}
+.placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#aaa;
+  text-align:center;
+  padding:20px
+}
+.controls{
+  display:flex;
+  gap:8px;
+  margin-top:12px
+}
+button{
+  flex:1;
+  border:0;
+  border-radius:12px;
+  padding:12px;
+  font-weight:900;
+  color:#fff;
+  font-size:15px
+}
+.start{
+  background:#8d46ff
+}
+.stop{
+  background:#333
+}
+.status{
+  margin-top:10px;
+  padding:10px;
+  background:#1c1524;
+  border-radius:10px;
+  color:#ffd76a;
+  font-size:13px
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-top:10px
+}
+.slot{
+  height:80px;
+  background:#211829;
+  border:1px solid #4a3457;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  font-size:11px;
+  text-align:center
+}
+.slot.me{
+  border:2px solid #ffd700
+}
+.label{
+  position:absolute;
+  left:4px;
+  bottom:4px;
+  background:#000a;
+  padding:2px 5px;
+  border-radius:6px;
+  font-size:10px
+}
+.badge{
+  display:inline-block;
+  background:#ffd700;
+  color:#111;
+  font-weight:900;
+  padding:5px 9px;
+  border-radius:8px;
+  margin-bottom:7px
+}
+</style>
 </head>
-<body class="flex justify-center min-h-screen">
 
-  <div class="w-full max-w-md bg-neutral-950 min-h-screen pb-20 relative flex flex-col shadow-2xl overflow-hidden">
-    
-    <!-- 1. 상단 글로벌 헤더 -->
-    <header class="p-3 bg-black border-b border-neutral-800 flex justify-between items-center z-20">
-      <div class="text-xs font-black tracking-widest text-pink-500 border border-pink-500/50 px-2 py-1 rounded">
-        K-TALK LIVE
+<body>
+
+<div class="wrap">
+
+  <div class="badge">
+    최종 · 최대 13명
+  </div>
+
+  <div class="top">
+
+    <div>
+      <div class="brand">
+        👑 K-Talk
       </div>
-      <div class="flex items-center gap-2">
-        <span class="bg-neutral-900 border border-neutral-700 px-2 py-0.5 rounded text-[10px] text-yellow-400 font-bold">
-          보유: <span id="userCoins">50,000</span> C
-        </span>
-        <button onclick="openRoseShopModal()" class="bg-pink-600 px-2 py-0.5 rounded text-[10px] font-bold">충전</button>
-      </div>
-    </header>
 
-    <!-- 2. 네비게이션 탭 -->
-    <nav class="grid grid-cols-5 gap-1 p-2 bg-neutral-900 border-b border-neutral-800 text-[10px] text-center font-bold">
-      <button onclick="switchView('home')" id="tab-home" class="py-1.5 rounded-lg bg-pink-600 text-white">홈</button>
-      <button onclick="switchView('live')" id="tab-live" class="py-1.5 rounded-lg bg-neutral-800 text-neutral-400">방송룸</button>
-      <button onclick="switchView('shorts')" id="tab-shorts" class="py-1.5 rounded-lg bg-neutral-800 text-neutral-400">쇼츠업로드</button>
-      <button onclick="switchView('video')" id="tab-video" class="py-1.5 rounded-lg bg-neutral-800 text-neutral-400">영상업로드</button>
-      <button onclick="switchView('library')" id="tab-library" class="py-1.5 rounded-lg bg-neutral-800 text-neutral-400">보관함</button>
-    </nav>
-
-    <!-- [화면 1: 메인 홈 - 호스트 탐색 그리드] -->
-    <div id="view-home" class="flex-1 overflow-y-auto p-4 space-y-4">
-      <div class="flex gap-2 text-xs font-bold">
-        <button class="px-3 py-1 bg-red-600 rounded-full text-[10px]">LIVE (방송중)</button>
-        <button class="px-3 py-1 bg-blue-600 rounded-full text-[10px]">대기중</button>
-      </div>
-      
-      <div class="grid grid-cols-2 gap-3">
-        <!-- 방송중 (LIVE) 카드 -->
-        <div onclick="switchView('live')" class="bg-neutral-900 rounded-xl p-2.5 border-2 border-red-600 live-pulse cursor-pointer">
-          <div class="relative mb-2">
-            <img src="https://picsum.photos/200/200?random=1" class="w-full aspect-square rounded-lg object-cover">
-            <span class="absolute top-1.5 left-1.5 bg-red-600 text-[9px] px-1.5 py-0.5 rounded font-black">LIVE</span>
-            <span class="absolute top-1.5 right-1.5 bg-purple-900 border border-purple-400 text-[9px] px-1 py-0.5 rounded font-bold">19+</span>
-          </div>
-          <div class="text-xs font-bold truncate">지수 DJ 라이브</div>
-          <div class="text-[9px] text-red-400">시청자 184명</div>
-        </div>
-
-        <!-- 대기중 (STANDBY) 카드 -->
-        <div class="bg-neutral-900 rounded-xl p-2.5 border border-blue-500 cursor-pointer">
-          <div class="relative mb-2">
-            <img src="https://picsum.photos/200/200?random=2" class="w-full aspect-square rounded-lg object-cover opacity-70">
-            <span class="absolute top-1.5 left-1.5 bg-blue-600 text-[9px] px-1.5 py-0.5 rounded font-black">대기</span>
-          </div>
-          <div class="text-xs font-bold truncate text-neutral-400">보라의 수다방</div>
-          <div class="text-[9px] text-blue-400">방송 준비 중</div>
-        </div>
+      <div class="sub">
+        13명 화상채팅 · 접속 순서 무관
       </div>
     </div>
 
-    <!-- [화면 2: 실시간 방송 룸] -->
-    <div id="view-live" class="hidden flex-1 relative flex flex-col bg-black">
-      
-      <!-- 비디오 뷰 컨테이너 (레이아웃 조절 가능) -->
-      <div id="roomContainer" class="flex-1 w-full relative bg-neutral-950 flex flex-col justify-center items-center overflow-hidden">
-        <video id="singleHostVideo" autoplay muted loop class="w-full h-full object-cover" src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-light-1232-large.mp4"></video>
-        
-        <!-- 미디어 오버레이 -->
-        <div id="mediaOverlay" class="hidden absolute top-4 left-4 right-4 z-30 bg-black/90 border border-blue-500 rounded-xl overflow-hidden">
-          <div class="flex justify-between items-center p-2 bg-neutral-800 text-[10px]">
-            <span>미디어 재생기</span>
-            <button onclick="closeMediaOverlay()"><i class="fa-solid fa-xmark"></i></button>
-          </div>
-          <video id="generalHostMedia" controls class="w-full h-36 object-cover"></video>
-          <input type="file" accept="video/*" class="p-2 text-[10px]" onchange="playMedia(event)">
-        </div>
-
-        <!-- DJ 신청곡 대시보드 오버레이 -->
-        <div id="djControlPanel" class="hidden absolute top-4 left-4 right-4 z-30 bg-black/90 border border-purple-500 rounded-xl p-3">
-          <div class="flex justify-between items-center mb-2">
-            <h4 class="text-[10px] font-bold text-yellow-400">♬ 실시간 신청곡 큐</h4>
-            <span class="text-[9px] text-neutral-400">재생중: <span id="currentPlaying" class="text-white">없음</span></span>
-          </div>
-          <div id="requestList" class="space-y-1 max-h-24 overflow-y-auto scrollbar-hide text-[10px]">
-            <div class="text-neutral-500 text-center py-2">대기 중인 곡이 없습니다.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 플로팅 퀵 액션 바 (친구 공유 & 쪽지) -->
-      <div class="absolute bottom-24 left-3 right-3 flex justify-between items-center z-40">
-        <button onclick="shareBroadcast()" class="bg-black/60 backdrop-blur-md border border-neutral-700 p-2.5 rounded-full hover:border-pink-500">
-          <i class="fa-solid fa-share-nodes text-sm"></i>
-        </button>
-        <button onclick="openChatModal('지수')" class="bg-black/60 backdrop-blur-md border border-neutral-700 text-yellow-400 p-2.5 rounded-full hover:border-yellow-500 relative">
-          <i class="fa-solid fa-envelope text-sm"></i>
-          <span id="newNoteBadge" class="hidden absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
-        </button>
-      </div>
-
-      <!-- 호스트 전용 컨트롤 바 (하단) -->
-      <div class="bg-neutral-900 border-t border-neutral-800 p-2 flex gap-1 justify-around text-[10px]">
-        <button onclick="openBeautyModal()" class="bg-pink-600 px-2 py-1.5 rounded flex flex-col items-center">
-          <i class="fa-solid fa-wand-magic-sparkles mb-0.5"></i><span>보정</span>
-        </button>
-        <button onclick="toggleDjDashboard()" class="bg-purple-600 px-2 py-1.5 rounded flex flex-col items-center">
-          <i class="fa-solid fa-music mb-0.5"></i><span>신청곡</span>
-        </button>
-        <button onclick="openMediaOverlay()" class="bg-blue-600 px-2 py-1.5 rounded flex flex-col items-center">
-          <i class="fa-solid fa-tv mb-0.5"></i><span>미디어</span>
-        </button>
-        <button onclick="toggleBreakMode()" id="breakBtn" class="bg-amber-600 px-2 py-1.5 rounded flex flex-col items-center">
-          <i class="fa-solid fa-mug-hot mb-0.5"></i><span>휴식</span>
-        </button>
-        <button onclick="changeLayout()" class="bg-neutral-700 px-2 py-1.5 rounded flex flex-col items-center">
-          <i class="fa-solid fa-table-cells mb-0.5"></i><span>화면분할</span>
-        </button>
-      </div>
+    <div class="on">
+      ON AIR
     </div>
-
-    <!-- [화면 3: 쇼츠 업로드 방] -->
-    <div id="view-shorts" class="hidden flex-1 p-4 space-y-4">
-      <h2 class="text-pink-400 font-bold text-sm">📱 쇼츠 동영상 등록</h2>
-      <input id="shortsTitle" type="text" placeholder="쇼츠 제목 입력" class="w-full bg-neutral-900 border border-neutral-700 p-2.5 rounded-xl text-xs">
-      <button onclick="openCharacterModal()" class="w-full bg-neutral-900 border border-purple-500 p-2.5 rounded-xl text-xs flex justify-center items-center gap-2">
-        <i class="fa-solid fa-face-smile text-purple-400"></i><span id="selectedCharLabel">AI 캐릭터 필터 선택 (없음)</span>
-      </button>
-      <input type="file" id="shortsFile" accept="video/*" class="w-full text-xs text-neutral-400">
-      <button onclick="saveMediaItem('shorts')" class="w-full bg-pink-600 py-3 rounded-xl font-bold text-xs">쇼츠 저장하기</button>
-    </div>
-
-    <!-- [화면 4: 일반 동영상 업로드 방] -->
-    <div id="view-video" class="hidden flex-1 p-4 space-y-4">
-      <h2 class="text-blue-400 font-bold text-sm">🎬 일반 동영상 등록</h2>
-      <input id="videoTitle" type="text" placeholder="동영상 제목 입력" class="w-full bg-neutral-900 border border-neutral-700 p-2.5 rounded-xl text-xs">
-      <input type="file" id="videoFile" accept="video/*" class="w-full text-xs text-neutral-400">
-      <button onclick="saveMediaItem('video')" class="w-full bg-blue-600 py-3 rounded-xl font-bold text-xs">동영상 저장하기</button>
-    </div>
-
-    <!-- [화면 5: 내 보관함] -->
-    <div id="view-library" class="hidden flex-1 p-4 overflow-y-auto">
-      <h2 class="text-yellow-400 font-bold text-sm mb-3">내 동영상 보관함</h2>
-      <div id="libraryList" class="grid grid-cols-2 gap-3"></div>
-    </div>
-
-    <!-- [푸터] 사업자 정보 표시 -->
-    <footer class="p-3 bg-black border-t border-neutral-900 text-[8px] text-neutral-500 text-center">
-      <div><strong>K-Talk</strong> | 대표: 송충영 | 사업자등록번호: 787-48-01170</div>
-      <div>고객센터: 010-7510-7218 | © 2026 K-Talk. All rights reserved.</div>
-    </footer>
 
   </div>
 
-  <!-- [모달 1: 얼굴 보정 1~100] -->
-  <div id="beautyModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="w-full max-w-xs bg-neutral-950 border border-pink-500 rounded-2xl p-4 flex flex-col gap-3">
-      <div class="flex justify-between items-center">
-        <span class="text-xs font-bold text-yellow-400">얼굴 뷰티 보정 (1~100)</span>
-        <button onclick="closeBeautyModal()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="flex justify-between text-xs">
-        <span>강도</span>
-        <span id="beautyLevelDisplay" class="text-pink-400 font-bold">Lv. 50</span>
-      </div>
-      <input type="range" id="beautyRange" min="1" max="100" value="50" oninput="updateBeautyFilter(this.value)" class="w-full accent-pink-500">
-      <button onclick="closeBeautyModal()" class="w-full py-2 bg-pink-600 rounded-lg text-xs font-bold">완료</button>
+  <div class="main">
+
+    <div
+      id="ph"
+      class="placeholder"
+    >
+      아래 ‘방송 시작’을 누르세요
     </div>
+
+    <video
+      id="localVideo"
+      autoplay
+      playsinline
+      muted
+    ></video>
+
   </div>
 
-  <!-- [모달 2: 장미 샵 (300개 이상 20% DC)] -->
-  <div id="roseShopModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="w-full max-w-xs bg-neutral-900 border border-yellow-500 rounded-2xl p-4 flex flex-col gap-3">
-      <div class="flex justify-between items-center border-b border-neutral-800 pb-2">
-        <span class="text-xs font-bold text-yellow-400">🌹 장미 패키지 샵</span>
-        <button onclick="closeRoseShopModal()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="text-[10px] text-pink-300 bg-pink-950/40 p-2 rounded border border-pink-500/30">
-        VIP/중회원 전용: 300개 이상 20% 할인 자동 적용
-      </div>
-      <div class="space-y-2 text-xs">
-        <div onclick="purchaseRosePackage(50)" class="p-2 bg-neutral-800 rounded flex justify-between cursor-pointer">
-          <span>장미 50개</span><span class="text-yellow-400">2,500 C</span>
-        </div>
-        <div onclick="purchaseRosePackage(300)" class="p-2 bg-neutral-800 rounded flex justify-between border border-yellow-500/50 cursor-pointer relative">
-          <span class="text-yellow-300">장미 300개 (20% DC)</span>
-          <span class="text-yellow-400 font-bold">12,000 C <span class="line-through text-[9px] text-neutral-500">15,000</span></span>
-        </div>
-        <div onclick="purchaseRosePackage(1000)" class="p-2 bg-neutral-800 rounded flex justify-between border border-pink-500 cursor-pointer relative">
-          <span class="text-pink-300">장미 1,000개 (20% DC)</span>
-          <span class="text-yellow-400 font-bold">40,000 C <span class="line-through text-[9px] text-neutral-500">50,000</span></span>
-        </div>
-      </div>
-    </div>
+  <div class="controls">
+
+    <button
+      class="start"
+      onclick="startRoom()"
+    >
+      📹 방송 시작
+    </button>
+
+    <button
+      class="stop"
+      onclick="stopRoom()"
+    >
+      방송 종료
+    </button>
+
   </div>
 
-  <!-- [모달 3: AI 캐릭터 필터 선택] -->
-  <div id="charModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="w-full max-w-xs bg-neutral-900 border border-purple-500 rounded-2xl p-4 space-y-3">
-      <h3 class="text-xs font-bold text-yellow-400">AI 캐릭터 마스크</h3>
-      <div class="grid grid-cols-3 gap-2 text-center text-xs">
-        <button onclick="selectChar('기본')" class="p-2 bg-neutral-800 rounded">없음</button>
-        <button onclick="selectChar('토끼 AI')" class="p-2 bg-neutral-800 rounded">🐰 토끼</button>
-        <button onclick="selectChar('사이버')" class="p-2 bg-neutral-800 rounded">🤖 사이버</button>
-      </div>
-      <button onclick="document.getElementById('charModal').classList.add('hidden')" class="w-full py-2 bg-purple-600 rounded-lg text-xs font-bold">닫기</button>
-    </div>
+  <div
+    id="status"
+    class="status"
+  >
+    대기 중
   </div>
 
-  <!-- [모달 4: 1:1 쪽지] -->
-  <div id="chatModal" class="hidden fixed inset-0 bg-black/95 z-50 flex flex-col p-4">
-    <div class="flex justify-between items-center border-b border-neutral-800 pb-3 mb-3">
-      <span class="text-xs font-bold" id="chatPartnerName">쪽지 대화</span>
-      <button onclick="document.getElementById('chatModal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div id="chatMessages" class="flex-1 overflow-y-auto space-y-2 text-xs">
-      <div class="bg-neutral-800 p-2.5 rounded-xl w-3/4">안녕하세요! 방송 잘 보고 있어요.</div>
-    </div>
-    <div class="flex gap-2 mt-2">
-      <input id="chatInput" type="text" placeholder="메시지 입력..." class="flex-1 bg-neutral-900 border border-neutral-700 p-2 rounded-lg text-xs">
-      <button onclick="sendChatMessage()" class="bg-yellow-500 text-black px-4 rounded-lg text-xs font-bold">전송</button>
-    </div>
-  </div>
+  <div
+    id="grid"
+    class="grid"
+  ></div>
 
-  <!-- [스크립트 로직] -->
-  <script>
-    let userCoins = 50000;
-    let currentUserGrade = 'VIP'; // VIP 또는 중회원
-    let isBreakMode = false;
-    let layoutIndex = 0;
+</div>
 
-    // 화면 탭 전환 함수
-    function switchView(viewName) {
-      ['home', 'live', 'shorts', 'video', 'library'].forEach(name => {
-        document.getElementById(`view-${name}`).classList.add('hidden');
-        const tab = document.getElementById(`tab-${name}`);
-        if(tab) {
-          tab.classList.remove('bg-pink-600', 'text-white');
-          tab.classList.add('bg-neutral-800', 'text-neutral-400');
+<script>
+
+const MAX_USERS = 13;
+
+const BASE =
+  'ktalk-final13-v20260816-slot-';
+
+let localStream = null;
+
+let peer = null;
+
+let mySlot = 0;
+
+let syncTimer = null;
+
+const calls =
+  new Map();
+
+const pending =
+  new Map();
+
+const lastSeen =
+  new Map();
+
+const retryAfter =
+  new Map();
+
+
+function $(id){
+
+  return document
+    .getElementById(id);
+
+}
+
+
+function setStatus(t){
+
+  $('status')
+    .textContent = t;
+
+}
+
+
+function slotName(slot){
+
+  return slot === 1
+    ? '진행자'
+    : '참가자 ' + slot;
+
+}
+
+
+function buildGrid(){
+
+  const grid =
+    $('grid');
+
+  grid.innerHTML = '';
+
+  for(
+    let i=1;
+    i<=MAX_USERS;
+    i++
+  ){
+
+    const d =
+      document
+        .createElement('div');
+
+    d.className =
+      'slot';
+
+    d.id =
+      'slot-' + i;
+
+    d.textContent =
+      slotName(i);
+
+    grid.appendChild(d);
+
+  }
+
+}
+
+
+buildGrid();
+
+
+function getSlotFromPeerId(id){
+
+  const m =
+    String(id || '')
+      .match(
+        /slot-(\d+)$/
+      );
+
+  return m
+    ? Number(m[1])
+    : 0;
+
+}
+
+
+function resetSlot(slot){
+
+  const box =
+    $('slot-' + slot);
+
+  if(!box)
+    return;
+
+  box.className =
+    'slot' +
+    (
+      slot === mySlot
+        ? ' me'
+        : ''
+    );
+
+  box.innerHTML =
+
+    slot === mySlot
+
+      ? slotName(slot) +
+        '<br>· 나 ·'
+
+      : slotName(slot);
+
+}
+
+
+function renderRemote(
+  slot,
+  stream
+){
+
+  if(
+    !slot ||
+    slot === mySlot
+  )
+    return;
+
+  const box =
+    $('slot-' + slot);
+
+  if(!box)
+    return;
+
+  box.innerHTML = '';
+
+  const v =
+    document
+      .createElement(
+        'video'
+      );
+
+  v.autoplay = true;
+
+  v.playsInline = true;
+
+  v.srcObject =
+    stream;
+
+  const lab =
+    document
+      .createElement(
+        'div'
+      );
+
+  lab.className =
+    'label';
+
+  lab.textContent =
+    slotName(slot);
+
+  box.appendChild(v);
+
+  box.appendChild(lab);
+
+  lastSeen.set(
+    slot,
+    Date.now()
+  );
+
+}
+
+
+function closeSlot(
+  slot,
+  reset=true
+){
+
+  const call =
+    calls.get(slot);
+
+  if(call){
+
+    try{
+
+      call.close();
+
+    }catch(e){}
+
+  }
+
+  calls.delete(slot);
+
+  pending.delete(slot);
+
+  lastSeen.delete(slot);
+
+  if(reset){
+
+    resetSlot(slot);
+
+  }
+
+}
+
+
+function attachCall(
+  slot,
+  call
+){
+
+  if(
+    !slot ||
+    slot === mySlot ||
+    !call
+  )
+    return;
+
+  const old =
+    calls.get(slot);
+
+  if(
+    old &&
+    old !== call
+  ){
+
+    try{
+
+      old.close();
+
+    }catch(e){}
+
+  }
+
+  calls.set(
+    slot,
+    call
+  );
+
+  pending.delete(slot);
+
+  lastSeen.set(
+    slot,
+    Date.now()
+  );
+
+
+  call.on(
+    'stream',
+    remoteStream => {
+
+      calls.set(
+        slot,
+        call
+      );
+
+      pending.delete(
+        slot
+      );
+
+      lastSeen.set(
+        slot,
+        Date.now()
+      );
+
+      renderRemote(
+        slot,
+        remoteStream
+      );
+
+      setStatus(
+
+        '✅ 연결됨 · 내 번호 ' +
+
+        mySlot +
+
+        ' · 최대 13명'
+
+      );
+
+    }
+  );
+
+
+  call.on(
+    'close',
+    () => {
+
+      if(
+        calls.get(slot)
+        === call
+      ){
+
+        calls.delete(slot);
+
+        pending.delete(slot);
+
+        lastSeen.delete(slot);
+
+        resetSlot(slot);
+
+        retryAfter.set(
+
+          slot,
+
+          Date.now()
+          + 1200
+
+        );
+
+      }
+
+    }
+  );
+
+
+  call.on(
+    'error',
+    () => {
+
+      if(
+        calls.get(slot)
+        === call
+      ){
+
+        calls.delete(slot);
+
+        pending.delete(slot);
+
+        lastSeen.delete(slot);
+
+        resetSlot(slot);
+
+        retryAfter.set(
+
+          slot,
+
+          Date.now()
+          + 1200
+
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+function claimSlot(slot){
+
+  return new Promise(
+    resolve => {
+
+      const p =
+        new Peer(
+
+          BASE + slot,
+
+          {
+
+            debug:0,
+
+            config:{
+
+              iceServers:[
+
+                {
+
+                  urls:
+                  'stun:stun.l.google.com:19302'
+
+                },
+
+                {
+
+                  urls:
+                  'stun:stun1.l.google.com:19302'
+
+                }
+
+              ]
+
+            }
+
+          }
+
+        );
+
+
+      let finished =
+        false;
+
+
+      const done =
+        value => {
+
+          if(finished)
+            return;
+
+          finished = true;
+
+          resolve(value);
+
+        };
+
+
+      p.on(
+        'open',
+        () => {
+
+          done(p);
+
         }
-      });
-      document.getElementById(`view-${viewName}`).classList.remove('hidden');
-      const activeTab = document.getElementById(`tab-${viewName}`);
-      if(activeTab) {
-        activeTab.classList.remove('bg-neutral-800', 'text-neutral-400');
-        activeTab.classList.add('bg-pink-600', 'text-white');
+      );
+
+
+      p.on(
+        'error',
+        () => {
+
+          try{
+
+            p.destroy();
+
+          }catch(e){}
+
+          done(null);
+
+        }
+      );
+
+
+      setTimeout(
+        () => {
+
+          if(
+            !finished
+          ){
+
+            try{
+
+              p.destroy();
+
+            }catch(e){}
+
+            done(null);
+
+          }
+
+        },
+        2200
+      );
+
+    }
+  );
+
+}
+
+
+function shouldDial(slot){
+
+  if(
+    !peer ||
+    !localStream ||
+    !mySlot
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    slot <= 0 ||
+    slot >= mySlot
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    calls.has(slot) ||
+    pending.has(slot)
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+
+    (
+      retryAfter
+        .get(slot)
+      || 0
+    )
+
+    > Date.now()
+
+  ){
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+function dial(slot){
+
+  if(
+    !shouldDial(slot)
+  )
+    return;
+
+
+  pending.set(
+    slot,
+    Date.now()
+  );
+
+
+  let call =
+    null;
+
+
+  try{
+
+    call =
+      peer.call(
+
+        BASE + slot,
+
+        localStream,
+
+        {
+
+          metadata:{
+
+            slot:
+              mySlot
+
+          }
+
+        }
+
+      );
+
+  }catch(e){
+
+    pending.delete(
+      slot
+    );
+
+    retryAfter.set(
+
+      slot,
+
+      Date.now()
+      + 1500
+
+    );
+
+    return;
+
+  }
+
+
+  if(!call){
+
+    pending.delete(
+      slot
+    );
+
+    retryAfter.set(
+
+      slot,
+
+      Date.now()
+      + 1500
+
+    );
+
+    return;
+
+  }
+
+
+  let gotStream =
+    false;
+
+
+  call.on(
+    'stream',
+    remoteStream => {
+
+      gotStream =
+        true;
+
+      attachCall(
+        slot,
+        call
+      );
+
+      renderRemote(
+        slot,
+        remoteStream
+      );
+
+    }
+  );
+
+
+  call.on(
+    'close',
+    () => {
+
+      if(
+        calls.get(slot)
+        === call
+      ){
+
+        calls.delete(
+          slot
+        );
+
       }
-      if(viewName === 'library') renderLibrary();
+
+      pending.delete(
+        slot
+      );
+
+      lastSeen.delete(
+        slot
+      );
+
+      resetSlot(
+        slot
+      );
+
+      retryAfter.set(
+
+        slot,
+
+        Date.now()
+        + 1200
+
+      );
+
+    }
+  );
+
+
+  call.on(
+    'error',
+    () => {
+
+      if(
+        calls.get(slot)
+        === call
+      ){
+
+        calls.delete(
+          slot
+        );
+
+      }
+
+      pending.delete(
+        slot
+      );
+
+      lastSeen.delete(
+        slot
+      );
+
+      resetSlot(
+        slot
+      );
+
+      retryAfter.set(
+
+        slot,
+
+        Date.now()
+        + 1200
+
+      );
+
+    }
+  );
+
+
+  setTimeout(
+    () => {
+
+      if(
+        !gotStream
+      ){
+
+        try{
+
+          call.close();
+
+        }catch(e){}
+
+
+        if(
+          calls.get(slot)
+          === call
+        ){
+
+          calls.delete(
+            slot
+          );
+
+        }
+
+
+        pending.delete(
+          slot
+        );
+
+
+        retryAfter.set(
+
+          slot,
+
+          Date.now()
+          + 1500
+
+        );
+
+
+        resetSlot(
+          slot
+        );
+
+      }
+
+    },
+    7000
+  );
+
+}
+
+
+function syncPeers(){
+
+  if(
+    !peer ||
+    !localStream ||
+    !mySlot
+  ){
+
+    return;
+
+  }
+
+
+  for(
+    let slot=1;
+    slot<mySlot;
+    slot++
+  ){
+
+    if(
+      shouldDial(slot)
+    ){
+
+      dial(slot);
+
     }
 
-    // 얼굴 뷰티 필터 연산 (1~100)
-    function openBeautyModal() { document.getElementById('beautyModal').classList.remove('hidden'); }
-    function closeBeautyModal() { document.getElementById('beautyModal').classList.add('hidden'); }
-    function updateBeautyFilter(val) {
-      const level = Number(val);
-      document.getElementById('beautyLevelDisplay').innerText = `Lv. ${level}`;
-      const blurVal = (level * 0.012).toFixed(2);
-      const brightnessVal = (100 + (level * 0.25)).toFixed(1);
-      const filterStr = `blur(${blurVal}px) brightness(${brightnessVal}%)`;
-      document.getElementById('singleHostVideo').style.filter = filterStr;
+  }
+
+
+  for(
+    const [slot,call]
+    of calls.entries()
+  ){
+
+    const pc =
+
+      call &&
+
+      call
+        .peerConnection;
+
+
+    const state =
+
+      pc
+
+        ? pc.connectionState
+
+        : '';
+
+
+    if(
+      state ===
+      'connected'
+    ){
+
+      lastSeen.set(
+
+        slot,
+
+        Date.now()
+
+      );
+
+      continue;
+
     }
 
-    // 장미 샵 20% DC 연산
-    function openRoseShopModal() { document.getElementById('roseShopModal').classList.remove('hidden'); }
-    function closeRoseShopModal() { document.getElementById('roseShopModal').classList.add('hidden'); }
-    function purchaseRosePackage(count) {
-      let price = count * 50;
-      let isDiscount = false;
-      if ((currentUserGrade === 'VIP' || currentUserGrade === '중회원') && count >= 300) {
-        price = Math.floor(price * 0.8); // 20% DC
-        isDiscount = true;
+
+    if(
+
+      state ===
+      'failed'
+
+      ||
+
+      state ===
+      'closed'
+
+    ){
+
+      closeSlot(
+        slot
+      );
+
+      retryAfter.set(
+
+        slot,
+
+        Date.now()
+        + 1200
+
+      );
+
+      continue;
+
+    }
+
+
+    if(
+      state ===
+      'disconnected'
+    ){
+
+      const since =
+
+        lastSeen.get(slot)
+
+        ||
+
+        Date.now();
+
+
+      if(
+
+        Date.now()
+        - since
+
+        > 4500
+
+      ){
+
+        closeSlot(
+          slot
+        );
+
+        retryAfter.set(
+
+          slot,
+
+          Date.now()
+          + 1200
+
+        );
+
       }
-      if (userCoins < price) {
-        alert("코인이 부족합니다!");
+
+    }
+
+  }
+
+
+  for(
+
+    const [
+      slot,
+      started
+    ]
+
+    of pending.entries()
+
+  ){
+
+    if(
+
+      Date.now()
+      - started
+
+      > 9000
+
+    ){
+
+      pending.delete(
+        slot
+      );
+
+      retryAfter.set(
+
+        slot,
+
+        Date.now()
+        + 1200
+
+      );
+
+    }
+
+  }
+
+}
+
+
+async function startRoom(){
+
+  if(
+    localStream ||
+    peer
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    localStream =
+
+      await navigator
+        .mediaDevices
+        .getUserMedia({
+
+          video:{
+
+            facingMode:
+              'user',
+
+            width:{
+
+              ideal:
+                640
+
+            },
+
+            height:{
+
+              ideal:
+                360
+
+            },
+
+            frameRate:{
+
+              ideal:
+                15,
+
+              max:
+                20
+
+            }
+
+          },
+
+
+          audio:{
+
+            echoCancellation:
+              true,
+
+            noiseSuppression:
+              true,
+
+            autoGainControl:
+              true
+
+          }
+
+        });
+
+
+    $('localVideo')
+      .srcObject =
+        localStream;
+
+
+    $('ph')
+      .style
+      .display =
+        'none';
+
+
+  }catch(e){
+
+    localStream =
+      null;
+
+
+    alert(
+
+      '카메라와 마이크를 허용해 주세요.'
+
+    );
+
+
+    return;
+
+  }
+
+
+  setStatus(
+
+    '13명 방 연결 중...'
+
+  );
+
+
+  for(
+
+    let i=1;
+
+    i<=MAX_USERS;
+
+    i++
+
+  ){
+
+    const p =
+
+      await claimSlot(i);
+
+
+    if(p){
+
+      peer = p;
+
+      mySlot = i;
+
+      break;
+
+    }
+
+  }
+
+
+  if(!peer){
+
+
+    localStream
+      .getTracks()
+      .forEach(
+
+        t =>
+          t.stop()
+
+      );
+
+
+    localStream =
+      null;
+
+
+    $('localVideo')
+      .srcObject =
+        null;
+
+
+    $('ph')
+      .style
+      .display =
+        'flex';
+
+
+    setStatus(
+
+      '⛔ 이 방은 최대 13명입니다.'
+
+    );
+
+
+    alert(
+
+      '현재 13명이 접속 중입니다.'
+
+    );
+
+
+    return;
+
+  }
+
+
+  for(
+
+    let i=1;
+
+    i<=MAX_USERS;
+
+    i++
+
+  ){
+
+    resetSlot(i);
+
+  }
+
+
+  peer.on(
+
+    'call',
+
+    call => {
+
+
+      const slot =
+
+        getSlotFromPeerId(
+
+          call.peer
+
+        );
+
+
+      if(
+
+        !slot
+
+        ||
+
+        slot === mySlot
+
+      ){
+
+        try{
+
+          call.close();
+
+        }catch(e){}
+
+
         return;
+
       }
-      userCoins -= price;
-      document.getElementById('userCoins').innerText = userCoins.toLocaleString();
-      alert(`장미 ${count}개 구매 완료! (차감: ${price.toLocaleString()} C ${isDiscount ? '- 20% 할인가' : ''})`);
-      closeRoseShopModal();
+
+
+      try{
+
+        call.answer(
+
+          localStream
+
+        );
+
+      }catch(e){}
+
+
+      attachCall(
+
+        slot,
+
+        call
+
+      );
+
     }
 
-    // DJ 신청곡 큐 및 대시보드
-    function toggleDjDashboard() {
-      const p = document.getElementById('djControlPanel');
-      p.classList.toggle('hidden');
-    }
-    function addSongRequest(user, title) {
-      const list = document.getElementById('requestList');
-      if (list.innerText.includes('대기 중인 곡이 없습니다')) list.innerHTML = '';
-      const item = document.createElement('div');
-      item.className = 'flex justify-between items-center bg-neutral-900 p-1.5 rounded border border-neutral-800';
-      item.innerHTML = `<span>${user}: ${title}</span><button onclick="playDjSong(this, '${title}')" class="bg-purple-600 px-1.5 py-0.5 rounded text-[9px]">재생</button>`;
-      list.appendChild(item);
-    }
-    function playDjSong(btn, title) {
-      document.getElementById('currentPlaying').innerText = title;
-      btn.className = 'bg-neutral-700 px-1.5 py-0.5 rounded text-[9px] text-neutral-400';
-      btn.innerText = '완료';
+  );
+
+
+  peer.on(
+
+    'disconnected',
+
+    () => {
+
+
+      setStatus(
+
+        '연결 복구 중...'
+
+      );
+
+
+      try{
+
+        peer.reconnect();
+
+      }catch(e){}
+
     }
 
-    // 미디어 오버레이
-    function openMediaOverlay() { document.getElementById('mediaOverlay').classList.remove('hidden'); }
-    function closeMediaOverlay() { 
-      document.getElementById('mediaOverlay').classList.add('hidden');
-      document.getElementById('generalHostMedia').pause();
-    }
-    function playMedia(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const v = document.getElementById('generalHostMedia');
-        v.src = URL.createObjectURL(file);
-        v.play();
-      }
-    }
+  );
 
-    // 휴식 모드 토글
-    function toggleBreakMode() {
-      isBreakMode = !isBreakMode;
-      const btn = document.getElementById('breakBtn');
-      if (isBreakMode) {
-        btn.innerHTML = '<i class="fa-solid fa-microphone mb-0.5"></i><span>복귀</span>';
-        btn.className = 'bg-green-600 px-2 py-1.5 rounded flex flex-col items-center';
-        alert('휴식 모드 시작: DJ 라디오 대기 화면으로 전환됩니다.');
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-mug-hot mb-0.5"></i><span>휴식</span>';
-        btn.className = 'bg-amber-600 px-2 py-1.5 rounded flex flex-col items-center';
-        alert('방송에 복귀했습니다.');
-      }
-    }
 
-    // 화면 레이아웃 토글
-    function changeLayout() {
-      const container = document.getElementById('roomContainer');
-      layoutIndex = (layoutIndex + 1) % 3;
-      if (layoutIndex === 0) alert('1인 전체 화면');
-      else if (layoutIndex === 1) alert('2인 분할 모드');
-      else alert('그리드 모드');
-    }
+  peer.on(
 
-    // 공유 및 쪽지
-    function shareBroadcast() {
-      if (navigator.share) {
-        navigator.share({ title: 'K-Talk Live', url: window.location.href });
-      } else {
-        alert('방송 링크가 복사되었습니다.');
-      }
-    }
-    function openChatModal(partner) {
-      document.getElementById('chatPartnerName').innerText = `${partner}님과의 쪽지`;
-      document.getElementById('chatModal').classList.remove('hidden');
-    }
-    function sendChatMessage() {
-      const input = document.getElementById('chatInput');
-      if (!input.value) return;
-      const log = document.getElementById('chatMessages');
-      const msg = document.createElement('div');
-      msg.className = 'bg-yellow-500 text-black p-2.5 rounded-xl w-3/4 ml-auto';
-      msg.innerText = input.value;
-      log.appendChild(msg);
-      input.value = '';
-    }
+    'error',
 
-    // 쇼츠 / 동영상 저장 및 로컬스토리지 보관함
-    function openCharacterModal() { document.getElementById('charModal').classList.remove('hidden'); }
-    function selectChar(name) {
-      document.getElementById('selectedCharLabel').innerText = `AI 필터: ${name}`;
-      document.getElementById('charModal').classList.add('hidden');
-    }
-    function saveMediaItem(type) {
-      const title = document.getElementById(`${type}Title`).value;
-      if (!title) { alert('제목을 입력하세요.'); return; }
-      const item = { id: Date.now(), type, title, date: new Date().toLocaleDateString() };
-      let lib = JSON.parse(localStorage.getItem('ktalk_library') || '[]');
-      lib.push(item);
-      localStorage.setItem('ktalk_library', JSON.stringify(lib));
-      alert('보관함에 저장되었습니다.');
-      document.getElementById(`${type}Title`).value = '';
-      switchView('library');
-    }
-    function renderLibrary() {
-      const lib = JSON.parse(localStorage.getItem('ktalk_library') || '[]');
-      const container = document.getElementById('libraryList');
-      if (lib.length === 0) {
-        container.innerHTML = '<div class="col-span-2 text-center text-xs text-neutral-500 py-8">보관된 영상이 없습니다.</div>';
+    err => {
+
+
+      if(
+
+        err
+
+        &&
+
+        (
+
+          err.type ===
+          'peer-unavailable'
+
+          ||
+
+          err.type ===
+          'network'
+
+        )
+
+      ){
+
         return;
+
       }
-      container.innerHTML = lib.map(item => `
-        <div class="bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl">
-          <div class="h-20 bg-neutral-950 rounded flex items-center justify-center mb-2">
-            <i class="fa-solid ${item.type === 'shorts' ? 'fa-mobile-screen text-pink-400' : 'fa-film text-blue-400'} text-xl"></i>
-          </div>
-          <div class="text-xs font-bold truncate">${item.title}</div>
-          <div class="text-[9px] text-neutral-500">${item.date}</div>
-        </div>
-      `).join('');
+
+
+      console.log(
+        err
+      );
+
     }
-  </script>
+
+  );
+
+
+  syncPeers();
+
+
+  syncTimer =
+
+    setInterval(
+
+      syncPeers,
+
+      2000
+
+    );
+
+
+  setStatus(
+
+    mySlot === 1
+
+      ? '✅ 진행자 입장 완료 · 최대 13명'
+
+      : '✅ 참가자 ' +
+
+        mySlot +
+
+        ' 입장 완료 · 최대 13명'
+
+  );
+
+}
+
+
+function stopRoom(){
+
+
+  if(syncTimer){
+
+    clearInterval(
+
+      syncTimer
+
+    );
+
+
+    syncTimer =
+      null;
+
+  }
+
+
+  for(
+
+    const slot
+
+    of Array.from(
+
+      calls.keys()
+
+    )
+
+  ){
+
+    closeSlot(
+
+      slot,
+
+      false
+
+    );
+
+  }
+
+
+  calls.clear();
+
+  pending.clear();
+
+  lastSeen.clear();
+
+  retryAfter.clear();
+
+
+  try{
+
+    if(peer){
+
+      peer.destroy();
+
+    }
+
+  }catch(e){}
+
+
+  if(localStream){
+
+    localStream
+      .getTracks()
+      .forEach(
+
+        t =>
+          t.stop()
+
+      );
+
+  }
+
+
+  localStream =
+    null;
+
+  peer =
+    null;
+
+  mySlot =
+    0;
+
+
+  $('localVideo')
+    .srcObject =
+      null;
+
+
+  $('ph')
+    .style
+    .display =
+      'flex';
+
+
+  for(
+
+    let i=1;
+
+    i<=MAX_USERS;
+
+    i++
+
+  ){
+
+    resetSlot(i);
+
+  }
+
+
+  setStatus(
+
+    '대기 중'
+
+  );
+
+}
+
+
+window.addEventListener(
+
+  'beforeunload',
+
+  stopRoom
+
+);
+
+</script>
+
 </body>
 </html>
-
