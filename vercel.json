@@ -1,15 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:path*",
+      "src": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "k-talk-new-room.vercel.app"
         }
       ],
-      "destination": "https://k-talk-live-final.vercel.app/:path*"
+      "dest": "https://k-talk-live-final.vercel.app/$1"
+    },
+    {
+      "handle": "filesystem"
     }
   ]
 }
