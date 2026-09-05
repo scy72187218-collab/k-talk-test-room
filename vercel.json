@@ -6,6 +6,10 @@
       "dest": "/api/root"
     },
     {
+      "src": "/api/video",
+      "dest": "/api/video"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
