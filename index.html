@@ -23,6 +23,15 @@ html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family
     .then(function(r){if(!r.ok)throw new Error('load');return r.text();})
     .then(function(html){
       if(!/<head[\s>]/i.test(html))throw new Error('html');
+      var fresh=Date.now();
+      html=html.replace(/(<script\b[^>]*\bsrc=["'])([^"']+)(["'][^>]*>)/gi,function(all,a,u,z){
+        if(/^(?:https?:|\/\/|data:)/i.test(u))return all;
+        return a+u+(u.indexOf('?')>-1?'&':'?')+'ktfresh='+fresh+z;
+      });
+      html=html.replace(/(<link\b[^>]*\bhref=["'])([^"']+)(["'][^>]*>)/gi,function(all,a,u,z){
+        if(/^(?:https?:|\/\/|data:)/i.test(u))return all;
+        return a+u+(u.indexOf('?')>-1?'&':'?')+'ktfresh='+fresh+z;
+      });
       html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+SOURCE+'">');
       document.open();
       document.write(html);
