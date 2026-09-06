@@ -1,14 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    {"source": "/", "destination": "/feed-v2.html"}
-  ],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {"key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, max-age=0"}
-      ]
+      "src": "/",
+      "dest": "/feed-v2.html",
+      "headers": {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "src": "/feed-v2.html",
+      "dest": "/feed-v2.html",
+      "headers": {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
+      }
     }
   ]
 }
