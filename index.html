@@ -3,41 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
 <title>K-Talk LIVE</title>
 <style>
-html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif}
-#ktLoading{position:fixed;inset:0;display:grid;place-items:center;background:#000;text-align:center;padding:24px}
-#ktLoading b{font-size:24px;color:#ffe071}#ktLoading span{display:block;margin-top:10px;font-size:14px;color:#bbb}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;overflow:hidden}button{font:inherit}.feed{height:calc(100dvh - 76px);overflow-y:auto;overscroll-behavior-y:contain;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;background:#000}.card{height:calc(100dvh - 76px);min-height:520px;position:relative;overflow:hidden;scroll-snap-align:start;background:#000}.card video,.card img.cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.24),transparent 30%,transparent 58%,rgba(0,0,0,.78))}.tabs{position:absolute;top:18px;left:18px;right:18px;z-index:4;display:flex;align-items:center;gap:22px;font-size:15px;font-weight:900;text-shadow:0 2px 7px #000}.tabs span{white-space:nowrap}.tabs .on{border-bottom:3px solid #fff;padding-bottom:7px}.tabs .search{margin-left:auto;font-size:30px;line-height:1}.title{position:absolute;left:28px;right:94px;bottom:35px;z-index:3;text-shadow:0 2px 6px #000}.title b{display:block;color:#ffe070;font-size:25px}.title span{display:block;margin-top:8px;font-size:16px;line-height:1.45}.actions{position:absolute;right:18px;bottom:38px;z-index:4;display:grid;gap:16px}.actions button{width:64px;height:64px;border:0;border-radius:50%;background:rgba(7,7,10,.73);color:#fff;font-size:28px}.actions small{display:block;margin-top:2px;font-size:10px}.loading{position:absolute;inset:0;display:grid;place-items:center;z-index:2;color:#ddd;font-size:14px;pointer-events:none}.loading b{display:block;color:#ffe070;font-size:23px;text-align:center}.loading span{display:block;margin-top:8px;text-align:center}.livecard{cursor:pointer;background:radial-gradient(circle at 50% 28%,#44143a 0,#160a18 42%,#020204 78%)}.livecenter{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:35px;background:linear-gradient(180deg,#0002,#0008);z-index:2}.livebadge{display:inline-block;padding:10px 18px;border-radius:999px;background:#ff2d55;font-size:20px;font-weight:950;box-shadow:0 0 28px #ff2d5580}.livecenter .antenna{font-size:70px;margin:26px 0 10px}.livecenter b{display:block;font-size:28px}.livecenter span{display:block;margin-top:8px;font-size:18px}.livecenter em{display:block;margin-top:20px;padding:12px 18px;border-radius:999px;border:1px solid #ffffff38;background:#ffffff16;font-style:normal;font-size:16px;font-weight:900}.bottom{height:76px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;border-top:1px solid #ffffff14;background:#030305}.bottom button{height:76px;border:0;background:transparent;color:#d9d9df;font-size:11px;font-weight:800}.bottom b{display:block;font-size:27px;line-height:1.1;margin-bottom:4px}.bottom .plus b{width:56px;height:50px;margin:-14px auto 3px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#29cfff,#9c52ff 48%,#ff55b4);font-size:35px;box-shadow:0 0 18px #9e55ff66}.remote{position:fixed;inset:0;background:#000;z-index:100;display:none}.remote.show{display:block}.remote video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}.remote .rshade{position:absolute;inset:0;background:linear-gradient(180deg,#0008,transparent 28%,transparent 62%,#000c);pointer-events:none}.remote .rback{position:absolute;left:14px;top:18px;z-index:3;width:46px;height:46px;border-radius:50%;border:1px solid #ffffff35;background:#07070bbb;color:#fff;font-size:31px}.remote .rhead{position:absolute;left:72px;right:18px;top:18px;z-index:3;padding:9px 13px;border-radius:15px;background:#08080baa;border:1px solid #ffffff20}.remote .rhead b{display:block;font-size:16px}.remote .rhead span{display:block;margin-top:3px;font-size:11px;color:#ff9cb4}.remote .rstatus{position:absolute;left:20px;right:20px;bottom:28px;z-index:3;padding:12px 15px;border-radius:16px;background:#09090dcc;border:1px solid #ffffff25;text-align:center;font-size:13px}.empty{height:calc(100dvh - 76px);display:grid;place-items:center;text-align:center;color:#bbb}.empty b{display:block;color:#ffe070;font-size:23px}.empty span{display:block;margin-top:8px}
 </style>
 </head>
 <body>
-<div id="ktLoading"><div><b>♛ K-Talk LIVE</b><span>화면을 불러오는 중입니다...</span></div></div>
+<div id="feed" class="feed"></div>
+<nav class="bottom">
+  <button onclick="refreshFeed()"><b>⌂</b>홈</button>
+  <button onclick="alert('친구 기능은 기존 K-Talk 기능과 연결합니다.')"><b>👥</b>친구</button>
+  <button class="plus" onclick="location.href='https://k-talk-live-final.vercel.app'"><b>＋</b>방송하기</button>
+  <button onclick="alert('사용방법은 K-Talk 안내 화면과 연결합니다.')"><b>?</b>사용방법</button>
+  <button onclick="alert('프로필 기능은 K-Talk 계정과 연결합니다.')"><b>♙</b>프로필</button>
+</nav>
+<div id="remote" class="remote">
+  <video id="remoteVideo" autoplay playsinline></video>
+  <div class="rshade"></div>
+  <button class="rback" onclick="leaveLive()">‹</button>
+  <div class="rhead"><b id="remoteTitle">K-Talk LIVE</b><span id="remoteRoom">방송 연결 중...</span></div>
+  <div id="remoteStatus" class="rstatus">방송 연결 중...</div>
+</div>
 <script>
 (function(){
-  var SOURCE='https://k-talk-live-final.vercel.app/';
-  function fail(){
-    var el=document.getElementById('ktLoading');
-    if(el)el.innerHTML='<div><b>♛ K-Talk LIVE</b><span>연결을 다시 시도해 주세요.</span></div>';
-  }
-  fetch(SOURCE+'?ktnew='+Date.now(),{cache:'no-store',mode:'cors'})
-    .then(function(r){if(!r.ok)throw new Error('load');return r.text();})
-    .then(function(html){
-      if(!/<head[\s>]/i.test(html))throw new Error('html');
-      var fresh=Date.now();
-      html=html.replace(/(<script\b[^>]*\bsrc=["'])([^"']+)(["'][^>]*>)/gi,function(all,a,u,z){
-        if(/^(?:https?:|\/\/|data:)/i.test(u))return all;
-        return a+u+(u.indexOf('?')>-1?'&':'?')+'ktfresh='+fresh+z;
-      });
-      html=html.replace(/(<link\b[^>]*\bhref=["'])([^"']+)(["'][^>]*>)/gi,function(all,a,u,z){
-        if(/^(?:https?:|\/\/|data:)/i.test(u))return all;
-        return a+u+(u.indexOf('?')>-1?'&':'?')+'ktfresh='+fresh+z;
-      });
-      html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+SOURCE+'">');
-      document.open();
-      document.write(html);
-      document.close();
-    })
-    .catch(fail);
+  'use strict';
+  var SB='https://zupwbfmacwzexyvznlzq.supabase.co';
+  var KEY='sb_publishable_AnyCMi4rAgSR2uWg_u1pvw_hHyqWlm3';
+  var SEED=[
+    'https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516701116-emysxm.mp4',
+    'https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516656323-4elqcf.mp4',
+    'https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516653502-crprae.mp4'
+  ];
+  var firstSeedIndex=0,observer=null,viewerPeer=null,viewerSessionId='',pollTimer=null;
+  var rtcConfig={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]};
+  function h(extra){var x={apikey:KEY,Authorization:'Bearer '+KEY};if(extra)Object.keys(extra).forEach(function(k){x[k]=extra[k]});return x}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function viewerId(){var id='';try{id=localStorage.getItem('ktalk_viewer_id')||''}catch(e){}if(!id){id='viewer_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);try{localStorage.setItem('ktalk_viewer_id',id)}catch(e){}}return id}
+  function tabs(on){return '<div class="tabs"><span'+(on==='live'?' class="on"':'')+'>LIVE</span><span>커뮤니티</span><span>팔로잉</span><span'+(on!=='live'?' class="on"':'')+'>추천</span><span class="search">⌕</span></div>'}
+  function videoCard(x,i){var u=esc(x.video_url||SEED[i%SEED.length]),name=esc(x.author_name||'K-Talk'),title=esc(x.title||'추천 동영상');var src=i===0?' src="'+u+'"':' data-src="'+u+'"';return '<section class="card" data-kind="video"><video class="pub" '+(i===0?'autoplay ':'')+'muted loop playsinline webkit-playsinline preload="'+(i===0?'auto':'none')+'"'+src+'></video><div class="loading"><div><b>♛ K-Talk</b><span>동영상 불러오는 중...</span></div></div><div class="shade"></div>'+tabs('video')+'<div class="title"><b>♛ '+name+'</b><span>'+title+'</span></div><div class="actions"><button>♡<small>좋아요</small></button><button>💬<small>댓글</small></button><button>🎁<small>선물</small></button><button>↗<small>공유</small></button></div></section>'}
+  function liveCard(x){var host=esc(x.host_id||'guest'),name=esc(x.host_name||'K-Talk'),title=esc(x.title||x.room_name||'K-Talk LIVE'),room=esc(x.room_name||'라이브 방송'),type=esc(x.room_type||'');var bg=x.host_photo?'<img class="cover" src="'+esc(x.host_photo)+'" alt="">':'';return '<section class="card livecard" data-host="'+host+'" data-title="'+title+'" data-room="'+room+'" data-type="'+type+'">'+bg+'<div class="livecenter"><div><div class="livebadge">● LIVE</div><div class="antenna">📡</div><b>'+name+'</b><span>'+title+'</span><small>'+room+' · 방송 중</small><em>눌러서 방송 들어가기</em></div></div>'+tabs('live')+'<div class="title"><b>🔴 '+name+'</b><span>'+title+'</span></div></section>'}
+  function compose(videos,lives){videos=Array.isArray(videos)&&videos.length?videos:SEED.map(function(u,i){return {id:'seed'+i,author_name:'K-Talk',title:'추천 동영상',video_url:u}});lives=Array.isArray(lives)?lives:[];var out=[],vi=0,li=0;if(videos[0]){out.push(videoCard(videos[0],0));vi=1}while(vi<videos.length||li<lives.length){if(li<lives.length)out.push(liveCard(lives[li++]));if(vi<videos.length)out.push(videoCard(videos[vi],vi++))}return out.join('')}
+  function wire(){var f=document.getElementById('feed'),vs=[].slice.call(f.querySelectorAll('video.pub'));if(observer)try{observer.disconnect()}catch(e){};vs.forEach(function(v,idx){v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');v.removeAttribute('poster');var load=v.closest('.card').querySelector('.loading');function ready(){if(load)load.style.display='none';try{var p=v.play();if(p&&p.catch)p.catch(function(){})}catch(e){}}v.addEventListener('loadeddata',ready,{once:true});v.addEventListener('canplay',ready,{once:true});v.addEventListener('error',function(){if(idx===0&&firstSeedIndex<SEED.length-1){firstSeedIndex++;v.src=SEED[firstSeedIndex];try{v.load();v.play().catch(function(){})}catch(e){}}});v.onclick=function(){if(v.paused){v.play().catch(function(){})}else v.pause()}});if('IntersectionObserver'in window){observer=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting&&e.intersectionRatio>.45){var lazy=v.getAttribute('data-src');if(lazy&&!v.src){v.src=lazy;v.removeAttribute('data-src');try{v.load()}catch(_){}}v.play().catch(function(){})}else{try{v.pause()}catch(_){}}})},{root:f,threshold:[.45]});vs.forEach(function(v){observer.observe(v)})}[].slice.call(f.querySelectorAll('.livecard')).forEach(function(c){c.onclick=function(){joinLive(c.dataset.host,c.dataset.title,c.dataset.room,c.dataset.type)}});if(vs[0]){setTimeout(function(){if(vs[0].readyState<2&&firstSeedIndex<SEED.length-1){firstSeedIndex++;vs[0].src=SEED[firstSeedIndex];try{vs[0].load();vs[0].play().catch(function(){})}catch(e){}}},5500);try{vs[0].play().catch(function(){})}catch(e){}}}
+  function render(videos,lives){var f=document.getElementById('feed');f.innerHTML=compose(videos,lives);f.scrollTop=0;wire()}
+  async function loadData(){try{var since=new Date(Date.now()-20000).toISOString();var vu=SB+'/rest/v1/ktalk_videos?select=id,author_name,title,video_url,created_at,likes&order=created_at.desc&limit=16';var lu=SB+'/rest/v1/ktalk_live_rooms?select=id,host_id,host_name,title,room_type,room_name,host_photo,updated_at&active=eq.true&updated_at=gte.'+encodeURIComponent(since)+'&order=updated_at.desc&limit=10';var rs=await Promise.all([fetch(vu,{headers:h(),cache:'no-store'}),fetch(lu,{headers:h(),cache:'no-store'})]);var videos=rs[0].ok?await rs[0].json():[],lives=rs[1].ok?await rs[1].json():[];if(videos&&videos.length)render(videos,lives);else render([],lives)}catch(e){render([],[])}}
+  window.refreshFeed=function(){firstSeedIndex=0;render([],[]);setTimeout(loadData,80)};
+  function waitIce(pc,ms){return new Promise(function(resolve){if(!pc||pc.iceGatheringState==='complete')return resolve();var done=false;function finish(){if(done)return;done=true;try{pc.removeEventListener('icegatheringstatechange',chg)}catch(e){}resolve()}function chg(){if(pc.iceGatheringState==='complete')finish()}pc.addEventListener('icegatheringstatechange',chg);setTimeout(finish,ms||3500)})}
+  function setStatus(t){document.getElementById('remoteStatus').textContent=t}
+  async function stopViewer(mark){clearInterval(pollTimer);pollTimer=null;if(mark&&viewerSessionId){try{await fetch(SB+'/rest/v1/ktalk_webrtc_sessions?id=eq.'+encodeURIComponent(viewerSessionId),{method:'PATCH',headers:h({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify({active:false,updated_at:new Date().toISOString()})})}catch(e){}}viewerSessionId='';if(viewerPeer){try{viewerPeer.close()}catch(e){}viewerPeer=null}var v=document.getElementById('remoteVideo');try{v.pause();v.srcObject=null}catch(e){}}
+  async function pollAnswer(id,pc){try{var r=await fetch(SB+'/rest/v1/ktalk_webrtc_sessions?select=answer_sdp,active&id=eq.'+encodeURIComponent(id)+'&limit=1',{headers:h(),cache:'no-store'});if(!r.ok)return;var a=await r.json(),row=a&&a[0];if(!row)return;if(row.active===false){setStatus('방송이 종료되었습니다.');clearInterval(pollTimer);pollTimer=null;return}if(row.answer_sdp&&!pc.currentRemoteDescription){await pc.setRemoteDescription(JSON.parse(row.answer_sdp));setStatus('방송 연결 중...')}}catch(e){}}
+  window.joinLive=async function(hostId,title,room,type){if(type==='password'){alert('비밀방은 비밀번호 확인 후 입장해야 합니다.');return}await stopViewer(true);var remote=document.getElementById('remote'),video=document.getElementById('remoteVideo');remote.classList.add('show');document.getElementById('remoteTitle').textContent=title||'K-Talk LIVE';document.getElementById('remoteRoom').textContent=room||'라이브 방송';setStatus('방송 연결 중...');var pc=new RTCPeerConnection(rtcConfig);viewerPeer=pc;pc.ontrack=function(ev){var s=ev.streams&&ev.streams[0];if(s){video.srcObject=s;video.muted=false;video.defaultMuted=false;video.volume=1;var p=video.play();if(p&&p.catch)p.catch(function(){video.muted=true;video.play().catch(function(){})});setStatus('LIVE 방송 중')}};pc.onconnectionstatechange=function(){if(pc.connectionState==='failed'||pc.connectionState==='disconnected')setStatus('방송을 다시 연결하고 있습니다...')};try{var offer=await pc.createOffer({offerToReceiveAudio:true,offerToReceiveVideo:true});await pc.setLocalDescription(offer);await waitIce(pc,3500);var now=new Date().toISOString();var r=await fetch(SB+'/rest/v1/ktalk_webrtc_sessions',{method:'POST',headers:h({'Content-Type':'application/json','Prefer':'return=representation'}),body:JSON.stringify({host_id:String(hostId||'guest'),viewer_id:viewerId(),offer_sdp:JSON.stringify(pc.localDescription),answer_sdp:null,active:true,created_at:now,updated_at:now})});if(!r.ok)throw new Error('signal');var rows=await r.json();viewerSessionId=rows&&rows[0]&&rows[0].id||'';if(!viewerSessionId)throw new Error('session');await pollAnswer(viewerSessionId,pc);pollTimer=setInterval(function(){pollAnswer(viewerSessionId,pc)},650);setTimeout(function(){if(remote.classList.contains('show')&&video.readyState<2)setStatus('방송 연결 중... 잠시만 기다려 주세요.')},7000)}catch(e){setStatus('방송 연결에 실패했습니다. 뒤로 갔다가 다시 눌러 주세요.')}};
+  window.leaveLive=async function(){await stopViewer(true);document.getElementById('remote').classList.remove('show')};
+  render([],[]);setTimeout(loadData,80);setInterval(function(){if(!document.getElementById('remote').classList.contains('show'))loadData()},6000);
 })();
 </script>
 </body>
