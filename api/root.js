@@ -8,8 +8,7 @@ export default async function handler(req,res){
     let html=await r.text();
 
     const soundFix=`<script id="ktAutoSoundFix">(function(){
-      var unlocked=false,raf=0;
-      try{unlocked=sessionStorage.getItem('ktalk_sound_unlocked')==='1';}catch(e){}
+      var unlocked=false,raf=0,soundVideo=null;
 
       function cards(){return [].slice.call(document.querySelectorAll('#feed .card'));}
       function currentIndex(list){
@@ -18,25 +17,28 @@ export default async function handler(req,res){
         list.forEach(function(c,i){var r=c.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-cy);if(d<dist){dist=d;best=i;}});
         return best;
       }
-      function prepareVideo(v,preload){
+      function prepare(v,mode){
         if(!v)return;
         var lazy=v.getAttribute('data-src');
         if(lazy&&!v.getAttribute('src')){
-          v.src=lazy;v.removeAttribute('data-src');
+          v.src=lazy;
+          v.removeAttribute('data-src');
           try{v.load();}catch(e){}
         }
-        v.preload=preload||'metadata';
+        v.preload=mode||'auto';
         v.setAttribute('playsinline','');
         v.setAttribute('webkit-playsinline','');
       }
-      function setSound(v,on){
+      function mute(v){
         if(!v)return;
-        try{
-          v.muted=!on;v.defaultMuted=!on;v.volume=on?1:0;
-          if(on)v.removeAttribute('muted');else v.setAttribute('muted','');
-        }catch(e){}
+        try{v.muted=true;v.defaultMuted=true;v.volume=0;v.setAttribute('muted','');}catch(e){}
+      }
+      function sound(v){
+        if(!v)return;
+        try{v.muted=false;v.defaultMuted=false;v.volume=1;v.removeAttribute('muted');}catch(e){}
       }
       function play(v){try{var p=v.play();if(p&&p.catch)p.catch(function(){});}catch(e){}}
+
       function tune(){
         raf=0;
         var list=cards(),idx=currentIndex(list);
@@ -45,54 +47,70 @@ export default async function handler(req,res){
           var v=c.querySelector('video.pub');
           if(!v)return;
           if(i===idx){
-            prepareVideo(v,'auto');setSound(v,unlocked);play(v);
-          }else if(i===idx+1){
-            prepareVideo(v,'auto');setSound(v,false);
-          }else if(i===idx-1){
-            prepareVideo(v,'metadata');setSound(v,false);try{v.pause();}catch(e){}
+            prepare(v,'auto');
+            if(v===soundVideo&&unlocked)sound(v);else mute(v);
+            play(v);
+          }else if(i===idx+1||i===idx+2){
+            prepare(v,'auto');
+            mute(v);
+            if(i===idx+1)play(v);
           }else{
-            setSound(v,false);try{v.pause();}catch(e){}
+            mute(v);
+            try{v.pause();}catch(e){}
           }
-          if(!v.__ktSoundTapFixed){
-            v.__ktSoundTapFixed=true;
+          if(!v.__ktTapFixed){
+            v.__ktTapFixed=true;
             v.onclick=function(){
-              if(!unlocked){unlock();return false;}
-              setSound(v,true);play(v);return false;
+              unlocked=true;
+              soundVideo=v;
+              sound(v);
+              if(v.paused)play(v);else{try{v.pause();}catch(e){}}
+              return false;
             };
           }
         });
-        var rv=document.getElementById('remoteVideo');
-        if(rv&&document.getElementById('remote')&&document.getElementById('remote').classList.contains('show')){
-          setSound(rv,unlocked);if(unlocked)play(rv);
-        }
       }
       function schedule(){if(raf)return;raf=requestAnimationFrame(tune);}
-      function unlock(){
-        if(!unlocked){
-          unlocked=true;
-          try{sessionStorage.setItem('ktalk_sound_unlocked','1');}catch(e){}
+
+      function activateCurrent(){
+        unlocked=true;
+        var list=cards(),idx=currentIndex(list);
+        if(idx<0)return;
+        var c=list[idx],v=c&&c.querySelector('video.pub');
+        if(v){
+          if(soundVideo&&soundVideo!==v)mute(soundVideo);
+          soundVideo=v;
+          prepare(v,'auto');
+          sound(v);
+          play(v);
+          var n=list[idx+1]&&list[idx+1].querySelector('video.pub');
+          var n2=list[idx+2]&&list[idx+2].querySelector('video.pub');
+          if(n){prepare(n,'auto');mute(n);play(n);}
+          if(n2){prepare(n2,'auto');mute(n2);}
         }
-        tune();
+        var rv=document.getElementById('remoteVideo');
+        var box=document.getElementById('remote');
+        if(rv&&box&&box.classList.contains('show')){soundVideo=rv;sound(rv);play(rv);}
       }
-      function gesture(){unlock();}
+
+      function gesture(){activateCurrent();}
       document.addEventListener('pointerdown',gesture,{capture:true,passive:true});
+      document.addEventListener('pointermove',gesture,{capture:true,passive:true});
       document.addEventListener('touchstart',gesture,{capture:true,passive:true});
-      document.addEventListener('click',function(e){
-        var v=e.target&&e.target.closest?e.target.closest('video.pub'):null;
-        if(v){setSound(v,true);play(v);}
-      },true);
+      document.addEventListener('touchmove',gesture,{capture:true,passive:true});
+      document.addEventListener('touchend',gesture,{capture:true,passive:true});
       document.addEventListener('scroll',schedule,true);
       window.addEventListener('resize',schedule,{passive:true});
-      var mo=new MutationObserver(function(){setTimeout(schedule,0);setTimeout(schedule,180);});
+      var mo=new MutationObserver(function(){setTimeout(schedule,0);setTimeout(schedule,120);});
       mo.observe(document.documentElement,{subtree:true,childList:true});
-      setTimeout(schedule,0);setTimeout(schedule,250);setTimeout(schedule,900);
+      setTimeout(schedule,0);setTimeout(schedule,200);setTimeout(schedule,700);
     })();</script>`;
 
     html=html.replace('</body>',soundFix+'</body>');
     res.status(r.status);
     res.setHeader('content-type','text/html; charset=utf-8');
     res.setHeader('cache-control','no-store, no-cache, must-revalidate, max-age=0');
-    res.setHeader('x-ktalk-independent','2');
+    res.setHeader('x-ktalk-independent','3');
     res.send(html);
   }catch(e){
     res.status(500).send('K-Talk loading error');
