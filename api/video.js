@@ -18,6 +18,28 @@ function cappedRange(value){
 export default async function handler(req,res){
   try{
     const n=Math.max(0,Math.min(SOURCES.length-1,parseInt((req.query&&req.query.i)||'0',10)||0));
+
+    if(req.query&&req.query.debug==='1'){
+      const head=await fetch(SOURCES[n],{method:'HEAD',headers:{'user-agent':req.headers['user-agent']||'K-Talk-Debug'},cache:'no-store'});
+      const probe=await fetch(SOURCES[n],{headers:{'user-agent':req.headers['user-agent']||'K-Talk-Debug','range':'bytes=0-63'},cache:'no-store'});
+      const buf=Buffer.from(await probe.arrayBuffer());
+      res.status(200).setHeader('content-type','application/json; charset=utf-8').setHeader('cache-control','no-store');
+      return res.end(JSON.stringify({
+        source:n,
+        headStatus:head.status,
+        headType:head.headers.get('content-type'),
+        headLength:head.headers.get('content-length'),
+        headRanges:head.headers.get('accept-ranges'),
+        probeStatus:probe.status,
+        probeType:probe.headers.get('content-type'),
+        probeLength:probe.headers.get('content-length'),
+        probeRange:probe.headers.get('content-range'),
+        probeRanges:probe.headers.get('accept-ranges'),
+        bytes:buf.length,
+        hex:buf.subarray(0,24).toString('hex')
+      }));
+    }
+
     const range=cappedRange(req.headers.range);
     const r=await fetch(SOURCES[n],{
       headers:{
@@ -45,7 +67,7 @@ export default async function handler(req,res){
     if(!res.getHeader('content-length'))res.setHeader('content-length',String(buf.length));
     return res.send(buf);
   }catch(e){
-    res.status(502).setHeader('cache-control','no-store');
-    return res.end();
+    res.status(502).setHeader('content-type','application/json; charset=utf-8').setHeader('cache-control','no-store');
+    return res.end(JSON.stringify({error:String(e&&e.message||e)}));
   }
 }
