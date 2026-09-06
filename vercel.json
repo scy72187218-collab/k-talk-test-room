@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {"source": "/", "destination": "/feed-v2.html"}
+  ],
   "headers": [
     {
       "source": "/(.*)",
