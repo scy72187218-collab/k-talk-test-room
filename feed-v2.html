@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#000000">
+<title>K-Talk LIVE</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;overflow:hidden}button{font:inherit}.feed{position:fixed;inset:0 0 76px 0;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior-y:contain;background:#000}.card{height:100%;min-height:100%;position:relative;overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;background:#000}.card video,.card .cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.20),transparent 30%,transparent 58%,rgba(0,0,0,.82))}.tabs{position:absolute;top:18px;left:20px;right:18px;z-index:5;display:flex;align-items:center;gap:22px;font-size:15px;font-weight:900;text-shadow:0 2px 7px #000}.tabs span{white-space:nowrap}.tabs .on{border-bottom:3px solid #fff;padding-bottom:7px}.tabs .search{margin-left:auto;font-size:30px}.title{position:absolute;left:30px;right:100px;bottom:34px;z-index:4;text-shadow:0 2px 6px #000}.title b{display:block;color:#ffe071;font-size:25px}.title span{display:block;margin-top:8px;font-size:16px;line-height:1.4}.actions{position:absolute;right:18px;bottom:36px;z-index:5;display:grid;gap:15px}.actions button{width:64px;height:64px;border:0;border-radius:50%;background:rgba(8,8,11,.72);color:#fff;font-size:28px}.actions small{display:block;margin-top:1px;font-size:10px}.bottom{position:fixed;left:0;right:0;bottom:0;height:76px;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;border-top:1px solid #ffffff16;background:#030305}.bottom button{height:76px;border:0;background:transparent;color:#ddd;font-size:11px;font-weight:850}.bottom b{display:block;font-size:27px;line-height:1.1;margin-bottom:3px}.bottom .plus b{width:58px;height:52px;margin:-15px auto 2px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#2acfff,#9f55ff 50%,#ff56b5);font-size:36px;box-shadow:0 0 18px #9e55ff77}.live{background:radial-gradient(circle at 50% 30%,#421239,#150916 43%,#020204 82%);cursor:pointer}.livecenter{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;background:linear-gradient(180deg,#0002,#0008);z-index:3}.livebadge{display:inline-block;padding:10px 18px;border-radius:999px;background:#ff2d55;font-size:20px;font-weight:950;box-shadow:0 0 26px #ff2d5580}.livecenter .ant{font-size:70px;margin:26px 0 12px}.livecenter b{display:block;font-size:28px}.livecenter span{display:block;margin-top:8px;font-size:18px}.livecenter em{display:block;margin-top:20px;padding:12px 18px;border-radius:999px;border:1px solid #ffffff36;background:#ffffff16;font-style:normal;font-weight:900}.error{position:absolute;inset:0;display:none;place-items:center;text-align:center;color:#ddd;background:#09090b;z-index:2}.error b{display:block;color:#ffe071;font-size:24px}.error span{display:block;margin-top:7px;font-size:14px}
+</style>
+</head>
+<body>
+<div id="feed" class="feed"></div>
+<nav class="bottom">
+<button onclick="goTop()"><b>⌂</b>홈</button>
+<button onclick="location.href='https://k-talk-live-final.vercel.app' "><b>👥</b>친구</button>
+<button class="plus" onclick="location.href='https://k-talk-live-final.vercel.app'"><b>＋</b>방송하기</button>
+<button onclick="location.href='https://k-talk-live-final.vercel.app'"><b>?</b>사용방법</button>
+<button onclick="location.href='https://k-talk-live-final.vercel.app'"><b>♙</b>프로필</button>
+</nav>
+<script>
+(function(){
+'use strict';
+var SB='https://zupwbfmacwzexyvznlzq.supabase.co';
+var KEY='sb_publishable_AnyCMi4rAgSR2uWg_u1pvw_hHyqWlm3';
+var sound=false,active=0,timer=0;
+try{sound=sessionStorage.getItem('ktalk_feed_sound')==='1'}catch(e){}
+var ITEMS=[
+['14254.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516701116-emysxm.mp4'],
+['14402.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516656323-4elqcf.mp4'],
+['14402.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516653502-crprae.mp4'],
+['14407.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516618159-4ep5ki.mp4'],
+['14407.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788516616620-b29tvt.mp4'],
+['9860.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788507446242-ke2qrw.mp4'],
+['9860.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788507442298-joc6va.mp4'],
+['14534.mp4','https://zupwbfmacwzexyvznlzq.supabase.co/storage/v1/object/public/ktalk-videos/guest/1788497763093-8d2mz7.mp4']
+];
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function tabs(live){return '<div class="tabs"><span'+(live?' class="on"':'')+'>LIVE</span><span>커뮤니티</span><span>팔로잉</span><span'+(!live?' class="on"':'')+'>추천</span><span class="search">⌕</span></div>'}
+function videoCard(item,i){var eager=i<3;return '<section class="card" data-kind="video"><video class="pub" '+(i===0?'autoplay ':'')+'muted loop playsinline webkit-playsinline preload="'+(eager?'auto':'metadata')+'" '+(eager?'src="'+esc(item[1])+'"':'data-src="'+esc(item[1])+'"')+'></video><div class="error"><div><b>♛ K-Talk</b><span>다음 영상으로 넘겨 주세요.</span></div></div><div class="shade"></div>'+tabs(false)+'<div class="title"><b>♛ K-Talk</b><span>'+esc(item[0])+'</span></div><div class="actions"><button>♡<small>좋아요</small></button><button>💬<small>댓글</small></button><button>🎁<small>선물</small></button><button>↗<small>공유</small></button></div></section>'}
+function liveCard(x){var host=esc(x.host_id||'guest'),title=esc(x.title||x.room_name||'K-Talk LIVE'),room=esc(x.room_name||'라이브 방송'),name=esc(x.host_name||'K-Talk');return '<section class="card live" data-kind="live" data-host="'+host+'" data-title="'+title+'" data-room="'+room+'"><div class="livecenter"><div><div class="livebadge">● LIVE</div><div class="ant">📡</div><b>'+name+'</b><span>'+title+'</span><em>눌러서 방송 들어가기</em></div></div>'+tabs(true)+'</section>'}
+function render(){var f=document.getElementById('feed');f.innerHTML=ITEMS.map(videoCard).join('');wire();sync(0)}
+function ensure(v){if(!v)return;var u=v.getAttribute('data-src');if(u&&!v.getAttribute('src')){v.src=u;v.removeAttribute('data-src');v.preload='auto';try{v.load()}catch(e){}}}
+function soundSet(v,on){if(!v)return;try{v.muted=!on;v.defaultMuted=!on;v.volume=on?1:0;if(on)v.removeAttribute('muted');else v.setAttribute('muted','')}catch(e){}}
+function play(v,on){if(!v)return;ensure(v);soundSet(v,on);try{var p=v.play();if(p&&p.catch)p.catch(function(){if(on){soundSet(v,false);try{v.play()}catch(e){}}})}catch(e){}}
+function cards(){return [].slice.call(document.querySelectorAll('#feed .card'))}
+function sync(i){var cs=cards();if(!cs.length)return;if(i<0)i=0;if(i>=cs.length)i=cs.length-1;active=i;cs.forEach(function(c,n){var v=c.querySelector('video.pub');if(!v)return;if(n===i)play(v,sound);else{soundSet(v,false);try{v.pause()}catch(e){}}});for(var n=i+1;n<=Math.min(i+2,cs.length-1);n++){var v=cs[n].querySelector('video.pub');if(v){ensure(v);v.preload='auto'}}}
+function nearest(){var f=document.getElementById('feed'),cs=cards(),top=f.getBoundingClientRect().top,best=0,d=1e9;cs.forEach(function(c,i){var x=Math.abs(c.getBoundingClientRect().top-top);if(x<d){d=x;best=i}});return best}
+function unlock(){if(sound)return;sound=true;try{sessionStorage.setItem('ktalk_feed_sound','1')}catch(e){};sync(nearest())}
+function wire(){var f=document.getElementById('feed');[].slice.call(f.querySelectorAll('video.pub')).forEach(function(v){v.removeAttribute('poster');v.addEventListener('error',function(){var e=v.closest('.card').querySelector('.error');if(e)e.style.display='grid'});v.addEventListener('stalled',function(){setTimeout(function(){if(v.closest('.card')===cards()[active])play(v,sound)},250)});v.addEventListener('waiting',function(){setTimeout(function(){if(v.closest('.card')===cards()[active])play(v,sound)},400)});v.addEventListener('ended',function(){try{v.currentTime=0;play(v,sound)}catch(e){}})});f.addEventListener('scroll',function(){clearTimeout(timer);timer=setTimeout(function(){sync(nearest())},70)},{passive:true});f.addEventListener('touchend',function(){setTimeout(function(){sync(nearest())},0)},{passive:true});f.addEventListener('pointerup',function(){setTimeout(function(){sync(nearest())},0)},{passive:true});f.addEventListener('touchstart',unlock,{passive:true});f.addEventListener('pointerdown',unlock,{passive:true})}
+async function addLives(){try{var since=new Date(Date.now()-25000).toISOString();var u=SB+'/rest/v1/ktalk_live_rooms?select=id,host_id,host_name,title,room_name,updated_at&active=eq.true&updated_at=gte.'+encodeURIComponent(since)+'&order=updated_at.desc&limit=4';var r=await fetch(u,{headers:{apikey:KEY,Authorization:'Bearer '+KEY},cache:'no-store'});if(!r.ok)return;var rows=await r.json();if(!Array.isArray(rows)||!rows.length)return;var f=document.getElementById('feed'),first=f.querySelector('.card');rows.reverse().forEach(function(x){var w=document.createElement('div');w.innerHTML=liveCard(x);var c=w.firstElementChild;c.onclick=function(){var q='?joinHost='+encodeURIComponent(x.host_id||'guest')+'&joinTitle='+encodeURIComponent(x.title||x.room_name||'K-Talk LIVE')+'&joinRoom='+encodeURIComponent(x.room_name||'라이브 방송');location.href='https://k-talk-live-final.vercel.app/'+q};first.insertAdjacentElement('afterend',c)});sync(nearest())}catch(e){}}
+window.goTop=function(){var f=document.getElementById('feed');f.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){sync(0)},350)};
+render();setTimeout(addLives,600);setInterval(addLives,12000);
+})();
+</script>
+</body>
+</html>
