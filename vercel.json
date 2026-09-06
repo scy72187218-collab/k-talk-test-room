@@ -1,26 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "routes": [
+  "headers": [
     {
-      "src": "/$",
-      "dest": "/api/root"
-    },
-    {
-      "src": "/api/video",
-      "dest": "/api/video"
-    },
-    {
-      "src": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "k-talk-new-room.vercel.app"
-        }
-      ],
-      "dest": "https://k-talk-live-final.vercel.app/$1"
-    },
-    {
-      "handle": "filesystem"
+      "source": "/(.*)",
+      "headers": [
+        {"key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, max-age=0"}
+      ]
     }
   ]
 }
